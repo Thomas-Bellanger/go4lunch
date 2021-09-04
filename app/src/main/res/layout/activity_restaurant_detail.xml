@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.RestaurantDetail.RestaurantDetail">
+
+    <ImageView
+        android:id="@+id/restaurant_detail_avatar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/restaurant_detail_avatar_height"
+        android:src="#787878"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/orange_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/orange_bar_height"
+        android:background="#FF5722"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_detail_avatar"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/restaurant_detail_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/restaurant_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/restaurant_detail_name_textsize"
+        app:layout_constraintStart_toStartOf="@+id/recyclerView_joiners"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_detail_avatar" />
+
+    <ImageView
+        android:id="@+id/restaurant_detail_star_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_star_rate_24"
+        app:layout_constraintStart_toEndOf="@+id/restaurant_detail_name"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_detail_avatar"
+        app:tint="@color/yellow" />
+
+    <ImageView
+        android:id="@+id/restaurant_detail_star_icon2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_star_rate_24"
+        app:layout_constraintStart_toEndOf="@+id/restaurant_detail_star_icon"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_detail_avatar"
+        app:tint="@color/yellow" />
+
+    <ImageView
+        android:id="@+id/restaurant_detail_star_icon3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_star_rate_24"
+        app:layout_constraintStart_toEndOf="@+id/restaurant_detail_star_icon2"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_detail_avatar"
+        app:tint="@color/yellow" />
+
+    <TextView
+        android:id="@+id/restaurant_detail_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/style_restaurant"
+        android:textColor="@color/white"
+        android:textSize="@dimen/restaurant_detail_style_textsize"
+        app:layout_constraintStart_toStartOf="@+id/restaurant_detail_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_detail_name" />
+
+    <TextView
+        android:id="@+id/restaurant_detail_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/after_style"
+        android:textColor="@color/white"
+        android:textSize="@dimen/restaurant_detail_style_textsize"
+        app:layout_constraintStart_toEndOf="@+id/restaurant_detail_style"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_detail_name" />
+
+    <TextView
+        android:id="@+id/restaurant_detail_adress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/adress"
+        android:textColor="@color/white"
+        android:textSize="@dimen/restaurant_detail_style_textsize"
+        app:layout_constraintStart_toEndOf="@+id/restaurant_detail_"
+        app:layout_constraintTop_toTopOf="@+id/restaurant_detail_style" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/floating_button_margin_top"
+        android:layout_marginEnd="@dimen/floating_button_margin_end"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/ic_baseline_local_dining_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/orange_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/button_call"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/phone_button_height"
+                android:layout_marginStart="@dimen/phone_button_margin_left"
+                android:background="@color/white"
+                android:src="@drawable/ic_baseline_phone_24" />
+
+            <ImageButton
+                android:id="@+id/button_like"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/phone_button_height"
+                android:layout_marginStart="@dimen/like_button_margin_left"
+                android:background="@color/white"
+                android:src="@drawable/ic_baseline_star_rate_24"
+                app:tint="#FD7A23" />
+
+            <ImageButton
+                android:id="@+id/button_website"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/phone_button_height"
+                android:layout_marginStart="@dimen/website_button_margin_left"
+                android:background="@color/white"
+                android:src="@drawable/ic_baseline_public_24" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/text_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="46dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginBottom="15dp"
+                android:text="@string/call"
+                android:textColor="#FD7A23"
+                android:textSize="@dimen/restaurant_detail_style_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/call_text_margin_left"
+                android:layout_marginTop="@dimen/call_text_margin_top"
+                android:layout_marginBottom="@dimen/call_text_margin_bottom"
+                android:text="@string/like"
+                android:textColor="#FD7A23"
+                android:textSize="@dimen/restaurant_detail_style_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_website"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginBottom="15dp"
+                android:text="@string/website"
+                android:textColor="#F44336"
+                android:textSize="@dimen/restaurant_detail_style_textsize"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_joiners"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/joiners_recyclerView_height"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        tools:listitem="@layout/workmates_join" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.SettingsActivity.SettingsActivity">
+
+    <ImageView
+        android:id="@+id/settings_avatar"
+        android:layout_width="@dimen/settings_avatar_size"
+        android:layout_height="@dimen/settings_avatar_size"
+        android:layout_marginTop="@dimen/settings_avatar_margin_top"
+        android:src="@drawable/ic_baseline_account_circle_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/orange" />
+
+    <EditText
+        android:id="@+id/settings_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/settings_profile_name_margin_top"
+        android:gravity="center"
+        android:text="profile_name"
+        android:textSize="@dimen/settings_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_avatar" />
+
+    <TextView
+        android:id="@+id/settings_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/settings_email_margin_top"
+        android:text="E-mail"
+        android:textSize="@dimen/settings_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_name" />
+
+    <Button
+        android:id="@+id/settings_name_button"
+        android:layout_width="@dimen/settings_btn_size"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/settings_btn_name_margin_top"
+        android:text="Mettre à jour le nom"
+        android:textSize="@dimen/settings_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_email" />
+
+    <Button
+        android:id="@+id/settings_logout"
+        android:layout_width="@dimen/settings_btn_size"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/settings_btn_margin_top"
+        android:backgroundTint="@color/orange"
+        android:text="Deconnexion"
+        android:textSize="@dimen/settings_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_name_button" />
+
+    <Button
+        android:id="@+id/settings_delette_btn"
+        android:layout_width="@dimen/settings_btn_size"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/settings_btn_margin_top"
+        android:backgroundTint="@color/red"
+        android:text="Supprimer le compte"
+        android:textSize="@dimen/settings_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_logout" />
+</androidx.constraintlayout.widget.ConstraintLayout>

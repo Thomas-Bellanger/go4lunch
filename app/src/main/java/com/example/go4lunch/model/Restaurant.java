@@ -1,0 +1,182 @@
+package com.example.go4lunch.model;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Restaurant implements Parcelable {
+    public static final Creator<Restaurant> CREATOR = new Creator<Restaurant>() {
+        @Override
+        public Restaurant createFromParcel(Parcel in) {
+            return new Restaurant(in);
+        }
+
+        @Override
+        public Restaurant[] newArray(int size) {
+            return new Restaurant[size];
+        }
+    };
+    private String name;
+    private String adress;
+    private List<User> joiners = new ArrayList<>();
+    private String type;
+    private int opening;
+    private int closing;
+    private String distance;
+    private String avatar;
+    private String url;
+    private int phoneNumber;
+    private boolean like;
+    private int note;
+
+    public Restaurant(String name, String adress, String type, int opening, int closing, String distance, String avatar, String url, int phoneNumber, boolean like, int note) {
+        this.name = name;
+        this.adress = adress;
+        this.joiners = new ArrayList<>();
+        this.type = type;
+        this.opening = opening;
+        this.closing = closing;
+        this.distance = distance;
+        this.avatar = avatar;
+        this.url = url;
+        this.phoneNumber = phoneNumber;
+        this.like = like;
+        this.note = note;
+    }
+
+    protected Restaurant(Parcel in) {
+        name = in.readString();
+        adress = in.readString();
+        type = in.readString();
+        opening = in.readInt();
+        closing = in.readInt();
+        distance = in.readString();
+        avatar = in.readString();
+        url = in.readString();
+        phoneNumber = in.readInt();
+        note = in.readInt();
+        like = in.readByte() != 0;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public boolean isLike() {
+        return like;
+    }
+
+    public void setLike(boolean like) {
+        this.like = like;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public List<User> getJoiners() {
+        return joiners;
+    }
+
+    public void setJoiners(List<com.example.go4lunch.model.User> joiners) {
+        this.joiners = joiners;
+    }
+
+    public int getOpening() {
+        return opening;
+    }
+
+    public void setOpening(int opening) {
+        this.opening = opening;
+    }
+
+    public int getClosing() {
+        return closing;
+    }
+
+    public void setClosing(int closing) {
+        this.closing = closing;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getNote() {
+        return note;
+    }
+
+    public void setNote(int note) {
+        this.note = note;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(adress);
+        dest.writeString(type);
+        dest.writeInt(opening);
+        dest.writeInt(closing);
+        dest.writeString(distance);
+        dest.writeString(avatar);
+        dest.writeString(url);
+        dest.writeInt(phoneNumber);
+        dest.writeInt(note);
+        dest.writeByte((byte) (like ? 1 : 0));
+    }
+
+    public void addJoiners(User user) {
+        joiners.add(user);
+    }
+}

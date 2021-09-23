@@ -3,8 +3,11 @@ package com.example.go4lunch.ui.RestaurantDetail;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,33 +15,41 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.go4lunch.DI.Di;
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.ActivityRestaurantDetailBinding;
+import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
-import com.example.go4lunch.service.List_api_Service;
 import com.example.go4lunch.ui.WebView.WebView;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantDetail extends AppCompatActivity {
     public static final String KEY_RESTAURANT = "restaurant";
     private final UserManager userManager = UserManager.getInstance();
+    private final User currentUser = User.firebaseUserToUser(userManager.getCurrentUser());
+    private final RestaurantManager restaurantManager = RestaurantManager.getInstance();
     public List<User> joiners;
     private Restaurant mRestaurant;
     private ActivityRestaurantDetailBinding binding;
     private RecyclerView mRecyclerView;
     private Restaurant_Detail_ViewAdapter mAdapter;
-    private List_api_Service mList_api_service;
+    @Nullable
+    private Restaurant chosenRestaurant;
+    private List<Restaurant> favorites;
+    private boolean chosen = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mList_api_service = Di.getListApiService();
         binding = ActivityRestaurantDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         Intent intent = getIntent();
         mRestaurant = intent.getParcelableExtra(KEY_RESTAURANT);
         this.joiners = mRestaurant.getJoiners();
@@ -49,38 +60,21 @@ public class RestaurantDetail extends AppCompatActivity {
                 .load(mRestaurant.getAvatar())
                 .apply(RequestOptions.centerCropTransform())
                 .into(binding.restaurantDetailAvatar);
-        joiners = mList_api_service.getCoWorkers();
-        checkIfRestaurantIsLicked();
         configureRecyclerView();
         checkNote();
-        binding.buttonLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeState();
-            }
-        });
-        binding.fabLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseRestaurant();
-            }
-        });
-        binding.buttonCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                call();
-            }
-        });
-        binding.buttonWebsite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigate();
-            }
-        });
+        //call
+        binding.buttonCall.setOnClickListener(v -> call());
+        //website
+        binding.buttonWebsite.setOnClickListener(v -> navigate());
+        //like the restaurant
+        binding.buttonLike.setOnClickListener(v -> changeState());
+        //choose this restaurant...or not
+        binding.fabLike.setOnClickListener(v -> chooseRestaurant());
     }
 
+    //change the like star if liked
     public void checkIfRestaurantIsLicked() {
-        if (mRestaurant.isLike() == true) {
+        if (favorites.contains(mRestaurant)) {
             binding.buttonLike.setColorFilter(ContextCompat.getColor(this, R.color.yellow));
         } else {
             binding.buttonLike.setColorFilter(ContextCompat.getColor(this, R.color.orange));
@@ -88,44 +82,61 @@ public class RestaurantDetail extends AppCompatActivity {
         checkNote();
     }
 
+    //choose restaurant function and check if the user already had a chosen restaurant
     public void chooseRestaurant() {
-        binding.fabLike.setColorFilter(ContextCompat.getColor(this, R.color.green));
-        binding.fabLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_check_circle_24));
-        initList();
-    }
-
-    public void checkIfRestaurantIsChosen() {
-        if (mRestaurant.getJoiners().contains(userManager.getUserData().getResult())) {
-            binding.buttonLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_check_circle_24));
+        if (chosen) {
+            userManager.updateLunch(null).addOnSuccessListener(unused -> {
+                Toast.makeText(RestaurantDetail.this, "Canceled", Toast.LENGTH_SHORT).show();
+                fabCleared();
+                mRestaurant.removeJoiners(currentUser);
+                initList();
+            });
         } else {
-            binding.buttonLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_local_dining_24));
+            userManager.updateLunch(mRestaurant).addOnSuccessListener(unused -> {
+                Toast.makeText(RestaurantDetail.this, "Restaurant chosen!", Toast.LENGTH_SHORT).show();
+                fabChecked();
+                joiners.add(currentUser);
+                initList();
+            });
         }
     }
 
-    public void changeState() {
-        if (mRestaurant.isLike() == false) {
-            mRestaurant.setNote(mRestaurant.getNote() + 1);
-            mRestaurant.setLike(true);
+    //check is the restaurant is already chosen by the user
+    public void checkIfRestaurantIsChosen() {
+        if (chosenRestaurant.getName().equals(mRestaurant.getName())) {
+            fabChecked();
         } else {
-            mRestaurant.setLike(false);
+            fabCleared();
+        }
+    }
+
+    //add or remove the restaurant from user's favorites
+    public void changeState() {
+        if (favorites.contains(mRestaurant)) {
             mRestaurant.setNote(mRestaurant.getNote() - 1);
+            favorites.remove(mRestaurant);
+        } else {
+            mRestaurant.setNote(mRestaurant.getNote() + 1);
+            favorites.add(mRestaurant);
         }
         checkIfRestaurantIsLicked();
     }
 
+    //call intent
     public void call() {
         Intent callIntent = new Intent(Intent.ACTION_DIAL);
         callIntent.setData(Uri.parse("tel:" + mRestaurant.getPhoneNumber()));
         startActivity(callIntent);
     }
 
+    //website intent
     public void navigate() {
         Intent navigate = new Intent(RestaurantDetail.this, WebView.class);
         navigate.putExtra(KEY_RESTAURANT, mRestaurant);
         startActivity(navigate);
-
     }
 
+    //recycler view
     public void configureRecyclerView() {
         mRecyclerView = findViewById(R.id.recyclerView_joiners);
         mAdapter = new Restaurant_Detail_ViewAdapter(joiners);
@@ -133,11 +144,12 @@ public class RestaurantDetail extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    //update the list for recyclerview
     public void initList() {
-        mRecyclerView.setAdapter(new Restaurant_Detail_ViewAdapter(joiners) {
-        });
+        mAdapter.update(joiners);
     }
 
+    //check the note of the restaurant and show stars
     public void checkNote() {
         if (mRestaurant.getNote() < 2) {
             binding.restaurantDetailStarIcon.setColorFilter(ContextCompat.getColor(this, R.color.orange));
@@ -154,6 +166,39 @@ public class RestaurantDetail extends AppCompatActivity {
         } else {
             binding.restaurantDetailStarIcon3.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.yellow));
         }
-
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        userManager.getUserData().addOnSuccessListener(user -> {
+            chosenRestaurant = user.getChosenRestaurant();
+            favorites = user.getFavorite();
+            if (chosenRestaurant == null) {
+                chosenRestaurant = Restaurant.noRestaurant;
+            }
+            checkIfRestaurantIsChosen();
+        });
+        Log.e("restaurantuid", "" + mRestaurant.getUid());
+    }
+
+    public void fabChecked() {
+        binding.fabLike.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.green));
+        binding.fabLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_check_circle_24));
+        chosen = true;
+    }
+
+    public void fabCleared() {
+        binding.fabLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_local_dining_24));
+        binding.fabLike.clearColorFilter();
+        chosen = false;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        restaurantManager.getRestaurantData(mRestaurant).addOnSuccessListener(restaurant -> joiners = restaurant.getJoiners())
+                .addOnFailureListener(e -> Log.e("fail", e.getMessage()));
+    }
+
 }

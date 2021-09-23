@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
+import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 
 import java.util.List;
@@ -36,7 +37,10 @@ public class Co_Worker_List_View_Adapter extends RecyclerView.Adapter<Co_Worker_
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = mUsers.get(position);
-        holder.restaurant_Text.setText(user.getName() + " is eating " + user.getChosenRestaurant());
+        if (user.getChosenRestaurant() == null) {
+            user.setChosenRestaurant(Restaurant.noRestaurant);
+        }
+        holder.restaurant_Text.setText(user.getName() + " is eating " + user.getChosenRestaurant().getType() + "(" + user.getChosenRestaurant().getName() + ")");
         Glide.with(holder.co_Worker_Avatar.getContext())
                 .load(user.getAvatar())
                 .apply(RequestOptions.circleCropTransform())

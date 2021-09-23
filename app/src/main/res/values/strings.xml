@@ -37,4 +37,9 @@
     <string name="your_lunch">YOUR LUNCH</string>
     <string name="settings">SETTINGS</string>
     <string name="logout">LOGOUT</string>
+    <string name="mettre_jour_le_nom">Mettre à jour le nom</string>
+    <string name="profile_name">profile_name</string>
+    <string name="e_mail">E-mail</string>
+    <string name="retour">Retour</string>
+    <string name="supprimer_le_compte">Supprimer le compte</string>
 </resources>

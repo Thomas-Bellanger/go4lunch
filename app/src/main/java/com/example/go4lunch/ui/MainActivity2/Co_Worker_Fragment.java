@@ -2,6 +2,7 @@ package com.example.go4lunch.ui.MainActivity2;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,28 +12,26 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.go4lunch.DI.Di;
 import com.example.go4lunch.R;
 import com.example.go4lunch.manager.UserManager;
 import com.example.go4lunch.model.User;
-import com.example.go4lunch.service.List_api_Service;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Co_Worker_Fragment extends Fragment {
-    private List_api_Service mList_api_service;
-    private List<User> mUsers;
-    private RecyclerView mRecyclerView;
     private final UserManager userManager = UserManager.getInstance();
+    private List<User> mUsers = new ArrayList<>();
+    private RecyclerView mRecyclerView;
 
     public static Co_Worker_Fragment newInstance() {
-        return (new Co_Worker_Fragment());
+        return new Co_Worker_Fragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mList_api_service = Di.getListApiService();
     }
 
     @Override
@@ -41,13 +40,12 @@ public class Co_Worker_Fragment extends Fragment {
         Context context = view.getContext();
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
 
         return view;
     }
 
     public void initList() {
-        mUsers = userManager.getAllUsers();
         mRecyclerView.setAdapter(new Co_Worker_List_View_Adapter(mUsers));
     }
 
@@ -55,5 +53,21 @@ public class Co_Worker_Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         initList();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        userManager.getUserCollection().get().addOnSuccessListener(queryDocumentSnapshots -> {
+            mUsers = new ArrayList<>();
+            if (!queryDocumentSnapshots.isEmpty()) {
+                for (QueryDocumentSnapshot userCollection : queryDocumentSnapshots) {
+                    User user = userCollection.toObject(User.class);
+                    mUsers.add(user);
+                }
+            }
+            initList();
+        }).addOnFailureListener(e -> Log.e("fail", e.getMessage()));
     }
 }

@@ -2,17 +2,12 @@ package com.example.go4lunch.manager;
 
 import android.content.Context;
 
-import androidx.lifecycle.LiveData;
-
+import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.example.go4lunch.repository.UserRepository;
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.Query;
-
-import java.util.List;
 
 public class UserManager {
 
@@ -40,7 +35,6 @@ public class UserManager {
         return userRepository.getCurrentUser();
     }
 
-
     public Boolean isCurrentUserLogged() {
         return (this.getCurrentUser() != null);
     }
@@ -58,8 +52,8 @@ public class UserManager {
         return userRepository.updateUserName(username);
     }
 
-    public void updateLunch(String lunch) {
-        userRepository.updateLunch(lunch);
+    public Task<Void> updateLunch(Restaurant restaurant) {
+        return userRepository.updateLunch(restaurant);
     }
 
     public Task<Void> deleteUser(Context context) {
@@ -70,11 +64,11 @@ public class UserManager {
         });
     }
 
-    public Task<Void> signOut(Context context){
-        return userRepository.signOut(context);
+    public CollectionReference getUserCollection() {
+        return userRepository.getUsersCollection();
     }
 
-    public List<User> getAllUsers(){
-        return userRepository.getAllUsers();
+    public Task<Void> signOut(Context context) {
+        return userRepository.signOut(context);
     }
 }

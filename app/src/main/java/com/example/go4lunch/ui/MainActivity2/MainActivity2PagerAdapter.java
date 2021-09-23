@@ -6,24 +6,28 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class MainActivity2PagerAdapter extends FragmentPagerAdapter {
 
+    Fragment mFragment;
+
     public MainActivity2PagerAdapter(FragmentManager fm) {
         super(fm);
     }
-
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-
-                return Co_Worker_Fragment.newInstance();
+                mFragment = MapFragment.newInstance();
+                break;
             case 1:
-                return RestaurantListView.newInstance();
+                mFragment = RestaurantListView.newInstance();
+                break;
             case 2:
-                return Co_Worker_Fragment.newInstance();
+                mFragment = Co_Worker_Fragment.newInstance();
+                break;
             default:
                 return null;
         }
+        return mFragment;
     }
 
     @Override

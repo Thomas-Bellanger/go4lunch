@@ -2,6 +2,7 @@ package com.example.go4lunch.ui.MainActivity2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,13 +66,11 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
                 .into(holder.restaurantAvatar);
 
 
-        holder.restaurantName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), RestaurantDetail.class);
-                intent.putExtra(RestaurantDetail.KEY_RESTAURANT, restaurant);
-                v.getContext().startActivity(intent);
-            }
+        holder.restaurantName.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), RestaurantDetail.class);
+            Log.e("restaurantuid", "" + restaurant.getUid());
+            intent.putExtra(RestaurantDetail.KEY_RESTAURANT, restaurant);
+            v.getContext().startActivity(intent);
         });
 
     }

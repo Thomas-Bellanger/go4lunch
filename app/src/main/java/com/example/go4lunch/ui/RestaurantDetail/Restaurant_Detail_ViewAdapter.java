@@ -20,7 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class Restaurant_Detail_ViewAdapter extends RecyclerView.Adapter<Restaurant_Detail_ViewAdapter.ViewHolder> {
-    private final List<User> joiners;
+    private List<User> joiners;
 
     public Restaurant_Detail_ViewAdapter(List<User> items) {
         joiners = items;
@@ -49,6 +49,11 @@ public class Restaurant_Detail_ViewAdapter extends RecyclerView.Adapter<Restaura
     @Override
     public int getItemCount() {
         return joiners.size();
+    }
+
+    public void update(List<User> newJoiners) {
+        joiners = newJoiners;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

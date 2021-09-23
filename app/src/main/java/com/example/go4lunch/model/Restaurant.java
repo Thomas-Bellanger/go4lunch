@@ -3,6 +3,10 @@ package com.example.go4lunch.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.go4lunch.manager.RestaurantManager;
+import com.example.go4lunch.manager.UserManager;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +22,13 @@ public class Restaurant implements Parcelable {
             return new Restaurant[size];
         }
     };
+    public static Restaurant noRestaurant = new Restaurant("000", "none", "noAdress", "noType", 0, 0, "none", "none", "none", 0, 0);
+    public static Restaurant restaurant1 = new Restaurant("1863", "restaurant 1", "8 Rue des restaurants", "French", 11, 21, "210", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 10);
+    public static Restaurant restaurant2 = new Restaurant("2854", "restaurant 2", "10 Rue des restaurants", "French", 11, 21, "210", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 5);
+
+    public static Restaurant chosenRestaurant = User.firebaseUserToUser(UserManager.getInstance().getCurrentUser()).getChosenRestaurant();
+    private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
+    private String uid;
     private String name;
     private String adress;
     private List<User> joiners = new ArrayList<>();
@@ -30,8 +41,10 @@ public class Restaurant implements Parcelable {
     private int phoneNumber;
     private boolean like;
     private int note;
+    private LatLng mLatLng;
 
-    public Restaurant(String name, String adress, String type, int opening, int closing, String distance, String avatar, String url, int phoneNumber, boolean like, int note) {
+    public Restaurant(String uid, String name, String adress, String type, int opening, int closing, String distance, String avatar, String url, int phoneNumber, int note) {
+        this.uid = uid;
         this.name = name;
         this.adress = adress;
         this.joiners = new ArrayList<>();
@@ -42,11 +55,14 @@ public class Restaurant implements Parcelable {
         this.avatar = avatar;
         this.url = url;
         this.phoneNumber = phoneNumber;
-        this.like = like;
         this.note = note;
     }
 
+    public Restaurant() {
+    }
+
     protected Restaurant(Parcel in) {
+        uid = in.readString();
         name = in.readString();
         adress = in.readString();
         type = in.readString();
@@ -58,6 +74,22 @@ public class Restaurant implements Parcelable {
         phoneNumber = in.readInt();
         note = in.readInt();
         like = in.readByte() != 0;
+    }
+
+    public LatLng getLatLng() {
+        return mLatLng;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        mLatLng = latLng;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getUrl() {
@@ -78,10 +110,6 @@ public class Restaurant implements Parcelable {
 
     public boolean isLike() {
         return like;
-    }
-
-    public void setLike(boolean like) {
-        this.like = like;
     }
 
     public String getName() {
@@ -163,6 +191,7 @@ public class Restaurant implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uid);
         dest.writeString(name);
         dest.writeString(adress);
         dest.writeString(type);
@@ -178,5 +207,9 @@ public class Restaurant implements Parcelable {
 
     public void addJoiners(User user) {
         joiners.add(user);
+    }
+
+    public void removeJoiners(User user) {
+        joiners.remove(user);
     }
 }

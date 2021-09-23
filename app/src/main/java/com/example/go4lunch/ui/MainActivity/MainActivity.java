@@ -34,22 +34,27 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     private void startSignInActivity() {
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.FacebookBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.EmailBuilder().build());
+        if (userManager.isCurrentUserLogged()) {
+            Intent intent = new Intent(this, MainActivity2.class);
+            startActivity(intent);
+        } else {
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig.FacebookBuilder().build(),
+                    new AuthUI.IdpConfig.GoogleBuilder().build(),
+                    new AuthUI.IdpConfig.EmailBuilder().build());
 
-        //lauch activity
+            //lauch activity
 
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setTheme(R.style.LoginTheme)
-                        .setAvailableProviders(providers)
-                        .setIsSmartLockEnabled(false, true)
-                        .setLogo(R.drawable.ic_baseline_dinner_dining)
-                        .build()
-                , RC_SIGN_IN);
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setTheme(R.style.LoginTheme)
+                            .setAvailableProviders(providers)
+                            .setIsSmartLockEnabled(false, true)
+                            .setLogo(R.drawable.ic_baseline_dinner_dining)
+                            .build()
+                    , RC_SIGN_IN);
+        }
     }
 
     @Override
@@ -89,13 +94,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (userManager.isCurrentUserLogged()) {
-            Intent intent = new Intent(this, MainActivity2.class);
-            startActivity(intent);
-        } else {
-            startSignInActivity();
-        }
+    protected void onRestart() {
+        super.onRestart();
+        startSignInActivity();
     }
 }

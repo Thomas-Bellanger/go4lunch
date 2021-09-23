@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.Nullable;
 
+import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Task;
@@ -13,15 +14,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public final class UserRepository {
 
     private static final String COLLECTION_NAME = "users";
     private static final String USERNAME_FIELD = "username";
+    private static final String CHOSEN_LUNCH = "chosenRestaurant";
     private static volatile UserRepository instance;
-    private final String CHOSEN_LUNCH = "lunch";
 
     private UserRepository() {
     }
@@ -58,7 +56,7 @@ public final class UserRepository {
         return AuthUI.getInstance().delete(context);
     }
 
-    private CollectionReference getUsersCollection() {
+    public CollectionReference getUsersCollection() {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
     }
 
@@ -67,21 +65,29 @@ public final class UserRepository {
         FirebaseUser user = getCurrentUser();
         if (user != null) {
             String urlPicture = (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : null;
+            if (user.getPhotoUrl() == null) {
+                urlPicture = "https://www.gravatar.com/avatar/HASH";
+            }
             String username = user.getDisplayName();
             String uid = user.getUid();
+            @Nullable
+            Restaurant restaurant = null;
+            String mail = user.getEmail();
 
-            User userToCreate = new User(uid, username, urlPicture);
+            User userToCreate = new User(uid, username, urlPicture, restaurant, mail);
+
             Task<DocumentSnapshot> userData = getUserData();
             // If the user already exist in Firestore, we get his data (isMentor)
             userData.addOnSuccessListener(documentSnapshot -> {
                 if (documentSnapshot.contains(CHOSEN_LUNCH)) {
-                    userToCreate.setChosenRestaurant((String) documentSnapshot.get(CHOSEN_LUNCH));
+                    userToCreate.setChosenRestaurant(User.firebaseUserToUser(getCurrentUser()).getChosenRestaurant());
 
                 }
                 this.getUsersCollection().document(uid).set(userToCreate);
             });
         }
     }
+
     //get userdata from firestore
     public Task<DocumentSnapshot> getUserData() {
         String uid = this.getCurrentUserUid();
@@ -103,10 +109,12 @@ public final class UserRepository {
     }
 
     //update the lunch of the user
-    public void updateLunch(String lunch) {
+    public Task<Void> updateLunch(Restaurant restaurant) {
         String uid = this.getCurrentUserUid();
         if (uid != null) {
-            this.getUsersCollection().document(uid).update(CHOSEN_LUNCH, lunch);
+            return this.getUsersCollection().document(uid).update(CHOSEN_LUNCH, restaurant);
+        } else {
+            return null;
         }
     }
 
@@ -118,11 +126,4 @@ public final class UserRepository {
         }
     }
 
-    public List<User> users = new ArrayList<>();
-
-    public List<User> getAllUsers(){
-        return users;
-    }
-
 }
-

@@ -21,7 +21,8 @@
             android:parentActivityName=".ui.MainActivity2.MainActivity2" />
         <activity
             android:name=".ui.RestaurantDetail.RestaurantDetail"
-            android:exported="true" />
+            android:exported="true"
+            android:parentActivityName=".ui.MainActivity2.MainActivity2" />
         <activity
             android:name=".ui.MainActivity2.MainActivity2"
             android:exported="true" />

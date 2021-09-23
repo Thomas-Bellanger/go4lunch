@@ -2,6 +2,7 @@ package com.example.go4lunch.ui.MainActivity2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,29 +20,35 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.ActivityMain2Binding;
+import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.manager.UserManager;
+import com.example.go4lunch.model.Restaurant;
+import com.example.go4lunch.model.User;
+import com.example.go4lunch.service.ApiServiceInterface;
+import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 import com.example.go4lunch.ui.SettingsActivity.SettingsActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity2 extends AppCompatActivity {
 
     private final UserManager userManager = UserManager.getInstance();
-    public Filter filter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            FilterResults results = new FilterResults();
+    private final User currentUser = User.firebaseUserToUser(userManager.getCurrentUser());
+    private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
+    public static List<Restaurant> mRestaurants = new ArrayList<>();
+    public static List<Restaurant> mRestaurantsFiltered = new ArrayList<>();
+    public static List<User> mUsers = new ArrayList<>();
+    private ApiServiceInterface fSI;
+    private Filter filter;
 
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-
-        }
-    };
     ViewPager mViewPager;
     TabLayout mTabLayout;
     ActivityMain2Binding binding;
@@ -48,6 +56,7 @@ public class MainActivity2 extends AppCompatActivity {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private Restaurant chosenRestaurant;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +70,7 @@ public class MainActivity2 extends AppCompatActivity {
         configurePagerAdapter();
         configureNavigationView();
         onDrawerOpened(mDrawerLayout);
+        fSI = DI.getFSIService();
     }
 
     private void configureToolBar() {
@@ -82,13 +92,26 @@ public class MainActivity2 extends AppCompatActivity {
 
         switch (id) {
             case R.id.activity_main_drawer_dining:
+                userManager.getUserData().addOnSuccessListener(user -> {
+                    chosenRestaurant = user.getChosenRestaurant();
+                    if (chosenRestaurant != null) {
+                        Intent intent = new Intent(MainActivity2.this, RestaurantDetail.class);
+                        intent.putExtra(RestaurantDetail.KEY_RESTAURANT, chosenRestaurant);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(MainActivity2.this, "No lunch chosen!", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(e -> Log.e("tag", "fail" + e.getMessage()));
                 break;
+
             case R.id.activity_main_drawer_settings:
-                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                Intent settingsIntent = new Intent(MainActivity2.this, SettingsActivity.class);
                 startActivity(settingsIntent);
+                break;
 
             case R.id.activity_main_drawer_logout:
                 userManager.signOut(this).addOnSuccessListener(Void -> finish());
+                break;
         }
         this.mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -104,7 +127,7 @@ public class MainActivity2 extends AppCompatActivity {
         mViewPager.setAdapter(mMainActivity2PagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
+        mViewPager.setOffscreenPageLimit(2);
     }
 
     @Override
@@ -142,8 +165,39 @@ public class MainActivity2 extends AppCompatActivity {
         TextView mail = headerView.findViewById(R.id.nav_header_mail);
         TextView name = headerView.findViewById(R.id.nav_header_name);
         ImageView avatar = headerView.findViewById(R.id.nav_header_avatar);
-        mail.setText(userManager.getCurrentUser().getEmail());
-        name.setText(userManager.getCurrentUser().getDisplayName());
-        avatar.setImageURI(userManager.getCurrentUser().getPhotoUrl());
+        mail.setText(currentUser.getMail());
+        name.setText(currentUser.getName());
+        Glide.with(avatar.getContext())
+                .load(currentUser.getAvatar())
+                .apply(RequestOptions.circleCropTransform())
+                .into(avatar);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public void getChosenRestaurant() {
+        userManager.getUserData().addOnSuccessListener(user -> chosenRestaurant = user.getChosenRestaurant())
+                .addOnFailureListener(e -> Log.e("tag", "fail" + e.getMessage()));
+    }
+
+    public Filter filter(){
+        filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();
+                results.values = fSI.filterRestaurant(constraint.toString());
+                Log.e("filtre","filtre     " + results.values);
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mRestaurantsFiltered = (List<Restaurant>) results.values;
+            }
+        };
+        return filter;
     }
 }

@@ -2,29 +2,53 @@ package com.example.go4lunch.model;
 
 import androidx.annotation.Nullable;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class User {
+    private final List<Restaurant> favorite = new ArrayList<>();
     private String uid;
     private String name;
     private String avatar;
-    private String chosenRestaurant;
-    private final List<Restaurant> favorite = new ArrayList<>();
+    private String mail;
+    @Nullable
+    private Restaurant chosenRestaurant;
 
-    public User(String uid, String name, @Nullable String avatar) {
+    public User(String uid, String name, @Nullable String avatar, @Nullable Restaurant chosenRestaurant, String mail) {
         this.uid = uid;
         this.name = name;
         this.avatar = avatar;
-        this.chosenRestaurant = "none";
+        this.chosenRestaurant = chosenRestaurant;
+        this.mail = mail;
     }
 
-    public String getChosenRestaurant() {
+    public User() {
+    }
+
+    public static User firebaseUserToUser(FirebaseUser fbUser) {
+        try {
+            return new User(fbUser.getUid(), fbUser.getDisplayName(), fbUser.getPhotoUrl().toString(), Restaurant.noRestaurant, fbUser.getEmail());
+        } catch (NullPointerException exception) {
+            return new User(fbUser.getUid(), fbUser.getDisplayName(), "none", Restaurant.noRestaurant, fbUser.getEmail());
+        }
+    }
+
+    public Restaurant getChosenRestaurant() {
         return chosenRestaurant;
     }
 
-    public void setChosenRestaurant(String chosenRestaurant) {
+    public void setChosenRestaurant(Restaurant chosenRestaurant) {
         this.chosenRestaurant = chosenRestaurant;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getUid() {
@@ -53,5 +77,13 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public void addFavorite(Restaurant restaurant) {
+        favorite.add(restaurant);
+    }
+
+    public void removeFavorite(Restaurant restaurant) {
+        favorite.remove(restaurant);
     }
 }

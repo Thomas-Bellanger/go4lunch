@@ -14,6 +14,7 @@
 
             <ImageView
                 android:id="@+id/avatar"
+                android:layout_marginLeft="@dimen/avatar_margin_left"
                 android:layout_width="@dimen/workmate_item_avatar_size"
                 android:layout_height="@dimen/workmate_item_avatar_size"
                 android:src="@drawable/ic_baseline_account_circle_24" />
@@ -26,6 +27,7 @@
                 android:layout_marginLeft="@dimen/workmate_item_is_eating_margin_left"
                 android:text="is eating +style  (+ restaurant)"
                 android:textSize="@dimen/workmate_item_is_eating_textsize"
+                android:textColor="#191919"
                 android:textStyle="bold" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

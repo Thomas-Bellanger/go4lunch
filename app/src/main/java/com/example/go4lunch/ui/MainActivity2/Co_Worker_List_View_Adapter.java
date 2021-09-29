@@ -1,5 +1,7 @@
 package com.example.go4lunch.ui.MainActivity2;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
+import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 
 import java.util.List;
 
@@ -38,9 +41,18 @@ public class Co_Worker_List_View_Adapter extends RecyclerView.Adapter<Co_Worker_
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = mUsers.get(position);
         if (user.getChosenRestaurant() == null) {
-            user.setChosenRestaurant(Restaurant.noRestaurant);
+            holder.restaurant_Text.setText(user.getName() + " hasn't decided yet");
+            holder.restaurant_Text.setTextColor(Color.GRAY);
         }
-        holder.restaurant_Text.setText(user.getName() + " is eating " + user.getChosenRestaurant().getType() + "(" + user.getChosenRestaurant().getName() + ")");
+        else {
+            holder.restaurant_Text.setText(user.getName() + " is eating " + user.getChosenRestaurant().getType() + "(" + user.getChosenRestaurant().getName() + ")");
+            holder.restaurant_Text.setTextColor(Color.BLACK);
+            holder.restaurant_Text.setOnClickListener(v -> {
+                Intent intent = new Intent(v.getContext(), RestaurantDetail.class);
+                intent.putExtra(RestaurantDetail.KEY_RESTAURANT, user.getChosenRestaurant());
+                v.getContext().startActivity(intent);
+            });
+        }
         Glide.with(holder.co_Worker_Avatar.getContext())
                 .load(user.getAvatar())
                 .apply(RequestOptions.circleCropTransform())

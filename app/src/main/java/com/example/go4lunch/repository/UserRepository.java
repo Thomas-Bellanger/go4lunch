@@ -14,6 +14,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
+
 public final class UserRepository {
 
     private static final String COLLECTION_NAME = "users";
@@ -126,4 +128,11 @@ public final class UserRepository {
         }
     }
 
+    public Task<Void> updateFavorites(List<Restaurant> favorites) {
+        return this.getUsersCollection().document(getCurrentUserUid()).update("favorite", favorites);
+    }
+
+    public Task<Void> updateNotification(boolean notification) {
+        return this.getUsersCollection().document(getCurrentUserUid()).update("notification", notification);
+    }
 }

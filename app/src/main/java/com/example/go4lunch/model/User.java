@@ -15,6 +15,7 @@ public class User {
     private String mail;
     @Nullable
     private Restaurant chosenRestaurant;
+    private boolean notification;
 
     public User(String uid, String name, @Nullable String avatar, @Nullable Restaurant chosenRestaurant, String mail) {
         this.uid = uid;
@@ -41,6 +42,14 @@ public class User {
 
     public void setChosenRestaurant(Restaurant chosenRestaurant) {
         this.chosenRestaurant = chosenRestaurant;
+    }
+
+    public boolean isNotification() {
+        return notification;
+    }
+
+    public void setNotification(boolean notification) {
+        this.notification = notification;
     }
 
     public String getMail() {

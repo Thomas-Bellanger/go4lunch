@@ -2,8 +2,8 @@ package com.example.go4lunch.ui.MainActivity2;
 
 import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +14,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
+import com.example.go4lunch.model.Restaurant;
+import com.example.go4lunch.service.ApiService;
+import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.Marker;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.constants.Style;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
@@ -30,10 +37,16 @@ import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, PermissionsListener {
 
+    LatLng latLng;
+    private final double lat1 = 48.8675;
+    private final double lng1 = 2.6901;
+    private final double lat2 = 48.8653;
+    private final double lng2 = 2.6910;
     private MapView mapView;
     private MapboxMap map;
     private PermissionsManager permissionsManager;
     private ImageButton mapBtn;
+    private final ApiService mApiService = DI.getASIService();
 
     public MapFragment() {
     }
@@ -52,6 +65,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
         mapBtn = view.findViewById(R.id.mapBtn);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+        MainActivity2.toolbarTitle = "I'm hungry!";
 
         return mapView;
 
@@ -61,14 +75,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         this.map = mapboxMap;
+        LatLng pointlocation = new LatLng();
         mapboxMap.addOnCameraMoveListener(() -> {
-            Log.e("tag", "tag " + mapBtn.getVisibility());
             mapBtn.setVisibility(View.VISIBLE);
             mapBtn.setOnClickListener(v -> enableLocationComponent(mapboxMap.getStyleUrl()));
         });
         mapboxMap.setStyle(Style.MAPBOX_STREETS,
                 style -> enableLocationComponent(style));
+
+        getMarkers();
     }
+
 
     @SuppressWarnings({"MissingPermission"})
     private void enableLocationComponent(@NonNull String loadedMapStyle) {
@@ -110,12 +127,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
     @Override
     public void onPermissionResult(boolean granted) {
         if (granted) {
-            map.setStyle(Style.MAPBOX_STREETS, new MapboxMap.OnStyleLoadedListener() {
-                @Override
-                public void onStyleLoaded(@NonNull String style) {
-                    enableLocationComponent(style);
-                }
-            });
+            map.setStyle(Style.MAPBOX_STREETS, style -> enableLocationComponent(style));
 
         } else {
             Toast.makeText(this.getContext(), "location permission not granted", Toast.LENGTH_LONG).show();
@@ -166,4 +178,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
         mapView.onLowMemory();
     }
 
+    public void getMarkers() {
+        for (Restaurant restaurant : mApiService.getRestaurants()) {
+            latLng = new LatLng(restaurant.getLat(), restaurant.getLng());
+            Marker marker = map.addMarker(new MarkerOptions().setPosition(latLng));
+            map.setOnMarkerClickListener(marker1 -> {
+                Intent intent = new Intent(getContext(), RestaurantDetail.class);
+                intent.putExtra(RestaurantDetail.KEY_RESTAURANT, restaurant);
+                startActivity(intent);
+                return false;
+            });
+        }
+    }
 }

@@ -2,7 +2,6 @@ package com.example.go4lunch.ui.MainActivity2;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +11,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.manager.UserManager;
-import com.example.go4lunch.model.User;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.go4lunch.service.ApiService;
 
 public class Co_Worker_Fragment extends Fragment {
     private final UserManager userManager = UserManager.getInstance();
-    private List<User> mUsers = new ArrayList<>();
+    private ApiService mApiService;
     private RecyclerView mRecyclerView;
 
     public static Co_Worker_Fragment newInstance() {
@@ -41,12 +37,13 @@ public class Co_Worker_Fragment extends Fragment {
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+        mApiService = DI.getASIService();
 
         return view;
     }
 
     public void initList() {
-        mRecyclerView.setAdapter(new Co_Worker_List_View_Adapter(mUsers));
+        mRecyclerView.setAdapter(new Co_Worker_List_View_Adapter(mApiService.getFilteredUsers()));
     }
 
     @Override
@@ -58,16 +55,6 @@ public class Co_Worker_Fragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-        userManager.getUserCollection().get().addOnSuccessListener(queryDocumentSnapshots -> {
-            mUsers = new ArrayList<>();
-            if (!queryDocumentSnapshots.isEmpty()) {
-                for (QueryDocumentSnapshot userCollection : queryDocumentSnapshots) {
-                    User user = userCollection.toObject(User.class);
-                    mUsers.add(user);
-                }
-            }
-            initList();
-        }).addOnFailureListener(e -> Log.e("fail", e.getMessage()));
+        initList();
     }
 }

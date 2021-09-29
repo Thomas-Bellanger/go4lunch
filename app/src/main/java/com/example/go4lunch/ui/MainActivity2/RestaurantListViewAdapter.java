@@ -2,7 +2,6 @@ package com.example.go4lunch.ui.MainActivity2;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +57,7 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
         }
         holder.restaurantName.setText(restaurant.getName());
         holder.restaurantAdress.setText(restaurant.getAdress());
-        holder.style.setText(restaurant.getType());
+        holder.style.setText(restaurant.getType() + "   - ");
         holder.distance.setText(restaurant.getDistance());
         Glide.with(holder.restaurantAvatar.getContext())
                 .load(restaurant.getAvatar())
@@ -68,7 +67,6 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
 
         holder.restaurantName.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), RestaurantDetail.class);
-            Log.e("restaurantuid", "" + restaurant.getUid());
             intent.putExtra(RestaurantDetail.KEY_RESTAURANT, restaurant);
             v.getContext().startActivity(intent);
         });

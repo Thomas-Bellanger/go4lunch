@@ -9,6 +9,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 
+import java.util.List;
+
 public class UserManager {
 
     private static volatile UserManager instance;
@@ -70,5 +72,13 @@ public class UserManager {
 
     public Task<Void> signOut(Context context) {
         return userRepository.signOut(context);
+    }
+
+    public Task<Void> updateFavorites(List<Restaurant> favorites) {
+        return userRepository.updateFavorites(favorites);
+    }
+
+    public Task<Void> updateNotification(boolean notification) {
+        return userRepository.updateNotification(notification);
     }
 }

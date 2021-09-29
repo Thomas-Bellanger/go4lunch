@@ -35,45 +35,66 @@ import com.example.go4lunch.ui.SettingsActivity.SettingsActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity2 extends AppCompatActivity {
 
+    public static String toolbarTitle = "title";
+    public static String searchTip = "tip";
     private final UserManager userManager = UserManager.getInstance();
     private final User currentUser = User.firebaseUserToUser(userManager.getCurrentUser());
     private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
-    public static List<Restaurant> mRestaurants = new ArrayList<>();
-    public static List<Restaurant> mRestaurantsFiltered = new ArrayList<>();
-    public static List<User> mUsers = new ArrayList<>();
-    private ApiServiceInterface fSI;
-    private Filter filter;
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private ActivityMain2Binding binding;
+    private ApiServiceInterface ASI;
+    public Filter filterRestaurant = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+            results.values = ASI.filterRestaurant(constraint.toString());
+            return results;
+        }
 
-    ViewPager mViewPager;
-    TabLayout mTabLayout;
-    ActivityMain2Binding binding;
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            Log.e("filtre restaurant", "taille     " + (ASI.getFilteredRestaurants().size()));
+        }
+    };
+    public Filter filterUser = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+            results.values = ASI.filterUser(constraint.toString());
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            Log.e("filtre user", "taille     " + (ASI.getFilteredUsers().size()));
+        }
+    };
     private MainActivity2PagerAdapter mMainActivity2PagerAdapter;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private Restaurant chosenRestaurant;
+    private android.widget.SearchView searchView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMain2Binding.inflate(getLayoutInflater());
+        ASI = DI.getASIService();
         setContentView(binding.getRoot());
         mViewPager = findViewById(R.id.activity_main_viewpager);
         mTabLayout = findViewById(R.id.tabs);
         configureToolBar();
         configureDrawerLayout();
-        configurePagerAdapter();
         configureNavigationView();
         onDrawerOpened(mDrawerLayout);
-        fSI = DI.getFSIService();
+        configurePagerAdapter();
     }
 
-    private void configureToolBar() {
+    public void configureToolBar() {
         this.mToolbar = findViewById(R.id.includeToolbar);
         mToolbar.setTitle(R.string.i_m_hungry);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
@@ -89,7 +110,6 @@ public class MainActivity2 extends AppCompatActivity {
 
     public boolean onNavigationSelected(MenuItem item) {
         int id = item.getItemId();
-
         switch (id) {
             case R.id.activity_main_drawer_dining:
                 userManager.getUserData().addOnSuccessListener(user -> {
@@ -134,10 +154,8 @@ public class MainActivity2 extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_filtre, menu);
-
         MenuItem searchItem = menu.findItem(R.id.search);
-        android.widget.SearchView searchView = (android.widget.SearchView) searchItem.getActionView();
-
+        searchView = (android.widget.SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -146,16 +164,34 @@ public class MainActivity2 extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
-                getFilter().filter(newText);
+                getRestaurantFilter().filter(newText);
+                getUserFilter().filter(newText);
                 return false;
+            }
+        });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                searchView.setQueryHint(searchTip);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
             }
         });
         return true;
     }
 
-    public Filter getFilter() {
-        return filter;
+    public Filter getRestaurantFilter() {
+        return filterRestaurant;
+    }
+
+    public Filter getUserFilter() {
+        return filterUser;
     }
 
     public void onDrawerOpened(View drawerView) {
@@ -176,28 +212,30 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    public void getChosenRestaurant() {
-        userManager.getUserData().addOnSuccessListener(user -> chosenRestaurant = user.getChosenRestaurant())
-                .addOnFailureListener(e -> Log.e("tag", "fail" + e.getMessage()));
-    }
-
-    public Filter filter(){
-        filter = new Filter() {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                FilterResults results = new FilterResults();
-                results.values = fSI.filterRestaurant(constraint.toString());
-                Log.e("filtre","filtre     " + results.values);
-                return results;
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                switch (position) {
+                    case 0:
+                    case 1:
+                        toolbarTitle = "I'm hungry!";
+                        searchTip = "Search restaurants";
+                        break;
+                    case 2:
+                        toolbarTitle = "Workmates";
+                        searchTip = "Search workmates";
+                        break;
+                }
+                mToolbar.setTitle(toolbarTitle);
             }
 
             @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                mRestaurantsFiltered = (List<Restaurant>) results.values;
+            public void onPageSelected(int position) {
             }
-        };
-        return filter;
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 }

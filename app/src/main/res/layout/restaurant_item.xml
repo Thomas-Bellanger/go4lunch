@@ -32,6 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="distance"
+                android:textColor="#A5A5A5"
                 android:textSize="@dimen/restaurant_item_text_size" />
 
         </LinearLayout>
@@ -81,8 +82,9 @@
             android:layout_marginTop="@dimen/linearLayout2_margin_top">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/personPicture"
+                android:layout_width="@dimen/icon_person_size"
+                android:layout_height="@dimen/icon_person_size"
                 android:src="@drawable/ic_baseline_person_24"
                 app:tint="@color/black" />
 
@@ -104,6 +106,7 @@
                 android:id="@+id/restaurant_hours"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="italic"
                 android:text="open-close"
                 android:textSize="@dimen/restaurant_item_text_size" />
 

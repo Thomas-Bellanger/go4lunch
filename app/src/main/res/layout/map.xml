@@ -25,6 +25,6 @@
         android:layout_marginTop="112dp"
         mapbox:layout_constraintStart_toStartOf="parent"
         mapbox:layout_constraintTop_toTopOf="parent"
-        mapbox:mapbox_cameraZoom="40" />
+        mapbox:mapbox_cameraZoom="10" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

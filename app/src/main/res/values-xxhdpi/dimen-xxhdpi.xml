@@ -4,21 +4,26 @@
     <dimen name="toolbar_height">40dp</dimen>
     <dimen name="viewPager_height">438dp</dimen>
     <dimen name="tabIndicatorHeight">3dp</dimen>
+    <dimen name="tabLayout_height">80dp</dimen>
 
     <!-- activity restaurant detail -->
     <dimen name="restaurant_detail_avatar_height">250dp</dimen>
     <dimen name="orange_bar_height">80dp</dimen>
+    <dimen name="restaurant_name_detail_margin_top">10dp</dimen>
+    <dimen name="restaurant_name_detail_margin_left">10dp</dimen>
     <dimen name="restaurant_detail_name_textsize">20dp</dimen>
     <dimen name="restaurant_detail_style_textsize">15dp</dimen>
     <dimen name="floating_button_margin_top">220dp</dimen>
     <dimen name="floating_button_margin_end">28dp</dimen>
-    <dimen name="phone_button_height">80dp</dimen>
-    <dimen name="phone_button_margin_left">50dp</dimen>
-    <dimen name="like_button_margin_left">110dp</dimen>
-    <dimen name="website_button_margin_left">90dp</dimen>
-    <dimen name="call_text_margin_left">100dp</dimen>
+    <dimen name="phone_button_height">60dp</dimen>
+    <dimen name="phone_button_margin_left">20dp</dimen>
+    <dimen name="like_button_margin_left">70dp</dimen>
+    <dimen name="website_button_margin_left">50dp</dimen>
+    <dimen name="call_text_margin_left">40dp</dimen>
     <dimen name="call_text_margin_top">60dp</dimen>
     <dimen name="call_text_margin_bottom">15dp</dimen>
+    <dimen name="like_text_margin_left">90dp</dimen>
+    <dimen name="website_text_margin_left">65dp</dimen>
     <dimen name="joiners_recyclerView_height">310dp</dimen>
 
     <!-- nav_header -->
@@ -41,15 +46,17 @@
     <dimen name="linearLayout2_margin_top">30dp</dimen>
     <dimen name="restaurant_item_adress_margin_left">10dp</dimen>
     <dimen name="restaurant_item_icon_person_margin_left">210dp</dimen>
+    <dimen name="icon_person_size">20dp</dimen>
     <dimen name="restaurant_item_linearlayout3_margin_left">5dp</dimen>
     <dimen name="restaurant_item_linearlayout3_margin_top">70dp</dimen>
     <dimen name="restaurant_item_star_rate_margin_left">180dp</dimen>
 
     <!-- workmate item -->
+    <dimen name="avatar_margin_left">5dp</dimen>
     <dimen name="workmate_item_cardview_height">90dp</dimen>
     <dimen name="workmate_item_avatar_size">50dp</dimen>
     <dimen name="workmate_item_is_eating_margin_left">15dp</dimen>
-    <dimen name="workmate_item_is_eating_textsize">20dp</dimen>
+    <dimen name="workmate_item_is_eating_textsize">15dp</dimen>
 
     <!-- workmate join -->
     <dimen name="workmate_join_layout_margin_top">5dp</dimen>

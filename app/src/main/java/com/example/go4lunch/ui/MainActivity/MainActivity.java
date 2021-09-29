@@ -5,9 +5,11 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.ActivityMainBinding;
 import com.example.go4lunch.manager.UserManager;
+import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.ui.MainActivity2.MainActivity2;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
@@ -20,6 +22,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private static final int RC_SIGN_IN = 123;
     private final UserManager userManager = UserManager.getInstance();
+    private final ApiService mApiService = DI.getASIService();
 
 
     @Override
@@ -30,12 +33,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mApiService.populateUser();
+        mApiService.populateRestaurant();
         startSignInActivity();
     }
 
     private void startSignInActivity() {
         if (userManager.isCurrentUserLogged()) {
             Intent intent = new Intent(this, MainActivity2.class);
+
             startActivity(intent);
         } else {
             List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -56,6 +62,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                     , RC_SIGN_IN);
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

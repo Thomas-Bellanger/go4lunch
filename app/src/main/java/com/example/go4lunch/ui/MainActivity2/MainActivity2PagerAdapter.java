@@ -4,8 +4,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-public class MainActivity2PagerAdapter extends FragmentPagerAdapter {
+import com.example.go4lunch.DI.DI;
+import com.example.go4lunch.service.ApiService;
 
+public class MainActivity2PagerAdapter extends FragmentPagerAdapter {
+    ApiService mApiService = DI.getASIService();
     Fragment mFragment;
 
     public MainActivity2PagerAdapter(FragmentManager fm) {

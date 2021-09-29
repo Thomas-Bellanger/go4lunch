@@ -7,6 +7,21 @@
     android:orientation="vertical"
     tools:context=".ui.SettingsActivity.SettingsActivity">
 
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="@dimen/settings_btn_size"
+        android:layout_height="wrap_content"
+        android:text="@string/notification"
+        android:textSize="@dimen/settings_text_size"
+        android:textColor="@color/white"
+        android:layout_marginBottom="@dimen/settings_btn_margin_top"
+        android:gravity="center"
+        android:background="@drawable/button_radius_red"
+        android:backgroundTint="@color/green"
+        app:layout_constraintBottom_toTopOf="@+id/settings_name_button"
+        app:layout_constraintEnd_toEndOf="@+id/settings_name_button"
+        app:layout_constraintStart_toStartOf="@+id/settings_name_button" />
+
     <ImageView
         android:id="@+id/settings_avatar"
         android:layout_width="@dimen/settings_avatar_size"
@@ -56,7 +71,7 @@
         android:layout_width="@dimen/settings_btn_size"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/settings_btn_margin_top"
-        android:backgroundTint="@color/green"
+        android:backgroundTint="@color/orange"
         android:text="@string/retour"
         android:textSize="@dimen/settings_text_size"
         app:layout_constraintEnd_toEndOf="parent"

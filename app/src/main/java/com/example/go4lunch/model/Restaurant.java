@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.go4lunch.manager.RestaurantManager;
-import com.example.go4lunch.manager.UserManager;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.ArrayList;
@@ -22,11 +21,10 @@ public class Restaurant implements Parcelable {
             return new Restaurant[size];
         }
     };
-    public static Restaurant noRestaurant = new Restaurant("000", "none", "noAdress", "noType", 0, 0, "none", "none", "none", 0, 0);
-    public static Restaurant restaurant1 = new Restaurant("1863", "restaurant 1", "8 Rue des restaurants", "French", 11, 21, "210", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 10);
-    public static Restaurant restaurant2 = new Restaurant("2854", "restaurant 2", "10 Rue des restaurants", "French", 11, 21, "210", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 5);
+    public static Restaurant noRestaurant = new Restaurant("000", "none", "noAdress", "noType", 0, 0, "none", "none", "none", 0, 0, 0, 0);
+    public static Restaurant restaurant1 = new Restaurant("1863", "restaurant 1", "8 Rue des restaurants", "French", 11, 21, "210", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 10, 48.8675, 2.6901);
+    public static Restaurant restaurant2 = new Restaurant("2854", "restaurant 2", "10 Rue des restaurants", "French", 11, 21, "210", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 5, 48.8341, 2.7958);
 
-    public static Restaurant chosenRestaurant = User.firebaseUserToUser(UserManager.getInstance().getCurrentUser()).getChosenRestaurant();
     private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
     private String uid;
     private String name;
@@ -41,9 +39,11 @@ public class Restaurant implements Parcelable {
     private int phoneNumber;
     private boolean like;
     private int note;
-    private LatLng mLatLng;
+    private double lat;
+    private double lng;
+    private LatLng mLatLng = new LatLng(getLat(), getLng());
 
-    public Restaurant(String uid, String name, String adress, String type, int opening, int closing, String distance, String avatar, String url, int phoneNumber, int note) {
+    public Restaurant(String uid, String name, String adress, String type, int opening, int closing, String distance, String avatar, String url, int phoneNumber, int note, double lat, double lng) {
         this.uid = uid;
         this.name = name;
         this.adress = adress;
@@ -56,6 +56,8 @@ public class Restaurant implements Parcelable {
         this.url = url;
         this.phoneNumber = phoneNumber;
         this.note = note;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     public Restaurant() {
@@ -74,6 +76,24 @@ public class Restaurant implements Parcelable {
         phoneNumber = in.readInt();
         note = in.readInt();
         like = in.readByte() != 0;
+        lat = in.readDouble();
+        lng = in.readDouble();
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
     }
 
     public LatLng getLatLng() {

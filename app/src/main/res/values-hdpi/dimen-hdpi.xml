@@ -1,72 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Activity 2 -->
-    <dimen name="toolbar_height">40dp</dimen>
-    <dimen name="viewPager_height">438dp</dimen>
+    <dimen name="toolbar_height">50dp</dimen>
+    <dimen name="viewPager_height">390dp</dimen>
     <dimen name="tabIndicatorHeight">3dp</dimen>
+    <dimen name="tabLayout_height">63dp</dimen>
 
     <!-- activity restaurant detail -->
-    <dimen name="restaurant_detail_avatar_height">250dp</dimen>
-    <dimen name="orange_bar_height">80dp</dimen>
-    <dimen name="restaurant_detail_name_textsize">20dp</dimen>
-    <dimen name="restaurant_detail_style_textsize">15dp</dimen>
-    <dimen name="floating_button_margin_top">220dp</dimen>
+    <dimen name="restaurant_detail_avatar_height">120dp</dimen>
+    <dimen name="orange_bar_height">50dp</dimen>
+    <dimen name="restaurant_name_detail_margin_top">4dp</dimen>
+    <dimen name="restaurant_name_detail_margin_left">10dp</dimen>
+    <dimen name="restaurant_detail_name_textsize">15dp</dimen>
+    <dimen name="restaurant_detail_style_textsize">10dp</dimen>
+    <dimen name="floating_button_margin_top">80dp</dimen>
     <dimen name="floating_button_margin_end">28dp</dimen>
-    <dimen name="phone_button_height">80dp</dimen>
-    <dimen name="phone_button_margin_left">50dp</dimen>
-    <dimen name="like_button_margin_left">110dp</dimen>
-    <dimen name="website_button_margin_left">90dp</dimen>
-    <dimen name="call_text_margin_left">100dp</dimen>
-    <dimen name="call_text_margin_top">60dp</dimen>
-    <dimen name="call_text_margin_bottom">15dp</dimen>
+    <dimen name="phone_button_height">30dp</dimen>
+    <dimen name="phone_button_margin_left">40dp</dimen>
+    <dimen name="like_button_margin_left">60dp</dimen>
+    <dimen name="website_button_margin_left">75dp</dimen>
+    <dimen name="call_text_margin_left">40dp</dimen>
+    <dimen name="call_text_margin_top">40dp</dimen>
+    <dimen name="call_text_margin_bottom">5dp</dimen>
+    <dimen name="like_text_margin_left">70dp</dimen>
+    <dimen name="website_text_margin_left">75dp</dimen>
     <dimen name="joiners_recyclerView_height">310dp</dimen>
 
     <!-- nav_header -->
-    <dimen name="nav_header_layout_height">250dp</dimen>
-    <dimen name="nav_header_text_size">40dp</dimen>
-    <dimen name="nav_header_account_size">60dp</dimen>
+    <dimen name="nav_header_layout_height">180dp</dimen>
+    <dimen name="nav_header_text_size">30dp</dimen>
+    <dimen name="nav_header_account_size">50dp</dimen>
     <dimen name="nav_header_go4lunch_text_size">20dp</dimen>
-    <dimen name="nav_header_email_text_size">12dp</dimen>
-    <dimen name="nav_header_avatar_margin_left">0dp</dimen>
+    <dimen name="nav_header_email_text_size">13dp</dimen>
+    <dimen name="nav_header_avatar_margin_left">10dp</dimen>
 
     <!-- restaurant item -->
     <dimen name="cardview_margin_left">5dp</dimen>
-    <dimen name="restaurant_item_text_size">12dp</dimen>
+    <dimen name="restaurant_item_text_size">10dp</dimen>
     <dimen name="restaurant_item_distance_margin_left">225dp</dimen>
-    <dimen name="restaurant_item_avatar_width">100dp</dimen>
-    <dimen name="restaurant_item_avatar_height">80dp</dimen>
-    <dimen name="restaurant_item_avatar_margin_top">8dp</dimen>
+    <dimen name="restaurant_item_avatar_width">60dp</dimen>
+    <dimen name="restaurant_item_avatar_height">60dp</dimen>
+    <dimen name="restaurant_item_avatar_margin_top">4dp</dimen>
     <dimen name="restaurant_item_avatar_margin_left">255dp</dimen>
     <dimen name="linearLayout2_margin_left">5dp</dimen>
-    <dimen name="linearLayout2_margin_top">30dp</dimen>
+    <dimen name="linearLayout2_margin_top">25dp</dimen>
     <dimen name="restaurant_item_adress_margin_left">10dp</dimen>
-    <dimen name="restaurant_item_icon_person_margin_left">210dp</dimen>
-    <dimen name="restaurant_item_linearlayout3_margin_left">5dp</dimen>
-    <dimen name="restaurant_item_linearlayout3_margin_top">70dp</dimen>
+    <dimen name="restaurant_item_icon_person_margin_left">220dp</dimen>
+    <dimen name="icon_person_size">15dp</dimen>
+    <dimen name="restaurant_item_linearlayout3_margin_left">7dp</dimen>
+    <dimen name="restaurant_item_linearlayout3_margin_top">45dp</dimen>
     <dimen name="restaurant_item_star_rate_margin_left">180dp</dimen>
 
     <!-- workmate item -->
-    <dimen name="workmate_item_cardview_height">90dp</dimen>
-    <dimen name="workmate_item_avatar_size">50dp</dimen>
-    <dimen name="workmate_item_is_eating_margin_left">15dp</dimen>
-    <dimen name="workmate_item_is_eating_textsize">20dp</dimen>
+    <dimen name="avatar_margin_left">10dp</dimen>
+    <dimen name="workmate_item_cardview_height">60dp</dimen>
+    <dimen name="workmate_item_avatar_size">40dp</dimen>
+    <dimen name="workmate_item_is_eating_margin_left">10dp</dimen>
+    <dimen name="workmate_item_is_eating_textsize">15dp</dimen>
 
     <!-- workmate join -->
     <dimen name="workmate_join_layout_margin_top">5dp</dimen>
-    <dimen name="workmate_join_avatar_size">50dp</dimen>
-    <dimen name="workmate_join_text_size">20dp</dimen>
+    <dimen name="workmate_join_avatar_size">40dp</dimen>
+    <dimen name="workmate_join_text_size">15dp</dimen>
     <dimen name="workmate_join_name_margin_left">15dp</dimen>
     <dimen name="workmate_join_is_joinig_margin_left">2dp</dimen>
 
     <!-- settings -->
     <dimen name="settings_avatar_margin_top">20dp</dimen>
-    <dimen name="settings_avatar_size">150dp</dimen>
-    <dimen name="settings_profile_name_margin_top">15dp</dimen>
-    <dimen name="settings_email_margin_top">20dp</dimen>
-    <dimen name="settings_btn_name_margin_top">120dp</dimen>
-    <dimen name="settings_btn_margin_top">10dp</dimen>
-    <dimen name="settings_btn_size">250dp</dimen>
-    <dimen name="settings_text_size">15dp</dimen>
+    <dimen name="settings_avatar_size">170dp</dimen>
+    <dimen name="settings_profile_name_margin_top">20dp</dimen>
+    <dimen name="settings_email_margin_top">25dp</dimen>
+    <dimen name="settings_btn_name_margin_top">300dp</dimen>
+    <dimen name="settings_btn_margin_top">15dp</dimen>
+    <dimen name="settings_btn_size">400dp</dimen>
+    <dimen name="settings_text_size">25dp</dimen>
 
 
 </resources>

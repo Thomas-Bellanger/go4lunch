@@ -2,7 +2,6 @@ package com.example.go4lunch.ui.MainActivity2;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +11,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.manager.RestaurantManager;
-import com.example.go4lunch.model.Restaurant;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.go4lunch.service.ApiService;
 
 public class RestaurantListView extends Fragment {
     private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
-    private List<Restaurant> mRestaurants = new ArrayList<>();
+    private ApiService mApiService;
     private RecyclerView mRecyclerView;
 
     public static RestaurantListView newInstance() {
@@ -41,6 +37,7 @@ public class RestaurantListView extends Fragment {
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        mApiService = DI.getASIService();
 
         return view;
     }
@@ -52,22 +49,11 @@ public class RestaurantListView extends Fragment {
     }
 
     public void initList() {
-        mRecyclerView.setAdapter(new RestaurantListViewAdapter(mRestaurants));
+        mRecyclerView.setAdapter(new RestaurantListViewAdapter(mApiService.getFilteredRestaurants()));
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        mRestaurantManager.getRestaurantCollection().get().addOnSuccessListener(queryDocumentSnapshots -> {
-            mRestaurants = new ArrayList<>();
-            if (!queryDocumentSnapshots.isEmpty()) {
-                for (QueryDocumentSnapshot restaurantCollection : queryDocumentSnapshots) {
-                    Restaurant restaurant = restaurantCollection.toObject(Restaurant.class);
-                    mRestaurants.add(restaurant);
-                }
-            }
-            initList();
-        }).addOnFailureListener(e -> Log.e("fail", e.getMessage()));
     }
 }

@@ -25,6 +25,8 @@
 
     <TextView
         android:id="@+id/restaurant_detail_name"
+        android:layout_marginTop="@dimen/restaurant_name_detail_margin_top"
+        android:layout_marginLeft="@dimen/restaurant_name_detail_margin_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/restaurant_name"
@@ -35,6 +37,7 @@
 
     <ImageView
         android:id="@+id/restaurant_detail_star_icon"
+        android:layout_marginTop="@dimen/restaurant_name_detail_margin_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_star_rate_24"
@@ -44,6 +47,7 @@
 
     <ImageView
         android:id="@+id/restaurant_detail_star_icon2"
+        android:layout_marginTop="@dimen/restaurant_name_detail_margin_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_star_rate_24"
@@ -53,6 +57,7 @@
 
     <ImageView
         android:id="@+id/restaurant_detail_star_icon3"
+        android:layout_marginTop="@dimen/restaurant_name_detail_margin_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_star_rate_24"
@@ -62,6 +67,7 @@
 
     <TextView
         android:id="@+id/restaurant_detail_style"
+        android:layout_marginLeft="@dimen/restaurant_name_detail_margin_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/style_restaurant"
@@ -113,7 +119,7 @@
 
             <ImageButton
                 android:id="@+id/button_call"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/phone_button_height"
                 android:layout_height="@dimen/phone_button_height"
                 android:layout_marginStart="@dimen/phone_button_margin_left"
                 android:background="@color/white"
@@ -121,16 +127,16 @@
 
             <ImageButton
                 android:id="@+id/button_like"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/phone_button_height"
                 android:layout_height="@dimen/phone_button_height"
                 android:layout_marginStart="@dimen/like_button_margin_left"
                 android:background="@color/white"
-                android:src="@drawable/ic_baseline_star_rate_24"
-                app:tint="#FD7A23" />
+                android:src="@drawable/ic_baseline_star_rate_24_orange"
+                />
 
             <ImageButton
                 android:id="@+id/button_website"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/phone_button_height"
                 android:layout_height="@dimen/phone_button_height"
                 android:layout_marginStart="@dimen/website_button_margin_left"
                 android:background="@color/white"
@@ -139,14 +145,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/text_call"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="46dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginStart="@dimen/call_text_margin_left"
+                android:layout_marginTop="@dimen/call_text_margin_top"
                 android:layout_marginBottom="15dp"
                 android:text="@string/call"
                 android:textColor="#FD7A23"
@@ -157,7 +163,7 @@
                 android:id="@+id/text_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/call_text_margin_left"
+                android:layout_marginStart="@dimen/like_text_margin_left"
                 android:layout_marginTop="@dimen/call_text_margin_top"
                 android:layout_marginBottom="@dimen/call_text_margin_bottom"
                 android:text="@string/like"
@@ -169,8 +175,8 @@
                 android:id="@+id/text_website"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginStart="@dimen/website_text_margin_left"
+                android:layout_marginTop="@dimen/call_text_margin_top"
                 android:layout_marginBottom="15dp"
                 android:text="@string/website"
                 android:textColor="#F44336"

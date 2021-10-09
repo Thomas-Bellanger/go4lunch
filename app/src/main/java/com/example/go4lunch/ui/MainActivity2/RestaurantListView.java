@@ -2,6 +2,7 @@ package com.example.go4lunch.ui.MainActivity2;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.manager.RestaurantManager;
+import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.service.ApiService;
+
+import java.util.List;
 
 public class RestaurantListView extends Fragment {
     private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
@@ -38,6 +42,7 @@ public class RestaurantListView extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mApiService = DI.getASIService();
+        mApiService.getLiveRestaurant().observe(this.getActivity(), this::initList);
 
         return view;
     }
@@ -45,11 +50,10 @@ public class RestaurantListView extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        initList();
     }
 
-    public void initList() {
-        mRecyclerView.setAdapter(new RestaurantListViewAdapter(mApiService.getFilteredRestaurants()));
+    private void initList(List<Restaurant> restaurants) {
+        mRecyclerView.setAdapter(new RestaurantListViewAdapter(restaurants));
     }
 
     @Override

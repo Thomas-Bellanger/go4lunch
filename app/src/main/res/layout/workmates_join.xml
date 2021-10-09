@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/workmate_join_layout_margin_top">
@@ -9,8 +8,7 @@
         android:id="@+id/avatar"
         android:layout_width="@dimen/workmate_join_avatar_size"
         android:layout_height="@dimen/workmate_join_avatar_size"
-        android:src="@drawable/ic_baseline_account_circle_24"
-        app:tint="#FF5722" />
+        android:src="@drawable/ic_baseline_account_circle_24" />
 
     <TextView
         android:id="@+id/joiner_name"
@@ -28,7 +26,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/workmate_join_is_joinig_margin_left"
         android:gravity="center"
-        android:text="is joining!"
+        android:text="@string/is_joining"
         android:textSize="@dimen/workmate_join_text_size"
         android:textStyle="bold" />
 

@@ -20,7 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
     private final UserManager userManager = UserManager.getInstance();
     private final User currentUser = User.firebaseUserToUser(userManager.getCurrentUser());
     private ActivitySettingsBinding binding;
-    private static boolean notification;
+    private boolean notification = currentUser.isNotification();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,6 @@ public class SettingsActivity extends AppCompatActivity {
                 .load(currentUser.getAvatar())
                 .apply(RequestOptions.circleCropTransform())
                 .into(binding.settingsAvatar);
-        settingCheckBox();
         binding.checkbox.setOnClickListener(v -> setNotification());
         binding.settingsLogout.setOnClickListener(v -> finish());
         binding.settingsNameButton.setOnClickListener(v -> userManager.updateUsername(binding.settingsName.getText().toString()));
@@ -49,13 +48,11 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void settingCheckBox(){
-
         if (notification){
-
-        binding.checkbox.setActivated(true);
+        binding.checkbox.setChecked(true);
         }
         else {
-            binding.checkbox.setActivated(false);
+            binding.checkbox.setChecked(false);
         }
     }
 
@@ -69,5 +66,13 @@ public class SettingsActivity extends AppCompatActivity {
         userManager.updateNotification(notification).addOnSuccessListener(unused -> Toast.makeText(getApplicationContext(),
                 "Change saved", Toast.LENGTH_SHORT).show());
         Log.e("notification", "notification "+notification);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        userManager.getUserData().addOnSuccessListener(user -> {notification = user.isNotification();
+        settingCheckBox();
+        });
     }
 }

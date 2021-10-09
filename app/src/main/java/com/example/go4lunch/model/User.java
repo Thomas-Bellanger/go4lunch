@@ -29,11 +29,11 @@ public class User {
     }
 
     public static User firebaseUserToUser(FirebaseUser fbUser) {
-        try {
-            return new User(fbUser.getUid(), fbUser.getDisplayName(), fbUser.getPhotoUrl().toString(), Restaurant.noRestaurant, fbUser.getEmail());
-        } catch (NullPointerException exception) {
-            return new User(fbUser.getUid(), fbUser.getDisplayName(), "none", Restaurant.noRestaurant, fbUser.getEmail());
-        }
+            try {
+                return new User(fbUser.getUid(), fbUser.getDisplayName(), fbUser.getPhotoUrl().toString(), Restaurant.noRestaurant, fbUser.getEmail());
+            } catch (NullPointerException exception) {
+                return new User(fbUser.getUid(), fbUser.getDisplayName(), "https://www.gravatar.com/avatar/HASH", Restaurant.noRestaurant, fbUser.getEmail());
+            }
     }
 
     public Restaurant getChosenRestaurant() {

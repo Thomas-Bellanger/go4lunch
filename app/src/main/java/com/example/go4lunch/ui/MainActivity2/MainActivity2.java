@@ -2,7 +2,6 @@ package com.example.go4lunch.ui.MainActivity2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +31,9 @@ import com.example.go4lunch.model.User;
 import com.example.go4lunch.service.ApiServiceInterface;
 import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 import com.example.go4lunch.ui.SettingsActivity.SettingsActivity;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -40,36 +42,37 @@ public class MainActivity2 extends AppCompatActivity {
     public static String toolbarTitle = "title";
     public static String searchTip = "tip";
     private final UserManager userManager = UserManager.getInstance();
-    private final User currentUser = User.firebaseUserToUser(userManager.getCurrentUser());
+    private User currentUser = User.firebaseUserToUser(userManager.getCurrentUser());
     private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ActivityMain2Binding binding;
-    private ApiServiceInterface ASI;
+    private ApiServiceInterface mApiService;
+
     public Filter filterRestaurant = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
-            results.values = ASI.filterRestaurant(constraint.toString());
+            results.values = mApiService.filterRestaurant(constraint.toString());
             return results;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            Log.e("filtre restaurant", "taille     " + (ASI.getFilteredRestaurants().size()));
+            mApiService.getLiveRestaurant();
         }
     };
     public Filter filterUser = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
-            results.values = ASI.filterUser(constraint.toString());
+            results.values = mApiService.filterUser(constraint.toString());
             return results;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            Log.e("filtre user", "taille     " + (ASI.getFilteredUsers().size()));
+            mApiService.getLiveUsers();
         }
     };
     private MainActivity2PagerAdapter mMainActivity2PagerAdapter;
@@ -83,7 +86,7 @@ public class MainActivity2 extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMain2Binding.inflate(getLayoutInflater());
-        ASI = DI.getASIService();
+        mApiService = DI.getASIService();
         setContentView(binding.getRoot());
         mViewPager = findViewById(R.id.activity_main_viewpager);
         mTabLayout = findViewById(R.id.tabs);
@@ -119,9 +122,10 @@ public class MainActivity2 extends AppCompatActivity {
                         intent.putExtra(RestaurantDetail.KEY_RESTAURANT, chosenRestaurant);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(MainActivity2.this, "No lunch chosen!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity2.this, getResources().getString(R.string.noLunch), Toast.LENGTH_SHORT).show();
                     }
-                }).addOnFailureListener(e -> Log.e("tag", "fail" + e.getMessage()));
+                }).addOnFailureListener(e -> {//Log.e("tag", "fail" + e.getMessage())
+                    });
                 break;
 
             case R.id.activity_main_drawer_settings:
@@ -130,11 +134,16 @@ public class MainActivity2 extends AppCompatActivity {
                 break;
 
             case R.id.activity_main_drawer_logout:
-                userManager.signOut(this).addOnSuccessListener(Void -> finish());
-                break;
+                    logout();
         }
         this.mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void logout(){
+        userManager.signOut(this).addOnSuccessListener(Void -> {
+            this.finish();
+        });
     }
 
     public void configureNavigationView() {
@@ -217,13 +226,15 @@ public class MainActivity2 extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 switch (position) {
                     case 0:
+                        toolbarTitle = getResources().getString(R.string.i_m_hungry);
+                        searchTip = getResources().getString(R.string.searchRestaurant);
                     case 1:
-                        toolbarTitle = "I'm hungry!";
-                        searchTip = "Search restaurants";
+                        toolbarTitle = getResources().getString(R.string.i_m_hungry);
+                        searchTip = getResources().getString(R.string.searchRestaurant);
                         break;
                     case 2:
-                        toolbarTitle = "Workmates";
-                        searchTip = "Search workmates";
+                        toolbarTitle = getResources().getString(R.string.availableWorkmate);
+                        searchTip = getResources().getString(R.string.searchWorkmates);;
                         break;
                 }
                 mToolbar.setTitle(toolbarTitle);
@@ -237,5 +248,10 @@ public class MainActivity2 extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
+
+    public void initalizeSDK(){
+        Places.initialize(getApplicationContext(), "AIzaSyC77ax8lhHQbeqgqiqJ7rqhJfCdEWE4FCk");
+        PlacesClient placesClient = Places.createClient(this);
     }
 }

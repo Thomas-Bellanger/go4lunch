@@ -14,7 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.manager.UserManager;
+import com.example.go4lunch.model.User;
 import com.example.go4lunch.service.ApiService;
+
+import java.util.List;
 
 public class Co_Worker_Fragment extends Fragment {
     private final UserManager userManager = UserManager.getInstance();
@@ -38,23 +41,22 @@ public class Co_Worker_Fragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         mApiService = DI.getASIService();
+        mApiService.getLiveUsers().observe(getActivity(), this::initList);
 
         return view;
     }
 
-    public void initList() {
-        mRecyclerView.setAdapter(new Co_Worker_List_View_Adapter(mApiService.getFilteredUsers()));
+    private void initList(List<User> users) {
+        mRecyclerView.setAdapter(new Co_Worker_List_View_Adapter(users));
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        initList();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        initList();
     }
 }

@@ -21,9 +21,9 @@ public class Restaurant implements Parcelable {
             return new Restaurant[size];
         }
     };
-    public static Restaurant noRestaurant = new Restaurant("000", "none", "noAdress", "noType", 0, 0, "none", "none", "none", 0, 0, 0, 0);
-    public static Restaurant restaurant1 = new Restaurant("1863", "restaurant 1", "8 Rue des restaurants", "French", 11, 21, "210", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 10, 48.8675, 2.6901);
-    public static Restaurant restaurant2 = new Restaurant("2854", "restaurant 2", "10 Rue des restaurants", "French", 11, 21, "210", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 5, 48.8341, 2.7958);
+    public static Restaurant noRestaurant = new Restaurant("000", "none", "noAdress", "noType", 0, 0, "0", "none", "none", 0, 0, 0, 0);
+    public static Restaurant restaurant1 = new Restaurant("1863", "restaurant 1", "8 Rue des restaurants", "French", 11, 21, "0.0", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 10, 48.8675, 2.6901);
+    public static Restaurant restaurant2 = new Restaurant("2854", "restaurant 2", "10 Rue des restaurants", "French", 11, 21,"0.0" , "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 5, 48.8341, 2.7958);
 
     private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
     private String uid;

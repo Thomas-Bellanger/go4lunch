@@ -1,5 +1,7 @@
 package com.example.go4lunch.service;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 
@@ -24,4 +26,8 @@ public interface ApiServiceInterface {
     void populateRestaurant();
 
     void populateUser();
+
+    LiveData<List<Restaurant>> getLiveRestaurant();
+
+    LiveData<List<User>> getLiveUsers();
 }

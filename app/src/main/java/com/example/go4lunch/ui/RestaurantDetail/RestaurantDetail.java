@@ -63,15 +63,13 @@ public class RestaurantDetail extends AppCompatActivity {
                 .apply(RequestOptions.centerCropTransform())
                 .into(binding.restaurantDetailAvatar);
         configureRecyclerView();
-        checkNote();
-        checkIfRestaurantIsLicked();
-
         //call
         binding.buttonCall.setOnClickListener(v -> call());
         //website
         binding.buttonWebsite.setOnClickListener(v -> navigate());
         //like the restaurant
-        binding.buttonLike.setOnClickListener(v -> changeState());
+        binding.buttonLike.setOnClickListener(v ->
+                changeState());
         //choose this restaurant...or not
         binding.fabLike.setOnClickListener(v -> chooseRestaurant());
     }
@@ -105,34 +103,36 @@ public class RestaurantDetail extends AppCompatActivity {
 
     //choose restaurant function and check if the user already had a chosen restaurant
     public void chooseRestaurant() {
-        removeUser(currentUser.getChosenRestaurant());
         if (chosen) {
             userManager.updateLunch(null).addOnSuccessListener(unused -> {
+                mApiService.populateRestaurant();
                 fabCleared();
-                restaurantManager.updateJoiners(mRestaurant, joiners).addOnSuccessListener(unused1 -> {
-                    Toast.makeText(RestaurantDetail.this, "Canceled", Toast.LENGTH_SHORT).show();
-                });
+                removeUser(mRestaurant);
+                Toast.makeText(RestaurantDetail.this, getResources().getString(R.string.canceled), Toast.LENGTH_SHORT).show();
             });
         } else {
+            removeUser(chosenRestaurant);
             joiners.add(currentUser);
             userManager.updateLunch(mRestaurant).addOnSuccessListener(unused -> {
+                mApiService.populateRestaurant();
                 fabChecked();
                 restaurantManager.updateJoiners(mRestaurant, joiners).addOnSuccessListener(unused12 -> {
-                    Toast.makeText(RestaurantDetail.this, "Restaurant chosen!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RestaurantDetail.this, getResources().getString(R.string.restaurantChosen), Toast.LENGTH_SHORT).show();
+                    initList();
                 });
             });
         }
-        initList();
         mApiService.populateUser();
     }
 
     //remove the user from the joiners list
     public void removeUser(Restaurant restaurant) {
-        for (User user : joiners) {
+        for (User user : restaurant.getJoiners()) {
             if (user.getUid().equals(currentUser.getUid())) {
-                joiners.remove(user);
+                restaurant.getJoiners().remove(user);
                 restaurantManager.updateJoiners(restaurant, restaurant.getJoiners()).addOnSuccessListener(unused12 -> {
-                    Log.e("removed from joiners", "list size " + restaurant.getJoiners().size());
+                    //Log.e("removed from joiners", "list size " + restaurant.getJoiners().size());
+                    initList();
                 });
             }
         }
@@ -145,13 +145,13 @@ public class RestaurantDetail extends AppCompatActivity {
         } else {
             addFavorites();
         }
-        restaurantManager.updateNote(mRestaurant, mRestaurant.getNote()).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-            }
+        restaurantManager.updateNote(mRestaurant, mRestaurant.getNote()).addOnSuccessListener(unused -> {
+            mApiService.populateRestaurant();
         });
-        userManager.updateFavorites(favorites).addOnSuccessListener(unused -> Log.e("favorite", "size    " + favorites.size()));
-        setStar();
+        userManager.updateFavorites(favorites).addOnSuccessListener(unused -> {
+            //Log.e("favorite", "size    " + favorites.size())
+        });
+        checkIfRestaurantIsLicked();
     }
 
     public void addFavorites() {
@@ -161,12 +161,13 @@ public class RestaurantDetail extends AppCompatActivity {
     }
 
     public void removeFromFavorites() {
-        mRestaurant.setNote(mRestaurant.getNote() - 1);
-        for (Restaurant restaurant : favorites)
+        for (Restaurant restaurant : favorites) {
             if ((restaurant.getUid().equals(mRestaurant.getUid()))) {
                 favorites.remove(restaurant);
+                mRestaurant.setNote(mRestaurant.getNote() - 1);
+                liked = false;
             }
-        liked = false;
+        }
     }
 
     //check the note of the restaurant and show stars
@@ -219,12 +220,6 @@ public class RestaurantDetail extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         userManager.getUserData().addOnSuccessListener(user -> {
-            chosenRestaurant = user.getChosenRestaurant();
-            favorites = user.getFavorite();
-            if (chosenRestaurant == null) {
-                chosenRestaurant = Restaurant.noRestaurant;
-            }
-            checkIfRestaurantIsChosen();
         });
     }
 
@@ -256,10 +251,20 @@ public class RestaurantDetail extends AppCompatActivity {
                     }
                 }
             }
-        }).addOnFailureListener(e -> Log.e("fail", e.getMessage()));
+        }).addOnFailureListener(e -> {//Log.e("fail", e.getMessage())
+        });
         userManager.getUserData().addOnSuccessListener(user -> {
-                    favorites = user.getFavorite();
+            chosenRestaurant = user.getChosenRestaurant();
+            favorites = user.getFavorite();
+            if (chosenRestaurant == null) {
+                chosenRestaurant = Restaurant.noRestaurant;
+            }
+            checkIfRestaurantIsChosen();
+            checkIfRestaurantIsLicked();
                 }
-        ).addOnFailureListener(e -> Log.e("fail", e.getMessage()));
+        ).addOnFailureListener(e -> {
+            //Log.e("fail", e.getMessage())
+        });
+        restaurantManager.getRestaurantData(mRestaurant).addOnSuccessListener(restaurant -> mRestaurant.setNote(restaurant.getNote()));
     }
 }

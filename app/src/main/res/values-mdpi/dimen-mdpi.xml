@@ -37,7 +37,8 @@
     <!-- restaurant item -->
     <dimen name="cardview_margin_left">5dp</dimen>
     <dimen name="restaurant_item_text_size">25dp</dimen>
-    <dimen name="restaurant_item_distance_margin_left">550dp</dimen>
+    <dimen name="restaurant_item_distance_size">20dp</dimen>
+    <dimen name="restaurant_item_distance_margin_left">530dp</dimen>
     <dimen name="restaurant_item_avatar_width">150dp</dimen>
     <dimen name="restaurant_item_avatar_height">100dp</dimen>
     <dimen name="restaurant_item_avatar_margin_top">5dp</dimen>

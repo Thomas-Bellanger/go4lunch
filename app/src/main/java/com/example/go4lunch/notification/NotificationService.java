@@ -17,6 +17,7 @@ import com.example.go4lunch.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.example.go4lunch.ui.MainActivity.MainActivity;
+import com.example.go4lunch.ui.SettingsActivity.SettingsActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -43,7 +44,7 @@ public class NotificationService extends FirebaseMessagingService {
                         }
                     }
             });
-            Log.e("Tag", notification.getBody());
+            //Log.e("Tag", notification.getBody());
 
         }
     }

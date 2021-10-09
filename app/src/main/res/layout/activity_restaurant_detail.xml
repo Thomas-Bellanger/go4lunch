@@ -131,8 +131,7 @@
                 android:layout_height="@dimen/phone_button_height"
                 android:layout_marginStart="@dimen/like_button_margin_left"
                 android:background="@color/white"
-                android:src="@drawable/ic_baseline_star_rate_24_orange"
-                />
+                android:src="@drawable/ic_baseline_star_rate_24_orange" />
 
             <ImageButton
                 android:id="@+id/button_website"

@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 public class Co_Worker_List_View_Adapter extends RecyclerView.Adapter<Co_Worker_List_View_Adapter.ViewHolder> {
     private final List<User> mUsers;
 
+
     public Co_Worker_List_View_Adapter(List<User> items) {
         mUsers = items;
     }
@@ -34,18 +35,23 @@ public class Co_Worker_List_View_Adapter extends RecyclerView.Adapter<Co_Worker_
     public Co_Worker_List_View_Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.workmates_item, parent, false);
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = mUsers.get(position);
+        String []name =user.getName().split(" ");
+        holder.name.setText(name[0]);
         if (user.getChosenRestaurant() == null) {
-            holder.restaurant_Text.setText(user.getName() + " hasn't decided yet");
+            holder.eating.setText(" ");
+            holder.restaurant_Text.setText(R.string.notDecided);
+            holder.name.setTextColor(Color.GRAY);
             holder.restaurant_Text.setTextColor(Color.GRAY);
         }
         else {
-            holder.restaurant_Text.setText(user.getName() + " is eating " + user.getChosenRestaurant().getType() + "(" + user.getChosenRestaurant().getName() + ")");
+            holder.restaurant_Text.setText(user.getChosenRestaurant().getType()+"("+ user.getChosenRestaurant().getName()+")");
             holder.restaurant_Text.setTextColor(Color.BLACK);
             holder.restaurant_Text.setOnClickListener(v -> {
                 Intent intent = new Intent(v.getContext(), RestaurantDetail.class);
@@ -71,6 +77,10 @@ public class Co_Worker_List_View_Adapter extends RecyclerView.Adapter<Co_Worker_
         public ImageView co_Worker_Avatar;
         @BindView(R.id.restaurant_text)
         public TextView restaurant_Text;
+        @BindView(R.id.coWorkerName)
+        public TextView name;
+        @BindView(R.id.isEating)
+        public TextView eating;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

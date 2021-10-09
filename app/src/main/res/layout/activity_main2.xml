@@ -38,19 +38,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:icon="@drawable/ic_baseline_map_24"
-                android:text="MapView" />
+                android:text="@string/mapview" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:icon="@drawable/ic_baseline_list_24"
-                android:text="ListView" />
+                android:text="@string/listview" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:icon="@drawable/ic_baseline_people_24"
-                android:text="WorkMates" />
+                android:text="@string/workmates" />
 
         </com.google.android.material.tabs.TabLayout>
 

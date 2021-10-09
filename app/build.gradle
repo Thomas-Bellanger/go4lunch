@@ -66,14 +66,18 @@ dependencies {
 
 
     implementation 'androidx.annotation:annotation:1.0.0'
-
+    //Facebook sdk
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 
     /***Butterknife**/
     implementation 'com.jakewharton:butterknife:10.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
 
+    //retrofit
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+
+    //google place
+    implementation 'com.google.android.libraries.places:places:2.4.0'
 
 }

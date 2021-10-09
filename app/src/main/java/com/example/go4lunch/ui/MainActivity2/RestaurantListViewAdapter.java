@@ -58,7 +58,7 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
         holder.restaurantName.setText(restaurant.getName());
         holder.restaurantAdress.setText(restaurant.getAdress());
         holder.style.setText(restaurant.getType() + "   - ");
-        holder.distance.setText(restaurant.getDistance());
+        holder.distance.setText(""+restaurant.getDistance());
         Glide.with(holder.restaurantAvatar.getContext())
                 .load(restaurant.getAvatar())
                 .apply(RequestOptions.centerCropTransform())
@@ -70,7 +70,7 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
             intent.putExtra(RestaurantDetail.KEY_RESTAURANT, restaurant);
             v.getContext().startActivity(intent);
         });
-
+        holder.number.setText("("+restaurant.getJoiners().size()+")");
     }
 
     @Override

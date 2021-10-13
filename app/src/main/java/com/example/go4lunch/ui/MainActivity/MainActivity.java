@@ -8,7 +8,10 @@ import androidx.annotation.Nullable;
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.ActivityMainBinding;
+import com.example.go4lunch.manager.GoogleManager;
+import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.manager.UserManager;
+import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.ui.MainActivity2.MainActivity2;
 import com.firebase.ui.auth.AuthUI;
@@ -23,6 +26,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private static final int RC_SIGN_IN = 123;
     private final UserManager userManager = UserManager.getInstance();
     private final ApiService mApiService = DI.getASIService();
+    private GoogleManager mGoogleManager = GoogleManager.getInstance();
+    private RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
 
 
     @Override
@@ -63,7 +68,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -77,7 +81,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         if (requestCode == RC_SIGN_IN) {
             // SUCCESS
             if (resultCode == RESULT_OK) {
-                showSnackBar(getString(R.string.connection_succeed));
+                loadRestaurant();
                 userManager.createUser();
                 Intent intent = new Intent(this, MainActivity2.class);
                 startActivity(intent);
@@ -106,5 +110,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         mApiService.populateUser();
         mApiService.populateRestaurant();
         startSignInActivity();
+    }
+
+    public void loadRestaurant(){
+
     }
 }

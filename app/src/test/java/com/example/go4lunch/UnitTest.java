@@ -17,12 +17,10 @@ import java.util.List;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class UnitTest {
-    private List<Restaurant> mRestaurantList;
-    private List<User> mUserList;
     public User fakeUser1 = new User("fakeUID", "fakeUser1", "https://www.gravatar.com/avatar/HASH", Restaurant.restaurant1, "fakeMail.com");
     public User fakeUser2 = new User("fakeUID2", "fakeUser2", "https://www.gravatar.com/avatar/HASH", Restaurant.restaurant2, "fakeMail2.com");
-    public Restaurant restaurant1 = new Restaurant("1863", "restaurant 1", "8 Rue des restaurants", "French", 11, 21, "0.0", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 10, 48.8675, 2.6901);
-    public Restaurant restaurant2 = new Restaurant("2854", "restaurant 2", "10 Rue des restaurants", "French", 11, 21,"0.0" , "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 5, 48.8341, 2.7958);
+    public Restaurant restaurant1 = new Restaurant("1863", "restaurant 1", "8 Rue des restaurants", "French", true, "0.0", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 10, 48.8675, 2.6901);
+    public Restaurant restaurant2 = new Restaurant("2854", "restaurant 2", "10 Rue des restaurants", "French", true,"0.0" , "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 5, 48.8341, 2.7958);
 
 
     @Test
@@ -51,5 +49,11 @@ public class UnitTest {
         assert (restaurant1.getJoiners().contains(fakeUser1));
         restaurant1.removeJoiners(fakeUser1);
         assertFalse(restaurant1.getJoiners().contains(fakeUser1));
+    }
+
+    @Test
+    public void updateLunchWithSuccess(){
+        fakeUser1.setChosenRestaurant(restaurant2);
+        assert (fakeUser1.getChosenRestaurant() == restaurant2);
     }
 }

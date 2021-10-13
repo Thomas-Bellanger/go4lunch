@@ -1,9 +1,13 @@
 package com.example.go4lunch.model;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.go4lunch.manager.RestaurantManager;
+import com.example.go4lunch.nearbysearchmodel.OpeningHours;
+import com.example.go4lunch.nearbysearchmodel.ResultsItem;
+import com.google.firebase.auth.FirebaseUser;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.ArrayList;
@@ -21,9 +25,9 @@ public class Restaurant implements Parcelable {
             return new Restaurant[size];
         }
     };
-    public static Restaurant noRestaurant = new Restaurant("000", "none", "noAdress", "noType", 0, 0, "0", "none", "none", 0, 0, 0, 0);
-    public static Restaurant restaurant1 = new Restaurant("1863", "restaurant 1", "8 Rue des restaurants", "French", 11, 21, "0.0", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 10, 48.8675, 2.6901);
-    public static Restaurant restaurant2 = new Restaurant("2854", "restaurant 2", "10 Rue des restaurants", "French", 11, 21,"0.0" , "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 5, 48.8341, 2.7958);
+    public static Restaurant noRestaurant = new Restaurant("000", "none", "noAdress", "noType", false  , "0", "none", "none", 0, 0, 0, 0);
+    public static Restaurant restaurant1 = new Restaurant("1863", "restaurant 1", "8 Rue des restaurants", "French", true, "0.0", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 10, 48.8675, 2.6901);
+    public static Restaurant restaurant2 = new Restaurant("2854", "restaurant 2", "10 Rue des restaurants", "French", true,"0.0" , "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", 3418, 5, 48.8341, 2.7958);
 
     private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
     private String uid;
@@ -31,8 +35,7 @@ public class Restaurant implements Parcelable {
     private String adress;
     private List<User> joiners = new ArrayList<>();
     private String type;
-    private int opening;
-    private int closing;
+    private Boolean opening;
     private String distance;
     private String avatar;
     private String url;
@@ -43,14 +46,13 @@ public class Restaurant implements Parcelable {
     private double lng;
     private LatLng mLatLng = new LatLng(getLat(), getLng());
 
-    public Restaurant(String uid, String name, String adress, String type, int opening, int closing, String distance, String avatar, String url, int phoneNumber, int note, double lat, double lng) {
+    public Restaurant(String uid, String name, String adress, String type, Boolean opening, String distance, String avatar, String url, int phoneNumber, int note, double lat, double lng) {
         this.uid = uid;
         this.name = name;
         this.adress = adress;
         this.joiners = new ArrayList<>();
         this.type = type;
         this.opening = opening;
-        this.closing = closing;
         this.distance = distance;
         this.avatar = avatar;
         this.url = url;
@@ -68,8 +70,6 @@ public class Restaurant implements Parcelable {
         name = in.readString();
         adress = in.readString();
         type = in.readString();
-        opening = in.readInt();
-        closing = in.readInt();
         distance = in.readString();
         avatar = in.readString();
         url = in.readString();
@@ -164,20 +164,12 @@ public class Restaurant implements Parcelable {
         this.joiners = joiners;
     }
 
-    public int getOpening() {
+    public Boolean getOpening() {
         return opening;
     }
 
-    public void setOpening(int opening) {
+    public void setOpening(Boolean opening) {
         this.opening = opening;
-    }
-
-    public int getClosing() {
-        return closing;
-    }
-
-    public void setClosing(int closing) {
-        this.closing = closing;
     }
 
     public String getDistance() {
@@ -215,8 +207,6 @@ public class Restaurant implements Parcelable {
         dest.writeString(name);
         dest.writeString(adress);
         dest.writeString(type);
-        dest.writeInt(opening);
-        dest.writeInt(closing);
         dest.writeString(distance);
         dest.writeString(avatar);
         dest.writeString(url);
@@ -231,5 +221,21 @@ public class Restaurant implements Parcelable {
 
     public void removeJoiners(User user) {
         joiners.remove(user);
+    }
+
+    public static Restaurant googleRestaurantToRestaurant(ResultsItem item) {
+            String uid = item.getPlaceId();
+            String name = item.getName();
+            String adress = item.getVicinity();
+            String type = item.getReference();
+            Boolean opening = item.getOpeningHours().isOpenNow();
+            String distance = "distance";
+            String avatar = item.getPhotos().toString();
+            String url = item.getScope();
+            int phoneNumber = 0;
+            int note = item.getUserRatingsTotal();
+            double lat = item.getGeometry().getLocation().getLat();
+            double lng = item.getGeometry().getLocation().getLng();
+            return new Restaurant(uid, name, adress, type, opening, distance, avatar, url, phoneNumber, note, lat, lng);
     }
 }

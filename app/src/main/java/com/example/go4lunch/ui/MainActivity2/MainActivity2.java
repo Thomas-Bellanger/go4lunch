@@ -1,6 +1,7 @@
 package com.example.go4lunch.ui.MainActivity2;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +36,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity2 extends AppCompatActivity {
@@ -88,6 +90,7 @@ public class MainActivity2 extends AppCompatActivity {
         binding = ActivityMain2Binding.inflate(getLayoutInflater());
         mApiService = DI.getASIService();
         setContentView(binding.getRoot());
+        showSnackBar(getString(R.string.connection_succeed));
         mViewPager = findViewById(R.id.activity_main_viewpager);
         mTabLayout = findViewById(R.id.tabs);
         configureToolBar();
@@ -253,5 +256,9 @@ public class MainActivity2 extends AppCompatActivity {
     public void initalizeSDK(){
         Places.initialize(getApplicationContext(), "AIzaSyC77ax8lhHQbeqgqiqJ7rqhJfCdEWE4FCk");
         PlacesClient placesClient = Places.createClient(this);
+    }
+
+    private void showSnackBar(String message) {
+        Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
     }
 }

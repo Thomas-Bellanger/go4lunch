@@ -3,8 +3,7 @@ package com.example.go4lunch.ui.MainActivity2;
 import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,22 +14,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
+import com.example.go4lunch.manager.GoogleManager;
 import com.example.go4lunch.model.Restaurant;
-import com.example.go4lunch.nearbysearchmodel.ResultsItem;
-import com.example.go4lunch.repository.GoogleRepository;
 import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.protobuf.StringValue;
+import com.mapbox.android.core.location.LocationEngineListener;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.annotations.Icon;
-import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -53,10 +48,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
     private MapboxMap map;
     private PermissionsManager permissionsManager;
     private final ApiService mApiService = DI.getASIService();
+    private MapViewModel mMapViewModel = MapViewModel.getInstance();
     private LatLng userLocation;
     private String styleUrl;
     private FloatingActionButton mapBtn;
-    private GoogleRepository mGoogleRepository = GoogleRepository.getInstance();
+    private GoogleManager mGoogleManager = GoogleManager.getInstance();
 
 
     public MapFragment() {
@@ -78,7 +74,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
         MainActivity2.toolbarTitle = "I'm hungry!";
         mapBtn = view.findViewById(R.id.btn);
         mapBtn.setVisibility(View.GONE);
-        mGoogleRepository.callRestaurant(userLocation.toString());
 
         return view;
     }
@@ -92,13 +87,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
                 style -> enableLocationComponent(style));
         map.addOnCameraMoveListener(() -> mapBtn.setVisibility(View.VISIBLE));
         mapBtn.setOnClickListener(v -> {
-            CameraPosition userPosition = new CameraPosition.Builder().target(userLocation).zoom(10).tilt(0).build();
+            CameraPosition userPosition = new CameraPosition.Builder().target(userLocation).zoom(11).tilt(0).build();
             mapboxMap.animateCamera(mapboxMap1 -> userPosition);
             mapBtn.setVisibility(View.GONE);
         });
     }
-
-
 
     @SuppressWarnings({"MissingPermission"})
     private void enableLocationComponent(@NonNull String loadedMapStyle) {
@@ -120,10 +113,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
 
 // Set the component's render mode
             locationComponent.setRenderMode(RenderMode.COMPASS);
+            locationComponent.getLocationEngine().addLocationEngineListener(new LocationEngineListener() {
+                @Override
+                public void onConnected() {
+                    userLocation = new LatLng(locationComponent.getLocationEngine().getLastLocation().getLatitude(), locationComponent.getLocationEngine().getLastLocation().getLongitude());
+                    getMarkers(mApiService.getFilteredRestaurants());
 
-            userLocation = new LatLng(48.8639, 2.6867);
-
-            mApiService.getLiveRestaurant().observe(getActivity(), this::getMarkers);
+                }
+                @Override
+                public void onLocationChanged(Location location) {
+                }
+            });
 
         } else {
             permissionsManager = new PermissionsManager(this);
@@ -203,6 +203,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
         map.clear();
 
         for (Restaurant restaurant : restaurants) {
+
             latLng = new LatLng(restaurant.getLat(), restaurant.getLng());
             Marker marker = map.addMarker(new MarkerOptions().setPosition(latLng));
             markerList.add(marker);

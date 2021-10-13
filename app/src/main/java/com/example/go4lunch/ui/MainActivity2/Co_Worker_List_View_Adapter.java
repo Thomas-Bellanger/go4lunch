@@ -53,7 +53,7 @@ public class Co_Worker_List_View_Adapter extends RecyclerView.Adapter<Co_Worker_
         else {
             holder.restaurant_Text.setText(user.getChosenRestaurant().getType()+"("+ user.getChosenRestaurant().getName()+")");
             holder.restaurant_Text.setTextColor(Color.BLACK);
-            holder.restaurant_Text.setOnClickListener(v -> {
+            holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(v.getContext(), RestaurantDetail.class);
                 intent.putExtra(RestaurantDetail.KEY_RESTAURANT, user.getChosenRestaurant());
                 v.getContext().startActivity(intent);

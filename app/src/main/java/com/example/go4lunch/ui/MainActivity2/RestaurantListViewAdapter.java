@@ -2,6 +2,7 @@ package com.example.go4lunch.ui.MainActivity2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ import butterknife.ButterKnife;
 public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantListViewAdapter.ViewHolder> {
 
     private final List<Restaurant> restaurants;
-    Context mContext;
+    private Context mContext;
 
     public RestaurantListViewAdapter(List<Restaurant> items) {
         restaurants = items;
@@ -55,6 +56,7 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
         if (restaurant.getNote() > 8) {
             holder.stars3.setColorFilter(ContextCompat.getColor(mContext, R.color.yellow));
         }
+
         holder.restaurantName.setText(restaurant.getName());
         holder.restaurantAdress.setText(restaurant.getAdress());
         holder.style.setText(restaurant.getType() + "   - ");
@@ -63,9 +65,15 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
                 .load(restaurant.getAvatar())
                 .apply(RequestOptions.centerCropTransform())
                 .into(holder.restaurantAvatar);
-
-
-        holder.restaurantName.setOnClickListener(v -> {
+        if(restaurant.getOpening() == true) {
+            holder.hours.setText(R.string.Open);
+            holder.hours.setTextColor(Color.GREEN);
+        }
+        else {
+            holder.hours.setTextColor(Color.RED);
+            holder.hours.setText(R.string.closed);
+        }
+        holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), RestaurantDetail.class);
             intent.putExtra(RestaurantDetail.KEY_RESTAURANT, restaurant);
             v.getContext().startActivity(intent);
@@ -97,6 +105,8 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
         public ImageView stars3;
         @BindView(R.id.restaurant_avatar)
         public ImageView restaurantAvatar;
+        @BindView(R.id.restaurant_hours)
+        public TextView hours;
 
 
         public ViewHolder(@NonNull View itemView) {

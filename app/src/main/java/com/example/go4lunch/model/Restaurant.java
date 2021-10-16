@@ -44,7 +44,6 @@ public class Restaurant implements Parcelable {
     private int note;
     private double lat;
     private double lng;
-    private LatLng mLatLng = new LatLng(getLat(), getLng());
 
     public Restaurant(String uid, String name, String adress, String type, Boolean opening, String distance, String avatar, String url, int phoneNumber, int note, double lat, double lng) {
         this.uid = uid;
@@ -94,14 +93,6 @@ public class Restaurant implements Parcelable {
 
     public void setLng(double lng) {
         this.lng = lng;
-    }
-
-    public LatLng getLatLng() {
-        return mLatLng;
-    }
-
-    public void setLatLng(LatLng latLng) {
-        mLatLng = latLng;
     }
 
     public String getUid() {

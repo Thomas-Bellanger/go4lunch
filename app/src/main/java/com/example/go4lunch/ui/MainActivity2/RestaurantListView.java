@@ -17,6 +17,7 @@ import com.example.go4lunch.R;
 import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.service.ApiService;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class RestaurantListView extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mApiService = DI.getASIService();
         mApiService.getLiveRestaurant().observe(this.getActivity(), this::initList);
+        mApiService.getLiveDistance().observe(this.getActivity(), this::update);
 
         return view;
     }
@@ -54,6 +56,10 @@ public class RestaurantListView extends Fragment {
 
     private void initList(List<Restaurant> restaurants) {
         mRecyclerView.setAdapter(new RestaurantListViewAdapter(restaurants));
+    }
+
+    private void update(String s) {
+        initList(mApiService.getFilteredRestaurants());
     }
 
     @Override

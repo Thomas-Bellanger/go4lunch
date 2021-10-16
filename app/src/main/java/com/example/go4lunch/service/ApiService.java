@@ -22,6 +22,7 @@ public class ApiService implements ApiServiceInterface {
     private RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
     private MutableLiveData<List<Restaurant>> liveRestaurants = new MutableLiveData<>();
     private MutableLiveData<List<User>> liveUsers = new MutableLiveData<>();
+    private MutableLiveData<String> liveDistance = new MutableLiveData<>();
 
     @Override
     public List<Restaurant> filterRestaurant(String filterPattern) {
@@ -139,4 +140,8 @@ public class ApiService implements ApiServiceInterface {
         return liveUsers;
     }
 
+    @Override
+    public MutableLiveData<String> getLiveDistance() {
+        return liveDistance;
+    }
 }

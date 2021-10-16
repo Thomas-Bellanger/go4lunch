@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
@@ -22,6 +24,7 @@ import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineListener;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
@@ -31,13 +34,16 @@ import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.location.CompassListener;
 import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.OnCameraTrackingChangedListener;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +59,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
     private String styleUrl;
     private FloatingActionButton mapBtn;
     private GoogleManager mGoogleManager = GoogleManager.getInstance();
+
 
 
     public MapFragment() {
@@ -83,15 +90,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         this.map = mapboxMap;
         styleUrl = map.getStyleUrl();
-        mapboxMap.setStyle(Style.MAPBOX_STREETS,
+        map.setStyle(Style.MAPBOX_STREETS,
                 style -> enableLocationComponent(style));
         map.addOnCameraMoveListener(() -> mapBtn.setVisibility(View.VISIBLE));
         mapBtn.setOnClickListener(v -> {
-            CameraPosition userPosition = new CameraPosition.Builder().target(userLocation).zoom(11).tilt(0).build();
-            mapboxMap.animateCamera(mapboxMap1 -> userPosition);
+            enableLocationComponent(styleUrl);
             mapBtn.setVisibility(View.GONE);
+            getMarkers(mApiService.getFilteredRestaurants());
         });
     }
+
 
     @SuppressWarnings({"MissingPermission"})
     private void enableLocationComponent(@NonNull String loadedMapStyle) {
@@ -100,7 +108,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
 
 // Get an instance of the component
             LocationComponent locationComponent = map.getLocationComponent();
-
 // Activate with options
             locationComponent.activateLocationComponent(
                     getApplicationContext());
@@ -113,21 +120,33 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
 
 // Set the component's render mode
             locationComponent.setRenderMode(RenderMode.COMPASS);
-            locationComponent.getLocationEngine().addLocationEngineListener(new LocationEngineListener() {
+            locationComponent.addCompassListener(new CompassListener() {
                 @Override
-                public void onConnected() {
-                    userLocation = new LatLng(locationComponent.getLocationEngine().getLastLocation().getLatitude(), locationComponent.getLocationEngine().getLastLocation().getLongitude());
-                    getMarkers(mApiService.getFilteredRestaurants());
-
+                public void onCompassChanged(float userHeading) {
+                    if (locationComponent.getLastKnownLocation()!=null) {
+                        Log.e("location", locationComponent.getLastKnownLocation().toString());
+                        if (userLocation != null) {
+                            getMarkers(mApiService.getFilteredRestaurants());
+                        }
+                        userLocation = new LatLng(locationComponent.getLastKnownLocation().getLatitude(), locationComponent.getLastKnownLocation().getLongitude());
+                    }
                 }
                 @Override
-                public void onLocationChanged(Location location) {
-                }
+                public void onCompassAccuracyChange(int compassStatus) {
+                    }
             });
-
-        } else {
+        }
+        else {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this.getActivity());
+        }
+    }
+
+    public void checkNearbyRestaurant() {
+        LatLng lastLocation = new LatLng(map.getLocationComponent().getLastKnownLocation().getLatitude(), map.getLocationComponent().getLastKnownLocation().getLongitude());
+        if (userLocation != lastLocation){
+            mMapViewModel.setLocation(userLocation);
+            mApiService.populateRestaurant();
         }
     }
 
@@ -203,19 +222,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
         map.clear();
 
         for (Restaurant restaurant : restaurants) {
-
             latLng = new LatLng(restaurant.getLat(), restaurant.getLng());
             Marker marker = map.addMarker(new MarkerOptions().setPosition(latLng));
             markerList.add(marker);
             distance = marker.getPosition().distanceTo(userLocation);
             String []distances = distance.toString().split("\\.");
             restaurant.setDistance(distances[0]+"m");
+            mApiService.getLiveDistance().setValue(distance.toString());
             for (Marker markers : markerList){
                 markers.setPosition(markers.getPosition());
                 map.setOnMarkerClickListener(marker1 -> {
                     Intent intent = new Intent(getContext(), RestaurantDetail.class);
-                    intent.putExtra(RestaurantDetail.KEY_RESTAURANT, restaurants.get(markerList.indexOf(marker1)));
                     startActivity(intent);
+
                     return false;
                 });
             }

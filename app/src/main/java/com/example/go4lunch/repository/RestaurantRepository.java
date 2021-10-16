@@ -2,6 +2,7 @@ package com.example.go4lunch.repository;
 
 import android.util.Log;
 
+import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.google.android.gms.tasks.Task;
@@ -16,6 +17,7 @@ public class RestaurantRepository {
     private static final String RESTAURANT_COLLECTION = "restaurants";
     private static final String RESTAURANT_NAME = "restaurantName";
     private static volatile RestaurantRepository instance;
+
 
     private RestaurantRepository() {
     }
@@ -43,12 +45,8 @@ public class RestaurantRepository {
     }
 
     public void createRestaurantFirebase(Restaurant restaurant) {
-        this.getRestaurantCollection().add(restaurant).addOnSuccessListener(documentReference -> {
-            documentReference.update("uid", documentReference.getId());
-            Log.e("path", documentReference.getPath());
-            Log.e("id", documentReference.getId());
-            restaurant.setJoiners(new ArrayList<>());
-        });
+        this.getRestaurantCollection().document(restaurant.getUid()).set(restaurant);
+        restaurant.setJoiners(new ArrayList<>());
     }
 
     public Task<Void> updateJoiners(Restaurant restaurant, List<User> joiners) {

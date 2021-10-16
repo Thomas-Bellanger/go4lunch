@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.model.Restaurant;
+import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 
 import java.util.List;
@@ -28,6 +30,7 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
 
     private final List<Restaurant> restaurants;
     private Context mContext;
+    private ApiService mApiService = DI.getASIService();
 
     public RestaurantListViewAdapter(List<Restaurant> items) {
         restaurants = items;
@@ -39,6 +42,7 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.restaurant_item, parent, false);
         mContext = view.getContext();
+
         return new ViewHolder(view);
     }
 
@@ -60,7 +64,7 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
         holder.restaurantName.setText(restaurant.getName());
         holder.restaurantAdress.setText(restaurant.getAdress());
         holder.style.setText(restaurant.getType() + "   - ");
-        holder.distance.setText(""+restaurant.getDistance());
+        holder.distance.setText(restaurant.getDistance());
         Glide.with(holder.restaurantAvatar.getContext())
                 .load(restaurant.getAvatar())
                 .apply(RequestOptions.centerCropTransform())

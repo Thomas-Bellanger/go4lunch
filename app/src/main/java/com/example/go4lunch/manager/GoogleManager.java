@@ -7,6 +7,8 @@ import com.example.go4lunch.nearbysearchmodel.ResultsItem;
 import com.example.go4lunch.repository.GoogleRepository;
 import com.example.go4lunch.repository.UserRepository;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,16 +34,7 @@ public class GoogleManager {
         }
     }
 
-    public ResultsItem getNearbySearchResult() {
-        return mGoogleRepository.getNearbySearchResult();
-    }
-
-    public ResultsItem callRestaurant(String location){
-        return mGoogleRepository.callRestaurant(location);
-    }
-
-    public Restaurant getRestaurantItem(){
-        Restaurant restaurant = Restaurant.googleRestaurantToRestaurant(getNearbySearchResult());
-        return restaurant;
+    public void fetchRestaurant(GoogleRepository.Callbacks callbacks, String location){
+        mGoogleRepository.fetchRestaurant(callbacks, location);
     }
 }

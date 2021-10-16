@@ -2,7 +2,9 @@ package com.example.go4lunch.ui.MainActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.go4lunch.DI.DI;
@@ -12,12 +14,16 @@ import com.example.go4lunch.manager.GoogleManager;
 import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
+import com.example.go4lunch.repository.RestaurantRepository;
 import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.ui.MainActivity2.MainActivity2;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +33,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private final UserManager userManager = UserManager.getInstance();
     private final ApiService mApiService = DI.getASIService();
     private GoogleManager mGoogleManager = GoogleManager.getInstance();
+    private RestaurantRepository mRestaurantRepository = RestaurantRepository.getInstance();
     private RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
 
 
@@ -40,6 +47,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         super.onCreate(savedInstanceState);
         mApiService.populateUser();
         mApiService.populateRestaurant();
+        googleToFirebase(Restaurant.restaurant1);
+        googleToFirebase(Restaurant.restaurant2);
         startSignInActivity();
     }
 
@@ -113,6 +122,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     public void loadRestaurant(){
-
     }
-}
+
+    public void googleToFirebase(Restaurant restaurant) {
+        if (restaurant.getJoiners() == null) {
+            mRestaurantManager.createRestaurantFirebase(restaurant);
+            Log.e("Nok", "Nok");
+        }
+        if (restaurant.getJoiners() != null) {
+        }
+    }
+    }

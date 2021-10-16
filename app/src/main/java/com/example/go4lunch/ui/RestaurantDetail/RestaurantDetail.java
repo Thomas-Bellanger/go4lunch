@@ -54,7 +54,6 @@ public class RestaurantDetail extends AppCompatActivity {
 
         Intent intent = getIntent();
         mRestaurant = intent.getParcelableExtra(KEY_RESTAURANT);
-        this.joiners = mRestaurant.getJoiners();
         binding.restaurantDetailName.setText(mRestaurant.getName());
         binding.restaurantDetailAdress.setText(mRestaurant.getAdress());
         binding.restaurantDetailStyle.setText(mRestaurant.getType());
@@ -62,6 +61,7 @@ public class RestaurantDetail extends AppCompatActivity {
                 .load(mRestaurant.getAvatar())
                 .apply(RequestOptions.centerCropTransform())
                 .into(binding.restaurantDetailAvatar);
+        this.joiners = mRestaurant.getJoiners();
         configureRecyclerView();
         //call
         binding.buttonCall.setOnClickListener(v -> call());

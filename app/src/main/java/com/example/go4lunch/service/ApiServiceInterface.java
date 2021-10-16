@@ -1,6 +1,7 @@
 package com.example.go4lunch.service;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
@@ -30,4 +31,6 @@ public interface ApiServiceInterface {
     LiveData<List<Restaurant>> getLiveRestaurant();
 
     LiveData<List<User>> getLiveUsers();
+
+    MutableLiveData<String> getLiveDistance();
 }

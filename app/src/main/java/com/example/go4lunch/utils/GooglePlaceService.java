@@ -17,5 +17,5 @@ public interface GooglePlaceService {
                             .build();
     // For Restaurants search
     @GET("nearbysearch/json?radius=1000&type=restaurant&key=" + R.string.MAPS_API_KEY)
-    ResultsItem getRestaurants(@Query("location") String position);
+    Call<ResultsItem> getRestaurants(@Query("location") String position);
 }

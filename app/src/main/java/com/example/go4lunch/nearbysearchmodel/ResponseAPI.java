@@ -3,7 +3,7 @@ package com.example.go4lunch.nearbysearchmodel;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class Response{
+public class ResponseAPI {
 
 	@SerializedName("next_page_token")
 	private String nextPageToken;

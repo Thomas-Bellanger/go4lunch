@@ -1,5 +1,7 @@
 package com.example.go4lunch.service;
 
+import android.graphics.drawable.Icon;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -10,6 +12,7 @@ import com.example.go4lunch.model.User;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ApiService implements ApiServiceInterface {
@@ -23,6 +26,7 @@ public class ApiService implements ApiServiceInterface {
     private MutableLiveData<List<Restaurant>> liveRestaurants = new MutableLiveData<>();
     private MutableLiveData<List<User>> liveUsers = new MutableLiveData<>();
     private MutableLiveData<String> liveDistance = new MutableLiveData<>();
+    private MutableLiveData<String> sort= new MutableLiveData();
 
     @Override
     public List<Restaurant> filterRestaurant(String filterPattern) {
@@ -144,4 +148,23 @@ public class ApiService implements ApiServiceInterface {
     public MutableLiveData<String> getLiveDistance() {
         return liveDistance;
     }
+
+    public static class RestaurantAZComparator implements Comparator<Restaurant> {
+        @Override
+        public int compare(Restaurant left, Restaurant right) {
+            return left.getName().compareTo(right.getName());
+        }
+    }
+
+    public static class RestaurantDistanceComparator implements Comparator<Restaurant> {
+        @Override
+        public int compare(Restaurant left, Restaurant right) {
+            return left.getDistance().compareTo(right.getDistance());
+        }
+    }
+
+    public MutableLiveData<String> getSort(){
+        return sort;
+    }
 }
+

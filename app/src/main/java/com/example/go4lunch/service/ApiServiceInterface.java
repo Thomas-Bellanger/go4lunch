@@ -33,4 +33,6 @@ public interface ApiServiceInterface {
     LiveData<List<User>> getLiveUsers();
 
     MutableLiveData<String> getLiveDistance();
+
+    MutableLiveData<String> getSort();
 }

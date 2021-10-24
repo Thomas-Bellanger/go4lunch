@@ -50,4 +50,8 @@
     <string name="notDecided">has not decied yet</string>
     <string name="Open">open</string>
     <string name="closed">closed</string>
+    <string name="filter">Filter</string>
+    <string name="alphabetical">alphabetical</string>
+    <string name="distance">distance</string>
+    <string name="note">note</string>
 </resources>

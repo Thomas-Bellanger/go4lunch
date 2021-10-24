@@ -1,11 +1,13 @@
 package com.example.go4lunch.ui.MainActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
@@ -24,6 +26,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mapbox.mapboxsdk.annotations.Icon;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -63,7 +67,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                     new AuthUI.IdpConfig.GoogleBuilder().build(),
                     new AuthUI.IdpConfig.EmailBuilder().build());
 
-            //lauch activity
+            //launch activity
 
             startActivityForResult(
                     AuthUI.getInstance()
@@ -90,7 +94,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         if (requestCode == RC_SIGN_IN) {
             // SUCCESS
             if (resultCode == RESULT_OK) {
-                loadRestaurant();
                 userManager.createUser();
                 Intent intent = new Intent(this, MainActivity2.class);
                 startActivity(intent);
@@ -116,12 +119,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     protected void onRestart() {
         super.onRestart();
+        Log.e("restart", "restart");
         mApiService.populateUser();
         mApiService.populateRestaurant();
         startSignInActivity();
-    }
-
-    public void loadRestaurant(){
     }
 
     public void googleToFirebase(Restaurant restaurant) {

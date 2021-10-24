@@ -2,6 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_filter"
+        app:showAsAction="ifRoom"
+        android:title="@string/filter"
+        android:icon="@drawable/ic_baseline_list_24">
+        <menu>
+            <item
+                android:id="@+id/filter_alphabetical"
+                android:title="@string/alphabetical"
+                app:showAsAction="never|withText" />
+            <item
+                android:id="@+id/filterDistance"
+                android:title="@string/distance"
+                app:showAsAction="never|withText" />
+        </menu>
+    </item>
+    <item
         android:id="@+id/search"
         android:icon="@android:drawable/ic_menu_search"
         android:title="search"

@@ -44,6 +44,7 @@ public class Restaurant implements Parcelable {
     private int note;
     private double lat;
     private double lng;
+    private String icon;
 
     public Restaurant(String uid, String name, String adress, String type, Boolean opening, String distance, String avatar, String url, int phoneNumber, int note, double lat, double lng) {
         this.uid = uid;
@@ -77,6 +78,7 @@ public class Restaurant implements Parcelable {
         like = in.readByte() != 0;
         lat = in.readDouble();
         lng = in.readDouble();
+        icon = in.readString();
     }
 
     public double getLat() {
@@ -151,6 +153,10 @@ public class Restaurant implements Parcelable {
         return joiners;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
     public void setJoiners(List<com.example.go4lunch.model.User> joiners) {
         this.joiners = joiners;
     }
@@ -187,6 +193,10 @@ public class Restaurant implements Parcelable {
         this.note = note;
     }
 
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -204,6 +214,7 @@ public class Restaurant implements Parcelable {
         dest.writeInt(phoneNumber);
         dest.writeInt(note);
         dest.writeByte((byte) (like ? 1 : 0));
+        dest.writeString(icon);
     }
 
     public void addJoiners(User user) {
@@ -219,9 +230,10 @@ public class Restaurant implements Parcelable {
             String name = item.getName();
             String adress = item.getVicinity();
             String type = item.getReference();
-            Boolean opening = item.getOpeningHours().isOpenNow();
+            Boolean opening = true;
             String distance = "distance";
-            String avatar = item.getPhotos().toString();
+            String avatar = item.getIcon();
+            String icon = item.getIcon();
             String url = item.getScope();
             int phoneNumber = 0;
             int note = item.getUserRatingsTotal();

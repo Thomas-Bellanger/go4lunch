@@ -1,7 +1,6 @@
 package com.example.go4lunch.utils;
 
-import com.example.go4lunch.R;
-import com.example.go4lunch.nearbysearchmodel.ResultsItem;
+import com.example.go4lunch.nearbysearchmodel.ResponseAPI;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -16,6 +15,6 @@ public interface GooglePlaceService {
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
     // For Restaurants search
-    @GET("nearbysearch/json?radius=1000&type=restaurant&key=" + R.string.MAPS_API_KEY)
-    Call<ResultsItem> getRestaurants(@Query("location") String position);
+    @GET("nearbysearch/json?radius=1000&type=restaurant&key=AIzaSyC77ax8lhHQbeqgqiqJ7rqhJfCdEWE4FCk")
+    Call<ResponseAPI> getRestaurants(@Query("location") String location);
 }

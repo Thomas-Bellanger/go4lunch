@@ -1,17 +1,6 @@
 package com.example.go4lunch.manager;
 
-import androidx.lifecycle.LiveData;
-
-import com.example.go4lunch.model.Restaurant;
-import com.example.go4lunch.nearbysearchmodel.ResultsItem;
 import com.example.go4lunch.repository.GoogleRepository;
-import com.example.go4lunch.repository.UserRepository;
-
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class GoogleManager {
     private static volatile GoogleManager instance;

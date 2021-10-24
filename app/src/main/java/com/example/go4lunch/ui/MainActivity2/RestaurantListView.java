@@ -19,12 +19,15 @@ import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.service.ApiService;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
+import java.util.Collections;
 import java.util.List;
 
 public class RestaurantListView extends Fragment {
     private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
     private ApiService mApiService;
     private RecyclerView mRecyclerView;
+    public static String ALPHABETICAL = "alphabetical";
+    public static String DISTANCE = "distance";
 
     public static RestaurantListView newInstance() {
         return new RestaurantListView();
@@ -45,6 +48,7 @@ public class RestaurantListView extends Fragment {
         mApiService = DI.getASIService();
         mApiService.getLiveRestaurant().observe(this.getActivity(), this::initList);
         mApiService.getLiveDistance().observe(this.getActivity(), this::update);
+        mApiService.getSort().observe(this.getActivity(), this::sortBy);
 
         return view;
     }
@@ -65,5 +69,16 @@ public class RestaurantListView extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    public void sortBy(String sort){
+        List<Restaurant> restaurants = mApiService.getFilteredRestaurants();
+        if (sort.equals(ALPHABETICAL)){
+            Collections.sort(restaurants, new ApiService.RestaurantAZComparator());
+        }
+        if (sort.equals(DISTANCE)){
+            Collections.sort(restaurants, new ApiService.RestaurantDistanceComparator());
+        }
+            initList(restaurants);
     }
 }

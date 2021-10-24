@@ -60,4 +60,8 @@
     <string name="MAPS_API_KEY" translatable="false">AIzaSyC77ax8lhHQbeqgqiqJ7rqhJfCdEWE4FCk"></string>
     <string name="Open">open</string>
     <string name="closed">closed</string>
+    <string name="filter">Filter</string>
+    <string name="alphabetical">alphabetical</string>
+    <string name="distance">distance</string>
+    <string name="note">note</string>
 </resources>

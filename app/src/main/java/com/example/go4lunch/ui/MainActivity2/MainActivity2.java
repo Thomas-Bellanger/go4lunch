@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.MutableLiveData;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
@@ -29,6 +30,7 @@ import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
+import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.service.ApiServiceInterface;
 import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 import com.example.go4lunch.ui.SettingsActivity.SettingsActivity;
@@ -39,17 +41,19 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.Collections;
+
 public class MainActivity2 extends AppCompatActivity {
 
     public static String toolbarTitle = "title";
     public static String searchTip = "tip";
     private final UserManager userManager = UserManager.getInstance();
-    private User currentUser = User.firebaseUserToUser(userManager.getCurrentUser());
     private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ActivityMain2Binding binding;
     private ApiServiceInterface mApiService;
+    private User currentUser;
 
     public Filter filterRestaurant = new Filter() {
         @Override
@@ -87,6 +91,8 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        currentUser = User.firebaseUserToUser(userManager.getCurrentUser());
         binding = ActivityMain2Binding.inflate(getLayoutInflater());
         mApiService = DI.getASIService();
         setContentView(binding.getRoot());
@@ -114,6 +120,19 @@ public class MainActivity2 extends AppCompatActivity {
         toggle.syncState();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.filter_alphabetical) {
+            mApiService.getSort().setValue(RestaurantListView.ALPHABETICAL);
+        } else if (id == R.id.filterDistance) {
+            mApiService.getSort().setValue(RestaurantListView.DISTANCE);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     public boolean onNavigationSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
@@ -137,7 +156,7 @@ public class MainActivity2 extends AppCompatActivity {
                 break;
 
             case R.id.activity_main_drawer_logout:
-                    logout();
+                logout();
         }
         this.mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -251,11 +270,6 @@ public class MainActivity2 extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
-    }
-
-    public void initalizeSDK(){
-        Places.initialize(getApplicationContext(), "AIzaSyC77ax8lhHQbeqgqiqJ7rqhJfCdEWE4FCk");
-        PlacesClient placesClient = Places.createClient(this);
     }
 
     private void showSnackBar(String message) {

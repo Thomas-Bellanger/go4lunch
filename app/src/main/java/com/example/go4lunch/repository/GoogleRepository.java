@@ -1,12 +1,13 @@
 package com.example.go4lunch.repository;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
-import com.example.go4lunch.model.Restaurant;
+import com.example.go4lunch.nearbysearchmodel.ResponseAPI;
 import com.example.go4lunch.nearbysearchmodel.ResultsItem;
 import com.example.go4lunch.utils.GooglePlaceService;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import retrofit2.Call;
@@ -19,7 +20,7 @@ public class GoogleRepository {
     private ResultsItem nearbySearchResult = new ResultsItem();
 
     public interface Callbacks{
-        void onResponse(@Nullable ResultsItem item);
+        void onResponse(@Nullable ResponseAPI response);
         void onFailure();
     }
 
@@ -37,31 +38,28 @@ public class GoogleRepository {
         }
     }
 
-    public ResultsItem callRestaurant(String location) throws IOException {
-        GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
-        ResultsItem liveDataCall = googlePlaceService.getRestaurants(location).execute().body();
-        nearbySearchResult = liveDataCall;
-
-        return liveDataCall;
-    }
     public void fetchRestaurant(Callbacks callbacks, String location){
         //Create a weak reference to callback (avoid memory leaks)
         final WeakReference<Callbacks> callbacksWeakReference = new WeakReference<>(callbacks);
         // get retrofit instance
         GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
         // create the call on the API
-        Call<ResultsItem> liveDataCall = googlePlaceService.getRestaurants(location);
+        Call<ResponseAPI> liveDataCall = googlePlaceService.getRestaurants(location);
         // 2.4 - Start the call
-        liveDataCall.enqueue(new Callback<ResultsItem>() {
-
+        liveDataCall.enqueue(new Callback<ResponseAPI>() {
             @Override
-            public void onResponse(Call<ResultsItem> liveDataCall, Response<ResultsItem> response) {
-                // 2.5 - Call the proper callback used in controller (MainFragment)
-                if (callbacksWeakReference.get() != null) callbacksWeakReference.get().onResponse(response.body());
+            public void onResponse(Call<ResponseAPI> liveDataCall, Response<ResponseAPI> response) {
+                // Call the proper callback used in controller (MainFragment)
+
+                if (callbacksWeakReference.get() != null)
+                    callbacksWeakReference.get().onResponse(response.body());
+                Log.e("checkbody","ok"+response.body().getResults());
+                Log.e("check","ok"+response.toString());
             }
 
             @Override
-            public void onFailure(Call<ResultsItem> call, Throwable t) {
+            public void onFailure(Call<ResponseAPI> call, Throwable t) {
+                Log.e("checkNOK",t.getMessage());
                 // 2.5 - Call the proper callback used in controller (MainFragment)
                 if (callbacksWeakReference.get() != null) callbacksWeakReference.get().onFailure();
             }

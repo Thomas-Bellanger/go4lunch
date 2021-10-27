@@ -1,6 +1,7 @@
 package com.example.go4lunch.service;
 
 import android.graphics.drawable.Icon;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -9,6 +10,7 @@ import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
+import com.example.go4lunch.ui.MainActivity2.MapViewModel;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -27,12 +29,13 @@ public class ApiService implements ApiServiceInterface {
     private MutableLiveData<List<User>> liveUsers = new MutableLiveData<>();
     private MutableLiveData<String> liveDistance = new MutableLiveData<>();
     private MutableLiveData<String> sort= new MutableLiveData();
+    private MapViewModel mMapViewModel = MapViewModel.getInstance();
 
     @Override
     public List<Restaurant> filterRestaurant(String filterPattern) {
         restaurantFiltered = new ArrayList<>();
         if (restaurantFiltered == null || filterPattern.length() == 0) {
-            restaurantFiltered = restaurants;
+            restaurantFiltered = mMapViewModel.restaurantList;
         } else {
             String filterLowerCase = filterPattern.toLowerCase();
             for (Restaurant restaurant : restaurants) {
@@ -46,6 +49,7 @@ public class ApiService implements ApiServiceInterface {
             }
         }
         liveRestaurants.setValue(restaurantFiltered);
+        mMapViewModel.liveRestaurantsCall.setValue(restaurantFiltered);
         return restaurantFiltered;
     }
 
@@ -67,8 +71,11 @@ public class ApiService implements ApiServiceInterface {
                 }
             }
             liveUsers.setValue(userFiltered);
+            Log.e("liste restaurants", "apiservice "+restaurants.size());
+            Log.e("liste restaurants", "map "+mMapViewModel.restaurantList.size());
             return userFiltered;
         }
+
     }
 
     @Override

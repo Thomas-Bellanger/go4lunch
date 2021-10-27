@@ -229,7 +229,7 @@ public class Restaurant implements Parcelable {
             String uid = item.getPlaceId();
             String name = item.getName();
             String adress = item.getVicinity();
-            String type = item.getReference();
+            String type = item.getTypes().get(0);
             Boolean opening = true;
             String distance = "distance";
             String avatar = item.getIcon();

@@ -50,7 +50,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mApiService.populateUser();
-        mApiService.populateRestaurant();
         googleToFirebase(Restaurant.restaurant1);
         googleToFirebase(Restaurant.restaurant2);
         startSignInActivity();
@@ -121,7 +120,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         super.onRestart();
         Log.e("restart", "restart");
         mApiService.populateUser();
-        mApiService.populateRestaurant();
         startSignInActivity();
     }
 

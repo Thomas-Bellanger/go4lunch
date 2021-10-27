@@ -46,7 +46,9 @@ public class RestaurantRepository {
 
     public void createRestaurantFirebase(Restaurant restaurant) {
         this.getRestaurantCollection().document(restaurant.getUid()).set(restaurant);
-        restaurant.setJoiners(new ArrayList<>());
+        if(restaurant.getJoiners()==null){
+            restaurant.setJoiners(new ArrayList<>());
+        }
     }
 
     public Task<Void> updateJoiners(Restaurant restaurant, List<User> joiners) {

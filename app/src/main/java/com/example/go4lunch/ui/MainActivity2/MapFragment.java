@@ -98,17 +98,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
             map.addOnCameraMoveListener(() -> mapBtn.setVisibility(View.VISIBLE));
             enableLocationComponent(Style.MAPBOX_STREETS);
             mapBtn.setOnClickListener(v -> {
-                if(userLocation.equals(lastLocation)) {
-                }
-                else{
-                    getLocation();
+                Log.e("list", "liste  "+mApiService.getFilteredRestaurants().size());
+                lastLocation = new LatLng(map.getLocationComponent().getLastKnownLocation().getLatitude(), map.getLocationComponent().getLastKnownLocation().getLongitude());
+                if(userLocation!=lastLocation){
+                    userLocation=lastLocation;
                 }
                 getMarkers(mApiService.getFilteredRestaurants());
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(userLocation).zoom(12).build();
-                map.setCameraPosition(cameraPosition);
-                mapBtn.setVisibility(View.GONE);
+                enableLocationComponent(Style.MAPBOX_STREETS);
             });
-            getLocation();
+            getMarkers(mApiService.getFilteredRestaurants());
     }
 
     @SuppressLint("MissingPermission")
@@ -136,35 +134,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
                  else{
                     userLocation = new LatLng(map.getCameraPosition().target.getLatitude(), map.getCameraPosition().target.getLongitude());
                 }
+                 mMapViewModel.liveRestaurantsCall.observe(this, this::getMarkers);
         }
         else {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this.getActivity());
-            Log.e("Nok", "Nok");
         }
-    }
-
-    private void getLocation(){
-        LocationComponent locationComponent = map.getLocationComponent();
-        if(locationComponent.getLastKnownLocation()!=null) {
-            lastLocation = new LatLng(locationComponent.getLastKnownLocation().getLatitude(), locationComponent.getLastKnownLocation().getLongitude());
-           if (userLocation != null) {
-               if (userLocation.equals(lastLocation)) {
-               } else {
-                   userLocation = lastLocation;
-                   checkNearbyRestaurant();
-                   getMarkers(mApiService.getFilteredRestaurants());
-               }
-           }
-           else {
-                userLocation = lastLocation;
-                }
-            liveLocation.setValue(locationComponent.getLastKnownLocation());
-        }
-        else{
-            userLocation = new LatLng(map.getCameraPosition().target.getLatitude(), map.getCameraPosition().target.getLongitude());
-        }
-        getMarkers(mApiService.getFilteredRestaurants());
     }
 
     public void checkNearbyRestaurant() {
@@ -208,6 +183,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
     public void onResume() {
         super.onResume();
         mapView.onResume();
+        mMapViewModel.liveRestaurantsCall.observe(this, this::getMarkers);
     }
 
     @Override
@@ -241,6 +217,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
     }
 
     public void getMarkers(List<Restaurant> restaurants) {
+        Log.e("listener", "marker  "+ restaurants.size());
         List<Marker> markerList = new ArrayList<>();
         IconFactory mIconFactory = IconFactory.getInstance(getContext());
         Icon pin = mIconFactory.fromResource(R.drawable.baseline_person_pin_circle_white_24);

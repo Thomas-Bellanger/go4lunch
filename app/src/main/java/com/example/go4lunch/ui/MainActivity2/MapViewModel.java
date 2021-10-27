@@ -1,9 +1,7 @@
 package com.example.go4lunch.ui.MainActivity2;
 
-import android.util.Log;
-
 import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.manager.GoogleManager;
@@ -13,12 +11,9 @@ import com.example.go4lunch.nearbysearchmodel.ResponseAPI;
 import com.example.go4lunch.nearbysearchmodel.ResultsItem;
 import com.example.go4lunch.repository.GoogleRepository;
 import com.example.go4lunch.service.ApiService;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
-import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapViewModel implements GoogleRepository.Callbacks {
@@ -26,6 +21,8 @@ public class MapViewModel implements GoogleRepository.Callbacks {
     private ApiService mApiService = DI.getASIService();
     private GoogleManager mGoogleManager = GoogleManager.getInstance();
     private RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
+    public List<Restaurant> restaurantList = new ArrayList<>();
+    public MutableLiveData<List<Restaurant>> liveRestaurantsCall = new MutableLiveData<>();
     public static MapViewModel getInstance(){
         MapViewModel result = instance;
         if(instance != null){
@@ -55,10 +52,12 @@ public class MapViewModel implements GoogleRepository.Callbacks {
 
     @Override
     public void onResponse(@Nullable ResponseAPI itemLive) {
+        restaurantList.clear();
         for (ResultsItem item : itemLive.getResults()){
             Restaurant restaurant = Restaurant.googleRestaurantToRestaurant(item);
-            mRestaurantManager.createRestaurantFirebase(restaurant);
-            mApiService.populateRestaurant();
+            restaurantList.add(restaurant);
+            mApiService.getFilteredRestaurants().add(restaurant);
+            liveRestaurantsCall.setValue(restaurantList);
         }
     }
 

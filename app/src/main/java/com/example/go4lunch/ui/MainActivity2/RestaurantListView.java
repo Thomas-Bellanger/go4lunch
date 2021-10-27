@@ -28,6 +28,7 @@ public class RestaurantListView extends Fragment {
     private RecyclerView mRecyclerView;
     public static String ALPHABETICAL = "alphabetical";
     public static String DISTANCE = "distance";
+    private MapViewModel mMapViewModel = MapViewModel.getInstance();
 
     public static RestaurantListView newInstance() {
         return new RestaurantListView();

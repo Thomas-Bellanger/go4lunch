@@ -5,7 +5,8 @@
         android:id="@+id/action_filter"
         app:showAsAction="ifRoom"
         android:title="@string/filter"
-        android:icon="@drawable/ic_baseline_list_24">
+        android:icon="@drawable/ic_sort_grey"
+        >
         <menu>
             <item
                 android:id="@+id/filter_alphabetical"

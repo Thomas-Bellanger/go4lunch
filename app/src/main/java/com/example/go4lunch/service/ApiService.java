@@ -1,6 +1,5 @@
 package com.example.go4lunch.service;
 
-import android.graphics.drawable.Icon;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -34,31 +33,30 @@ public class ApiService implements ApiServiceInterface {
     @Override
     public List<Restaurant> filterRestaurant(String filterPattern) {
         restaurantFiltered = new ArrayList<>();
-        if (restaurantFiltered == null || filterPattern.length() == 0) {
-            restaurantFiltered = mMapViewModel.restaurantList;
+        if (filterPattern == null || filterPattern.length() == 0) {
+            restaurantFiltered = restaurants;
+            liveRestaurants.setValue(restaurantFiltered);
+            return restaurantFiltered;
         } else {
             String filterLowerCase = filterPattern.toLowerCase();
             for (Restaurant restaurant : restaurants) {
-                if (restaurant.getType().toLowerCase().contains(filterLowerCase)) {
-                    restaurantFiltered.add(restaurant);
-                } else if (restaurant.getName().toLowerCase().contains(filterLowerCase)) {
-                    restaurantFiltered.add(restaurant);
-                } else if (restaurant.getAdress().toLowerCase().contains(filterLowerCase)) {
+                if (restaurant.getName().toLowerCase().contains(filterLowerCase)) {
+                restaurantFiltered.add(restaurant);
+            }
+               else if (restaurant.getType().toLowerCase().contains(filterLowerCase)) {
                     restaurantFiltered.add(restaurant);
                 }
             }
         }
         liveRestaurants.setValue(restaurantFiltered);
-        mMapViewModel.liveRestaurantsCall.setValue(restaurantFiltered);
         return restaurantFiltered;
     }
 
     @Override
     public List<User> filterUser(String filterPattern) {
-        userFiltered = new ArrayList<>();
-        if (userFiltered == null || filterPattern.length() == 0) {
+        userFiltered= new ArrayList<>();
+        if (filterPattern == null || filterPattern.length() == 0) {
             userFiltered = users;
-            return users;
         } else {
             String filterLowerCase = filterPattern.toLowerCase();
             for (User user : users) {
@@ -66,16 +64,11 @@ public class ApiService implements ApiServiceInterface {
                     userFiltered.add(user);
                 } else if (user.getChosenRestaurant().getName().toLowerCase().contains(filterLowerCase)) {
                     userFiltered.add(user);
-                } else if (user.getChosenRestaurant().getAdress().toLowerCase().contains(filterLowerCase)) {
-                    userFiltered.add(user);
                 }
             }
-            liveUsers.setValue(userFiltered);
-            Log.e("liste restaurants", "apiservice "+restaurants.size());
-            Log.e("liste restaurants", "map "+mMapViewModel.restaurantList.size());
-            return userFiltered;
         }
-
+        liveUsers.setValue(userFiltered);
+        return userFiltered;
     }
 
     @Override
@@ -106,7 +99,6 @@ public class ApiService implements ApiServiceInterface {
     @Override
     public void populateRestaurant() {
         restaurants.clear();
-        restaurantFiltered.clear();
         liveRestaurants.setValue(new ArrayList<>());
         mRestaurantManager.getRestaurantCollection().get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (!queryDocumentSnapshots.isEmpty()) {
@@ -114,7 +106,7 @@ public class ApiService implements ApiServiceInterface {
                     Restaurant restaurant = restaurantCollection.toObject(Restaurant.class);
                     restaurants.add(restaurant);
                     restaurantFiltered.add(restaurant);
-                    liveRestaurants.setValue(restaurantFiltered);
+                    liveRestaurants.setValue(restaurants);
                 }
             }
         }).addOnFailureListener(e -> {
@@ -125,12 +117,14 @@ public class ApiService implements ApiServiceInterface {
     @Override
     public void populateUser() {
         users.clear();
+        userFiltered.clear();
+        liveUsers.setValue(new ArrayList<>());
         mUserManager.getUserCollection().get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (!queryDocumentSnapshots.isEmpty()) {
                 for (QueryDocumentSnapshot userCollection : queryDocumentSnapshots) {
                     User user = userCollection.toObject(User.class);
                     users.add(user);
-                    userFiltered = users;
+                    userFiltered.add(user);
                     liveUsers.setValue(userFiltered);
                 }
             }

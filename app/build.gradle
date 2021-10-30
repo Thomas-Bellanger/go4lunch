@@ -79,5 +79,4 @@ dependencies {
 
     //google place
     implementation 'com.google.android.libraries.places:places:2.4.0'
-
 }

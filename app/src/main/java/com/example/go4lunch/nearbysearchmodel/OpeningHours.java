@@ -1,5 +1,8 @@
 package com.example.go4lunch.nearbysearchmodel;
 
+import java.util.List;
+
+import com.example.go4lunch.detailmodel.PeriodsItem;
 import com.google.gson.annotations.SerializedName;
 
 public class OpeningHours{
@@ -7,7 +10,21 @@ public class OpeningHours{
 	@SerializedName("open_now")
 	private boolean openNow;
 
+	@SerializedName("periods")
+	private List<PeriodsItem> periods;
+
+	@SerializedName("weekday_text")
+	private List<String> weekdayText;
+
 	public boolean isOpenNow(){
 		return openNow;
+	}
+
+	public List<PeriodsItem> getPeriods(){
+		return periods;
+	}
+
+	public List<String> getWeekdayText(){
+		return weekdayText;
 	}
 }

@@ -3,6 +3,7 @@ package com.example.go4lunch.ui.MainActivity2;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.service.ApiServiceInterface;
+import com.example.go4lunch.ui.MainActivity.MainActivity;
 import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 import com.example.go4lunch.ui.SettingsActivity.SettingsActivity;
 import com.google.android.libraries.places.api.Places;
@@ -163,8 +165,9 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void logout(){
+        Intent finish = new Intent(this, MainActivity.class);
         userManager.signOut(this).addOnSuccessListener(Void -> {
-            this.finish();
+            startActivity(finish);
         });
     }
 

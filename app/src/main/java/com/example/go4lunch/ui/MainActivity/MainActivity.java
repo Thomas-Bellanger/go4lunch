@@ -1,16 +1,16 @@
 package com.example.go4lunch.ui.MainActivity;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
+import com.example.go4lunch.databinding.ActivityMain2Binding;
 import com.example.go4lunch.databinding.ActivityMainBinding;
 import com.example.go4lunch.manager.GoogleManager;
 import com.example.go4lunch.manager.RestaurantManager;
@@ -22,37 +22,25 @@ import com.example.go4lunch.ui.MainActivity2.MainActivity2;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.mapbox.mapboxsdk.annotations.Icon;
-import com.mapbox.mapboxsdk.annotations.IconFactory;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding> {
+public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private final UserManager userManager = UserManager.getInstance();
     private final ApiService mApiService = DI.getASIService();
     private GoogleManager mGoogleManager = GoogleManager.getInstance();
+    private ActivityMainBinding binding;
     private RestaurantRepository mRestaurantRepository = RestaurantRepository.getInstance();
     private RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
-
-
-    @Override
-    protected ActivityMainBinding getViewBinding() {
-        return ActivityMainBinding.inflate(getLayoutInflater());
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mApiService.populateUser();
-        googleToFirebase(Restaurant.restaurant1);
-        googleToFirebase(Restaurant.restaurant2);
-        startSignInActivity();
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
     }
 
     private void startSignInActivity() {
@@ -94,6 +82,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             // SUCCESS
             if (resultCode == RESULT_OK) {
                 userManager.createUser();
+                mApiService.populateUser();
                 Intent intent = new Intent(this, MainActivity2.class);
                 startActivity(intent);
             } else {
@@ -112,23 +101,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     private void showSnackBar(String message) {
-        Snackbar.make(binding.mainLayout, message, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.e("restart", "restart");
-        mApiService.populateUser();
+    protected void onPostResume() {
+        super.onPostResume();
         startSignInActivity();
-    }
-
-    public void googleToFirebase(Restaurant restaurant) {
-        if (restaurant.getJoiners() == null) {
-            mRestaurantManager.createRestaurantFirebase(restaurant);
-            Log.e("Nok", "Nok");
-        }
-        if (restaurant.getJoiners() != null) {
-        }
     }
     }

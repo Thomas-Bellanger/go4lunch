@@ -2,6 +2,7 @@ package com.example.go4lunch.ui.MainActivity2;
 
 import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -54,12 +55,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, PermissionsListener {
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     LatLng latLng;
     private MapView mapView;
     private MapboxMap map;
-    private PermissionsManager permissionsManager;
     private final ApiService mApiService = DI.getASIService();
     private MapViewModel mMapViewModel = MapViewModel.getInstance();
     private LatLng userLocation;
@@ -67,6 +70,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
     private FloatingActionButton mapBtn;
     private GoogleManager mGoogleManager = GoogleManager.getInstance();
     private MutableLiveData<Location> liveLocation= new MutableLiveData<>();
+    private static final String PERMS = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final int RC_LOCATION = 100;
 
     public MapFragment() {
     }
@@ -85,8 +90,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
             MainActivity2.toolbarTitle = "I'm hungry!";
             mapBtn = view.findViewById(R.id.btn);
             mapBtn.setVisibility(View.GONE);
-            permissionsManager = new PermissionsManager(this);
-            permissionsManager.requestLocationPermissions(this.getActivity());
+
 
         return view;
     }
@@ -95,24 +99,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
             this.map = mapboxMap;
+            acceptPermission();
             map.addOnCameraMoveListener(() -> mapBtn.setVisibility(View.VISIBLE));
-            enableLocationComponent(Style.MAPBOX_STREETS);
             mapBtn.setOnClickListener(v -> {
-                Log.e("list", "liste  "+mApiService.getFilteredRestaurants().size());
-                lastLocation = new LatLng(map.getLocationComponent().getLastKnownLocation().getLatitude(), map.getLocationComponent().getLastKnownLocation().getLongitude());
-                if(userLocation!=lastLocation){
+                acceptPermission();
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(lastLocation))
+                        .zoom(10)
+                        .tilt(20)
+                        .build();
+                map.setCameraPosition(cameraPosition);
+                if(!userLocation.equals(lastLocation)){
                     userLocation=lastLocation;
+                    mApiService.populateRestaurant();
+                    Log.e("click", ""+ userLocation.equals(lastLocation));
                 }
-                getMarkers(mApiService.getFilteredRestaurants());
-                enableLocationComponent(Style.MAPBOX_STREETS);
             });
-            getMarkers(mApiService.getFilteredRestaurants());
+            mApiService.getLiveRestaurant().observe(getActivity(), this::getMarkers);
     }
 
     @SuppressLint("MissingPermission")
     private void enableLocationComponent(@NonNull String loadedMapStyle) {
-// Check if permissions are enabled and if not request
-        if (PermissionsManager.areLocationPermissionsGranted(this.getContext())) {
 // Get an instance of the component
             LocationComponent locationComponent = map.getLocationComponent();
 // Activate with options
@@ -127,51 +134,51 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
 
 // Set the component's render mode
             locationComponent.setRenderMode(RenderMode.COMPASS);
-
             if(locationComponent.getLastKnownLocation() != null) {
                 userLocation = new LatLng(locationComponent.getLastKnownLocation().getLatitude(), locationComponent.getLastKnownLocation().getLongitude());
+                checkNearbyRestaurant();
+
             }
                  else{
                     userLocation = new LatLng(map.getCameraPosition().target.getLatitude(), map.getCameraPosition().target.getLongitude());
                 }
-                 mMapViewModel.liveRestaurantsCall.observe(this, this::getMarkers);
+        Log.e("location", userLocation.toString());
+        mApiService.populateRestaurant();
+        locationComponent.addCompassListener(new CompassListener() {
+            @Override
+            public void onCompassChanged(float userHeading) {
+                if(locationComponent.getLastKnownLocation() != null) {
+                    liveLocation.setValue(locationComponent.getLastKnownLocation());
+                    lastLocation = new LatLng(locationComponent.getLastKnownLocation().getLatitude(), locationComponent.getLastKnownLocation().getLongitude());
+                }
+            }
+
+            @Override
+            public void onCompassAccuracyChange(int compassStatus) {
+
+            }
+        });
         }
-        else {
-            permissionsManager = new PermissionsManager(this);
-            permissionsManager.requestLocationPermissions(this.getActivity());
-        }
-    }
 
     public void checkNearbyRestaurant() {
             mMapViewModel.setLocation(userLocation);
             mApiService.populateRestaurant();
     }
 
-
-    @Override
-    public void onExplanationNeeded(List<String> permissionsToExplain) {
-
-    }
-
-    @Override
-    public void onPermissionResult(boolean granted) {
-        if (granted) {
-            Log.e("permission", "granted");
-            enableLocationComponent(Style.MAPBOX_STREETS);
-
-
-        } else {
-            Log.e("permission", "Not granted");
-            Toast.makeText(this.getContext(), "location permission not granted", Toast.LENGTH_LONG).show();
-            getActivity().finish();
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
+
+    @AfterPermissionGranted(RC_LOCATION)
+    private void acceptPermission(){
+        if (!EasyPermissions.hasPermissions(this.getContext(), PERMS)) {
+            EasyPermissions.requestPermissions(this, "Need the permission to start!", RC_LOCATION, PERMS);
+            return;
+        }
+        enableLocationComponent(Style.MAPBOX_STREETS);
+        }
 
     @Override
     public void onStart() {
@@ -183,7 +190,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
     public void onResume() {
         super.onResume();
         mapView.onResume();
-        mMapViewModel.liveRestaurantsCall.observe(this, this::getMarkers);
     }
 
     @Override
@@ -217,10 +223,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
     }
 
     public void getMarkers(List<Restaurant> restaurants) {
-        Log.e("listener", "marker  "+ restaurants.size());
         List<Marker> markerList = new ArrayList<>();
         IconFactory mIconFactory = IconFactory.getInstance(getContext());
-        Icon pin = mIconFactory.fromResource(R.drawable.baseline_person_pin_circle_white_24);
+        Icon pin = mIconFactory.fromResource(R.drawable.baseline_person_pin_circle_blue_24);
         Double distance;
         map.clear();
         for (Restaurant restaurant : restaurants) {
@@ -239,7 +244,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Permiss
                     markers.setPosition(markers.getPosition());
                     map.setOnMarkerClickListener(marker1 -> {
                         Intent intent = new Intent(getContext(), RestaurantDetail.class);
-                        intent.putExtra(RestaurantDetail.KEY_RESTAURANT, mApiService.getRestaurants().get(markerList.indexOf(marker1)));
+                        intent.putExtra(RestaurantDetail.KEY_RESTAURANT,mApiService.getLiveRestaurant().getValue().get(markerList.indexOf(marker1)));
                         startActivity(intent);
 
                         return false;

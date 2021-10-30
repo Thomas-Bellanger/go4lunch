@@ -1,5 +1,8 @@
 package com.example.go4lunch.ui.MainActivity2;
 
+import android.media.Image;
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
@@ -52,16 +55,30 @@ public class MapViewModel implements GoogleRepository.Callbacks {
 
     @Override
     public void onResponse(@Nullable ResponseAPI itemLive) {
-        restaurantList.clear();
+        restaurantList = new ArrayList<>();
+        liveRestaurantsCall.setValue(new ArrayList<>());
         for (ResultsItem item : itemLive.getResults()){
+            Log.e("call", ""+liveRestaurantsCall.getValue().size());
             Restaurant restaurant = Restaurant.googleRestaurantToRestaurant(item);
+            mRestaurantManager.createRestaurantFirebase(restaurant);
             restaurantList.add(restaurant);
-            mApiService.getFilteredRestaurants().add(restaurant);
+            mGoogleManager.getPhoto(this, item.getReference());
+
             liveRestaurantsCall.setValue(restaurantList);
         }
     }
 
     @Override
     public void onFailure() {
+    }
+
+    @Override
+    public void onResponsePhoto(@Nullable Image image) {
+
+    }
+
+    @Override
+    public void onFailurePhoto() {
+
     }
 }

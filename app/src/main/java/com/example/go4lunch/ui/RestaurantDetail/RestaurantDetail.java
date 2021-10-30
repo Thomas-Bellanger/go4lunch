@@ -3,7 +3,6 @@ package com.example.go4lunch.ui.RestaurantDetail;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -23,7 +22,6 @@ import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.ui.WebView.WebView;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -266,5 +264,11 @@ public class RestaurantDetail extends AppCompatActivity {
             //Log.e("fail", e.getMessage())
         });
         restaurantManager.getRestaurantData(mRestaurant).addOnSuccessListener(restaurant -> mRestaurant.setNote(restaurant.getNote()));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mApiService.populateRestaurant();
     }
 }

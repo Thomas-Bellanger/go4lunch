@@ -16,8 +16,8 @@
 
             <TextView
                 android:id="@+id/restaurant_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="15dp"
                 android:text="restaurant_name"
                 android:textSize="@dimen/restaurant_item_text_size"
                 android:ellipsize="end"/>
@@ -32,8 +32,8 @@
                 android:id="@+id/distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:ellipsize="end"
-                android:lines="1"
                 android:text="distance"
                 android:textColor="#A5A5A5"
                 android:textSize="@dimen/restaurant_item_text_size" />
@@ -64,15 +64,18 @@
 
             <TextView
                 android:id="@+id/restaurant_style"
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="style"
                 android:textSize="@dimen/restaurant_item_text_size" />
 
             <TextView
                 android:id="@+id/restaurant_adress"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:layout_marginLeft="@dimen/restaurant_item_adress_margin_left"
                 android:text="adress"
                 android:textSize="@dimen/restaurant_item_text_size" />

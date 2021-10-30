@@ -117,6 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             });
             mApiService.populateRestaurant();
+            mApiService.getLiveRestaurant().observe(getActivity(), this::getMarkers);
     }
 
     @SuppressLint("MissingPermission")
@@ -135,27 +136,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 // Set the component's render mode
             locationComponent.setRenderMode(RenderMode.COMPASS);
-            if(locationComponent.getLastKnownLocation() != null) {
+            if (locationComponent.getLastKnownLocation() != null) {
                 userLocation = new LatLng(locationComponent.getLastKnownLocation().getLatitude(), locationComponent.getLastKnownLocation().getLongitude());
+            } else {
+                userLocation = new LatLng(map.getCameraPosition().target.getLatitude(), map.getCameraPosition().target.getLongitude());
             }
-                 else{
-                    userLocation = new LatLng(map.getCameraPosition().target.getLatitude(), map.getCameraPosition().target.getLongitude());
-                }
-        locationComponent.addCompassListener(new CompassListener() {
-            @Override
-            public void onCompassChanged(float userHeading) {
-                if(locationComponent.getLastKnownLocation() != null) {
-                    if(!mApiService.getLiveDistance().equals(locationComponent.getLastKnownLocation())){
-                        mApiService.getLiveDistance().setValue(locationComponent.getLastKnownLocation().toString());
+            locationComponent.addCompassListener(new CompassListener() {
+                @Override
+                public void onCompassChanged(float userHeading) {
+                    if (locationComponent.getLastKnownLocation() != null) {
+                        if (!mApiService.getLiveDistance().equals(locationComponent.getLastKnownLocation())) {
+                            mApiService.getLiveDistance().setValue(locationComponent.getLastKnownLocation().toString());
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCompassAccuracyChange(int compassStatus) {
-            }
-        });
-        mApiService.getLiveRestaurant().observe(getActivity(), this::getMarkers);
+                @Override
+                public void onCompassAccuracyChange(int compassStatus) {
+                }
+            });
+            mApiService.getLiveRestaurant().observe(getActivity(), this::getMarkers);
         }
 
     public void checkNearbyRestaurant() {
@@ -175,7 +175,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             EasyPermissions.requestPermissions(this, "Need the permission to start!", RC_LOCATION, PERMS);
             return;
         }
-        enableLocationComponent(Style.MAPBOX_STREETS);
+            enableLocationComponent(Style.MAPBOX_STREETS);
         }
 
     @Override
@@ -223,7 +223,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void getMarkers(List<Restaurant> restaurants) {
         List<Marker> markerList = new ArrayList<>();
         IconFactory mIconFactory = IconFactory.getInstance(getContext());
-        Icon pin = mIconFactory.fromResource(R.drawable.baseline_person_pin_circle_indigo_400_24dp);
+        Icon pin = mIconFactory.fromResource(R.drawable.baseline_person_pin_circle_blue_500_36dp);
         Double distance;
         map.clear();
         for (Restaurant restaurant : restaurants) {

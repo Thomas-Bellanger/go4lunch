@@ -31,6 +31,7 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
     private final List<Restaurant> restaurants;
     private Context mContext;
     private ApiService mApiService = DI.getASIService();
+    private MapViewModel mMapViewModel = MapViewModel.getInstance();
 
     public RestaurantListViewAdapter(List<Restaurant> items) {
         restaurants = items;

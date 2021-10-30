@@ -47,8 +47,8 @@ public class RestaurantListView extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mApiService = DI.getASIService();
         mApiService.getLiveDistance().observe(this.getActivity(), this::update);
-        mApiService.getSort().observe(this.getActivity(), this::sortBy);
         mApiService.getLiveRestaurant().observe(getActivity(), this::initList);
+        mApiService.getSort().observe(this.getActivity(), this::sortBy);
 
         return view;
     }

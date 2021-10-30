@@ -99,6 +99,7 @@ public class ApiService implements ApiServiceInterface {
     @Override
     public void populateRestaurant() {
         restaurants.clear();
+        restaurantFiltered.clear();
         liveRestaurants.setValue(new ArrayList<>());
         mRestaurantManager.getRestaurantCollection().get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (!queryDocumentSnapshots.isEmpty()) {
@@ -107,11 +108,14 @@ public class ApiService implements ApiServiceInterface {
                     restaurants.add(restaurant);
                     restaurantFiltered.add(restaurant);
                     liveRestaurants.setValue(restaurants);
+                    Log.e("liste filtered", ""+ restaurantFiltered.size());
+                    Log.e("liste", ""+ restaurants.size());
                 }
             }
         }).addOnFailureListener(e -> {
             //Log.e("fail", e.getMessage())
         });
+
     }
 
     @Override

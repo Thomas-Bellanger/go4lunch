@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.go4lunch.detailmodel.Result;
 import com.example.go4lunch.nearbysearchmodel.ResponseAPI;
 import com.example.go4lunch.nearbysearchmodel.ResultsItem;
 import com.example.go4lunch.utils.GooglePlaceService;
@@ -26,6 +27,9 @@ public class GoogleRepository {
 
         void onResponsePhoto(@Nullable Image image);
         void onFailurePhoto();
+
+        void onResponseDetail(@Nullable Result result);
+        void onFailureDetail();
     }
 
     public static GoogleRepository getInstance() {
@@ -80,7 +84,8 @@ public class GoogleRepository {
             @Override
             public void onResponse(Call<Image> liveDataImage, Response<Image> response) {
                 // Call the proper callback used in controller
-
+                Log.e("checkbody","ok"+response.body());
+                Log.e("check","ok"+response.toString());
                 if (callbacksWeakReference.get() != null)
                     callbacksWeakReference.get().onResponsePhoto(response.body());
             }
@@ -94,4 +99,29 @@ public class GoogleRepository {
         });
     }
 
+    public void getDetail (Callbacks callbacksDetail, String id){
+        final WeakReference<Callbacks> callbacksWeakReference = new WeakReference<>(callbacksDetail);
+        // get retrofit instance
+        GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
+        // create the call on the API
+        Call<com.example.go4lunch.detailmodel.Response> liveDataCall = googlePlaceService.getDetail(id);
+        // 2.4 - Start the call
+        liveDataCall.enqueue(new Callback<com.example.go4lunch.detailmodel.Response>() {
+            @Override
+            public void onResponse(Call<com.example.go4lunch.detailmodel.Response> liveData, Response<com.example.go4lunch.detailmodel.Response> response) {
+                // Call the proper callback used in controller
+                Log.e("checkbody","ok"+response.body().getResult());
+                Log.e("check","ok"+response.toString());
+                if (callbacksWeakReference.get() != null)
+                    callbacksWeakReference.get().onResponseDetail(response.body().getResult());
+            }
+
+            @Override
+            public void onFailure(Call<com.example.go4lunch.detailmodel.Response> call, Throwable t) {
+                Log.e("checkNOK Photo",t.getMessage());
+                // 2.5 - Call the proper callback used in controller (MainFragment)
+                if (callbacksWeakReference.get() != null) callbacksWeakReference.get().onFailure();
+            }
+        });
+    }
 }

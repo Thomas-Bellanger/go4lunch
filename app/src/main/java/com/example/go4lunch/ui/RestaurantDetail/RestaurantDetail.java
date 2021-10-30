@@ -16,11 +16,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.ActivityRestaurantDetailBinding;
+import com.example.go4lunch.manager.GoogleManager;
 import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
+import com.example.go4lunch.repository.GoogleRepository;
 import com.example.go4lunch.service.ApiService;
+import com.example.go4lunch.ui.MainActivity2.MapViewModel;
 import com.example.go4lunch.ui.WebView.WebView;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -43,6 +46,7 @@ public class RestaurantDetail extends AppCompatActivity {
     private boolean chosen = false;
     private boolean liked = false;
     private ApiService mApiService = DI.getASIService();
+    private MapViewModel mMapViewModel = MapViewModel.getInstance();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -189,16 +193,29 @@ public class RestaurantDetail extends AppCompatActivity {
 
     //call intent
     public void call() {
-        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-        callIntent.setData(Uri.parse("tel:" + mRestaurant.getPhoneNumber()));
-        startActivity(callIntent);
+        String number = mMapViewModel.phoneNumber;
+        if(number == null){
+            Toast.makeText(getApplicationContext(), "No number found!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:" + number));
+            startActivity(callIntent);
+        }
     }
 
     //website intent
     public void navigate() {
-        Intent navigate = new Intent(RestaurantDetail.this, WebView.class);
-        navigate.putExtra(KEY_RESTAURANT, mRestaurant);
-        startActivity(navigate);
+        String url = mMapViewModel.url;
+        if(url == null){
+            Toast.makeText(getApplicationContext(), "No url found!", Toast.LENGTH_SHORT).show();
+        }
+            else {
+            mRestaurant.setUrl(url);
+            Intent navigate = new Intent(RestaurantDetail.this, WebView.class);
+            navigate.putExtra(KEY_RESTAURANT, mRestaurant);
+            startActivity(navigate);
+        }
     }
 
     //recycler view

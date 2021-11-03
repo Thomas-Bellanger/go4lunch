@@ -112,11 +112,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 map.setCameraPosition(cameraPosition);
                 if(!userLocation.equals(lastLocation)){
                     userLocation=lastLocation;
-                    mApiService.populateRestaurant();
+                    checkNearbyRestaurant();
                     Log.e("click", ""+ userLocation.equals(lastLocation));
                 }
             });
-            mApiService.populateRestaurant();
             mApiService.getLiveRestaurant().observe(getActivity(), this::getMarkers);
     }
 

@@ -3,6 +3,7 @@ package com.example.go4lunch.model;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.nearbysearchmodel.OpeningHours;
@@ -45,7 +46,6 @@ public class Restaurant implements Parcelable {
     private double lat;
     private double lng;
     private String icon;
-    private String photoReference;
 
     public Restaurant(String uid, String name, String adress, String type, Boolean opening, String distance, String avatar, String url, String phoneNumber, int note, double lat, double lng) {
         this.uid = uid;
@@ -80,7 +80,6 @@ public class Restaurant implements Parcelable {
         lat = in.readDouble();
         lng = in.readDouble();
         icon = in.readString();
-        photoReference = in.readString();
     }
 
     public double getLat() {
@@ -159,14 +158,6 @@ public class Restaurant implements Parcelable {
         return icon;
     }
 
-    public String getPhotoReference() {
-        return photoReference;
-    }
-
-    public void setPhotoReference(String photoReference) {
-        this.photoReference = photoReference;
-    }
-
     public void setJoiners(List<com.example.go4lunch.model.User> joiners) {
         this.joiners = joiners;
     }
@@ -225,7 +216,6 @@ public class Restaurant implements Parcelable {
         dest.writeInt(note);
         dest.writeByte((byte) (like ? 1 : 0));
         dest.writeString(icon);
-        dest.writeString(photoReference);
     }
 
     public void addJoiners(User user) {
@@ -243,8 +233,8 @@ public class Restaurant implements Parcelable {
             String type = item.getTypes().get(0);
             Boolean opening = true;
             String distance = "distance";
-            String avatar = item.getIcon();
-            String icon = item.getIcon();
+            String avatar = item.getPhotos().get(0).getPhotoReference();
+        Log.e("phot ref", avatar);
             String url = "url";
             String phoneNumber = "0";
             int note = item.getUserRatingsTotal();

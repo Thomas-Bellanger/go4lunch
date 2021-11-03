@@ -64,6 +64,10 @@
         android:backgroundTint="#FF9564"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/menu_menu" />
+        app:menu="@menu/menu_menu"
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/white"
+
+        />
 
 </androidx.drawerlayout.widget.DrawerLayout>

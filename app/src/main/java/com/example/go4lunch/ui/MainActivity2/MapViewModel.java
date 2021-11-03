@@ -20,7 +20,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapViewModel implements GoogleRepository.Callbacks, MapViewModelInterface {
+public class MapViewModel implements GoogleRepository.Callbacks {
     private static volatile MapViewModel instance;
     private ApiService mApiService = DI.getASIService();
     private GoogleManager mGoogleManager = GoogleManager.getInstance();
@@ -84,7 +84,7 @@ public class MapViewModel implements GoogleRepository.Callbacks, MapViewModelInt
     }
 
     public void checkForPhoto(Restaurant restaurant){
-        mGoogleManager.getPhoto(this, restaurant.getPhotoReference());
+        mGoogleManager.getPhoto(this, restaurant.getAvatar());
     }
 
     @Override
@@ -96,8 +96,6 @@ public class MapViewModel implements GoogleRepository.Callbacks, MapViewModelInt
             Restaurant restaurant = Restaurant.googleRestaurantToRestaurant(item);
             mRestaurantManager.createRestaurantFirebase(restaurant);
             restaurantList.add(restaurant);
-            mGoogleManager.getPhoto(this, item.getReference());
-
             liveRestaurantsCall.setValue(restaurantList);
         }
     }

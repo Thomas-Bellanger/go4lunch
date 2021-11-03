@@ -53,12 +53,12 @@ public class RestaurantDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityRestaurantDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         Intent intent = getIntent();
         mRestaurant = intent.getParcelableExtra(KEY_RESTAURANT);
         binding.restaurantDetailName.setText(mRestaurant.getName());
         binding.restaurantDetailAdress.setText(mRestaurant.getAdress());
         binding.restaurantDetailStyle.setText(mRestaurant.getType());
+        mMapViewModel.checkForPhoto(mRestaurant);
         Glide.with(binding.restaurantDetailAvatar.getContext())
                 .load(mRestaurant.getAvatar())
                 .apply(RequestOptions.centerCropTransform())

@@ -2,12 +2,12 @@
 <resources>
     <!-- Activity 2 -->
     <dimen name="toolbar_height">50dp</dimen>
-    <dimen name="viewPager_height">825dp</dimen>
+    <dimen name="viewPager_height">450dp</dimen>
     <dimen name="tabIndicatorHeight">3dp</dimen>
     <dimen name="tabLayout_height">63dp</dimen>
 
     <!-- activity restaurant detail -->
-    <dimen name="restaurant_detail_avatar_height">400dp</dimen>
+    <dimen name="restaurant_detail_avatar_height">200dp</dimen>
     <dimen name="orange_bar_height">100dp</dimen>
     <dimen name="restaurant_name_detail_margin_top">10dp</dimen>
     <dimen name="restaurant_name_detail_margin_left">10dp</dimen>
@@ -27,11 +27,11 @@
     <dimen name="joiners_recyclerView_height">310dp</dimen>
 
     <!-- nav_header -->
-    <dimen name="nav_header_layout_height">400dp</dimen>
-    <dimen name="nav_header_text_size">60dp</dimen>
+    <dimen name="nav_header_layout_height">250dp</dimen>
+    <dimen name="nav_header_text_size">50dp</dimen>
     <dimen name="nav_header_account_size">70dp</dimen>
     <dimen name="nav_header_go4lunch_text_size">20dp</dimen>
-    <dimen name="nav_header_email_text_size">20dp</dimen>
+    <dimen name="nav_header_email_text_size">15dp</dimen>
     <dimen name="nav_header_avatar_margin_left">10dp</dimen>
 
     <!-- restaurant item -->

@@ -164,10 +164,16 @@ public class ApiService implements ApiServiceInterface {
     public static class RestaurantDistanceComparator implements Comparator<Restaurant> {
         @Override
         public int compare(Restaurant left, Restaurant right) {
-            return left.getDistance().compareTo(right.getDistance());
+            if (left.getDistance() > right.getDistance()) {
+                Log.e("return comparator", "1");
+                return 1;
+            }
+            if (left.getDistance() < right.getDistance()) {
+                return -1;
+            }
+            return 0;
         }
     }
-
     public MutableLiveData<String> getSort(){
         return sort;
     }

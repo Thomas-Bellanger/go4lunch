@@ -51,6 +51,7 @@ public class MainActivity2 extends AppCompatActivity {
     public static String searchTip = "tip";
     private final UserManager userManager = UserManager.getInstance();
     private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
+    MapViewModel mMapViewModel = MapViewModel.getInstance();
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ActivityMain2Binding binding;
@@ -61,13 +62,13 @@ public class MainActivity2 extends AppCompatActivity {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
-            results.values = mApiService.filterRestaurant(constraint.toString());
+            results.values = mMapViewModel.filterRestaurant(constraint.toString());
             return results;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            mApiService.getLiveRestaurant();
+            mMapViewModel.liveRestaurantsCall.getValue();
         }
     };
     public Filter filterUser = new Filter() {

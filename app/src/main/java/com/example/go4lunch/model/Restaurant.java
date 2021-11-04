@@ -1,15 +1,11 @@
 package com.example.go4lunch.model;
 
-import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
 import com.example.go4lunch.manager.RestaurantManager;
-import com.example.go4lunch.nearbysearchmodel.OpeningHours;
 import com.example.go4lunch.nearbysearchmodel.ResultsItem;
-import com.google.firebase.auth.FirebaseUser;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +22,9 @@ public class Restaurant implements Parcelable {
             return new Restaurant[size];
         }
     };
-    public static Restaurant noRestaurant = new Restaurant("000", "none", "noAdress", "noType", false  , "0", "none", "none", "0", 0, 0, 0);
-    public static Restaurant restaurant1 = new Restaurant("1863", "restaurant 1", "8 Rue des restaurants", "French", true, "0.0", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "3418", 10, 48.8675, 2.6901);
-    public static Restaurant restaurant2 = new Restaurant("2854", "restaurant 2", "10 Rue des restaurants", "French", true,"0.0" , "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "3418", 5, 48.8341, 2.7958);
+    public static Restaurant noRestaurant = new Restaurant("000", "none", "noAdress", "noType", false  , 0, "none", "none", "0", 0, 0, 0);
+    public static Restaurant restaurant1 = new Restaurant("1863", "restaurant 1", "8 Rue des restaurants", "French", true, 0, "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "3418", 10, 48.8675, 2.6901);
+    public static Restaurant restaurant2 = new Restaurant("2854", "restaurant 2", "10 Rue des restaurants", "French", true,0 , "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "3418", 5, 48.8341, 2.7958);
 
     private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
     private String uid;
@@ -37,7 +33,7 @@ public class Restaurant implements Parcelable {
     private List<User> joiners = new ArrayList<>();
     private String type;
     private Boolean opening;
-    private String distance;
+    private int distance;
     private String avatar;
     private String url;
     private String phoneNumber;
@@ -47,7 +43,7 @@ public class Restaurant implements Parcelable {
     private double lng;
     private String icon;
 
-    public Restaurant(String uid, String name, String adress, String type, Boolean opening, String distance, String avatar, String url, String phoneNumber, int note, double lat, double lng) {
+    public Restaurant(String uid, String name, String adress, String type, Boolean opening, int distance, String avatar, String url, String phoneNumber, int note, double lat, double lng) {
         this.uid = uid;
         this.name = name;
         this.adress = adress;
@@ -71,7 +67,7 @@ public class Restaurant implements Parcelable {
         name = in.readString();
         adress = in.readString();
         type = in.readString();
-        distance = in.readString();
+        distance = in.readInt();
         avatar = in.readString();
         url = in.readString();
         phoneNumber = in.readString();
@@ -170,11 +166,11 @@ public class Restaurant implements Parcelable {
         this.opening = opening;
     }
 
-    public String getDistance() {
+    public int getDistance() {
         return distance;
     }
 
-    public void setDistance(String distance) {
+    public void setDistance(int distance) {
         this.distance = distance;
     }
 
@@ -209,7 +205,7 @@ public class Restaurant implements Parcelable {
         dest.writeString(name);
         dest.writeString(adress);
         dest.writeString(type);
-        dest.writeString(distance);
+        dest.writeInt(distance);
         dest.writeString(avatar);
         dest.writeString(url);
         dest.writeString(phoneNumber);
@@ -232,9 +228,9 @@ public class Restaurant implements Parcelable {
             String adress = item.getVicinity();
             String type = item.getTypes().get(0);
             Boolean opening = true;
-            String distance = "distance";
+            int distance = 0;
             String avatar = item.getPhotos().get(0).getPhotoReference();
-        Log.e("phot ref", avatar);
+            Log.e("phot ref", avatar);
             String url = "url";
             String phoneNumber = "0";
             int note = item.getUserRatingsTotal();

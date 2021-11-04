@@ -116,7 +116,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     Log.e("click", ""+ userLocation.equals(lastLocation));
                 }
             });
-            mApiService.getLiveRestaurant().observe(getActivity(), this::getMarkers);
+           mMapViewModel.liveRestaurantsCall.observe(getActivity(), this::getMarkers);
     }
 
     @SuppressLint("MissingPermission")
@@ -154,12 +154,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 public void onCompassAccuracyChange(int compassStatus) {
                 }
             });
-            mApiService.getLiveRestaurant().observe(getActivity(), this::getMarkers);
+            mMapViewModel.liveRestaurantsCall.observe(getActivity(), this::getMarkers);
         }
 
     public void checkNearbyRestaurant() {
-            mMapViewModel.setLocation(userLocation);
-            mApiService.populateRestaurant();
+        mMapViewModel.setLocation(userLocation);
     }
 
     @Override
@@ -223,7 +222,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         List<Marker> markerList = new ArrayList<>();
         IconFactory mIconFactory = IconFactory.getInstance(getContext());
         Icon pin = mIconFactory.fromResource(R.drawable.baseline_person_pin_circle_blue_500_36dp);
-        Double distance;
+        Double meter;
         map.clear();
         for (Restaurant restaurant : restaurants) {
             latLng = new LatLng(restaurant.getLat(), restaurant.getLng());
@@ -233,15 +232,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                marker.setIcon(pin);
             }
             markerList.add(marker);
-            distance = marker.getPosition().distanceTo(userLocation);
-                String[] distances = distance.toString().split("\\.");
-                restaurant.setDistance(distances[0] + "m");
-                mApiService.getLiveDistance().setValue(distance.toString());
+            meter = marker.getPosition().distanceTo(userLocation);
+            int distance = meter.intValue();
+                restaurant.setDistance(distance);
+                mApiService.getLiveDistance().setValue(distance + "m");
                 for (Marker markers : markerList) {
                     markers.setPosition(markers.getPosition());
                     map.setOnMarkerClickListener(marker1 -> {
                         Intent intent = new Intent(getContext(), RestaurantDetail.class);
-                        intent.putExtra(RestaurantDetail.KEY_RESTAURANT,mApiService.getLiveRestaurant().getValue().get(markerList.indexOf(marker1)));
+                        intent.putExtra(RestaurantDetail.KEY_RESTAURANT,mMapViewModel.liveRestaurantsCall.getValue().get(markerList.indexOf(marker1)));
                         startActivity(intent);
 
                         return false;

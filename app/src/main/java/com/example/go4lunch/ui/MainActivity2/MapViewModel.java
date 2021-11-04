@@ -3,6 +3,7 @@ package com.example.go4lunch.ui.MainActivity2;
 import android.media.Image;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
@@ -11,10 +12,17 @@ import com.example.go4lunch.detailmodel.Result;
 import com.example.go4lunch.manager.GoogleManager;
 import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.model.Restaurant;
+import com.example.go4lunch.model.User;
 import com.example.go4lunch.nearbysearchmodel.ResponseAPI;
 import com.example.go4lunch.nearbysearchmodel.ResultsItem;
 import com.example.go4lunch.repository.GoogleRepository;
 import com.example.go4lunch.service.ApiService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.ArrayList;
@@ -69,16 +77,6 @@ public class MapViewModel implements GoogleRepository.Callbacks {
         return restaurantFiltered;
     }
 
-    public void googleToFirebase(Restaurant restaurant){
-        mRestaurantManager.getRestaurantCollection().get().addOnSuccessListener(queryDocumentSnapshots -> {
-            if (queryDocumentSnapshots.getDocuments().contains(restaurant.getUid())){
-            }
-            else {
-                mRestaurantManager.createRestaurantFirebase(restaurant);
-            }
-        });
-    }
-
     public void checkForDetail(Restaurant restaurant){
         mGoogleManager.getDetail(this, restaurant.getUid());
     }
@@ -93,12 +91,28 @@ public class MapViewModel implements GoogleRepository.Callbacks {
         liveRestaurantsCall.setValue(new ArrayList<>());
         for (ResultsItem item : itemLive.getResults()){
             Log.e("call", ""+liveRestaurantsCall.getValue().size());
+
             Restaurant restaurant = Restaurant.googleRestaurantToRestaurant(item);
-            mRestaurantManager.createRestaurantFirebase(restaurant);
-            restaurantList.add(restaurant);
-            liveRestaurantsCall.setValue(restaurantList);
+            mRestaurantManager.getRestaurantCollection().document(restaurant.getUid()).get().addOnCompleteListener(task -> {
+                if(task.isComplete()){
+                    if(task.getResult().exists()){
+                        Log.e("Test", "No Empty Data");
+                        mRestaurantManager.getRestaurantData(restaurant).addOnSuccessListener(restaurant1 -> {
+                            restaurantList.add(restaurant1);
+                            restaurantFiltered.add(restaurant1);
+                            liveRestaurantsCall.setValue(restaurantList);
+                        });
+                    }
+                    else {
+                        mRestaurantManager.createRestaurantFirebase(restaurant);
+                        restaurantList.add(restaurant);
+                        restaurantFiltered.add(restaurant);
+                    }
+                    liveRestaurantsCall.setValue(restaurantList);
+                }
+            });
+            }
         }
-    }
 
     @Override
     public void onFailure() {
@@ -125,5 +139,20 @@ public class MapViewModel implements GoogleRepository.Callbacks {
 
     }
 
+    public void populateRestaurant() {
+        liveRestaurantsCall.setValue(new ArrayList<>());
+        restaurantFiltered.clear();
+       for (Restaurant restaurant : restaurantList){
+           mRestaurantManager.getRestaurantData(restaurant).addOnSuccessListener(restaurant1 -> {
+               restaurantList.remove(restaurant);
+               restaurantList.add(restaurant1);
+               restaurantFiltered.add(restaurant1);
+               liveRestaurantsCall.setValue(restaurantList);
+           });
+       }
+    }
 
+    public List<Restaurant> getFilteredRestaurants() {
+        return restaurantFiltered;
+    }
 }

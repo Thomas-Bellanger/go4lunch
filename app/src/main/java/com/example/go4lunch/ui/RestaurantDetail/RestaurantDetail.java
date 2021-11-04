@@ -107,7 +107,6 @@ public class RestaurantDetail extends AppCompatActivity {
     public void chooseRestaurant() {
         if (chosen) {
             userManager.updateLunch(null).addOnSuccessListener(unused -> {
-                mApiService.populateRestaurant();
                 fabCleared();
                 removeUser(mRestaurant);
                 Toast.makeText(RestaurantDetail.this, getResources().getString(R.string.canceled), Toast.LENGTH_SHORT).show();
@@ -116,7 +115,6 @@ public class RestaurantDetail extends AppCompatActivity {
             removeUser(chosenRestaurant);
             joiners.add(currentUser);
             userManager.updateLunch(mRestaurant).addOnSuccessListener(unused -> {
-                mApiService.populateRestaurant();
                 fabChecked();
                 restaurantManager.updateJoiners(mRestaurant, joiners).addOnSuccessListener(unused12 -> {
                     Toast.makeText(RestaurantDetail.this, getResources().getString(R.string.restaurantChosen), Toast.LENGTH_SHORT).show();
@@ -286,6 +284,6 @@ public class RestaurantDetail extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mApiService.populateRestaurant();
+        mMapViewModel.populateRestaurant();
     }
 }

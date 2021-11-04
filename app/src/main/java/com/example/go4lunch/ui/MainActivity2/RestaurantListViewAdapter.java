@@ -64,8 +64,8 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
 
         holder.restaurantName.setText(restaurant.getName());
         holder.restaurantAdress.setText(restaurant.getAdress());
-        holder.style.setText(restaurant.getType() + "   - ");
-        holder.distance.setText(restaurant.getDistance());
+        holder.style.setText(restaurant.getType() + " - ");
+        holder.distance.setText(restaurant.getDistance() + "m");
         Glide.with(holder.restaurantAvatar.getContext())
                 .load(restaurant.getAvatar())
                 .apply(RequestOptions.centerCropTransform())

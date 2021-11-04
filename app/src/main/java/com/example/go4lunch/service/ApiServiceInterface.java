@@ -24,8 +24,6 @@ public interface ApiServiceInterface {
 
     List<Restaurant> getFavorites();
 
-    void populateRestaurant();
-
     void populateUser();
 
     LiveData<List<Restaurant>> getLiveRestaurant();

@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             // SUCCESS
             if (resultCode == RESULT_OK) {
                 userManager.createUser();
-                mApiService.populateUser();
                 Intent intent = new Intent(this, MainActivity2.class);
                 startActivity(intent);
             } else {

@@ -112,11 +112,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 map.setCameraPosition(cameraPosition);
                 if(!userLocation.equals(lastLocation)){
                     userLocation=lastLocation;
-                    checkNearbyRestaurant();
+                    mMapViewModel.testList();
                     Log.e("click", ""+ userLocation.equals(lastLocation));
                 }
             });
            mMapViewModel.liveRestaurantsCall.observe(getActivity(), this::getMarkers);
+
     }
 
     @SuppressLint("MissingPermission")

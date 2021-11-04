@@ -97,28 +97,6 @@ public class ApiService implements ApiServiceInterface {
     }
 
     @Override
-    public void populateRestaurant() {
-        restaurants.clear();
-        restaurantFiltered.clear();
-        liveRestaurants.setValue(new ArrayList<>());
-        mRestaurantManager.getRestaurantCollection().get().addOnSuccessListener(queryDocumentSnapshots -> {
-            if (!queryDocumentSnapshots.isEmpty()) {
-                for (QueryDocumentSnapshot restaurantCollection : queryDocumentSnapshots) {
-                    Restaurant restaurant = restaurantCollection.toObject(Restaurant.class);
-                    restaurants.add(restaurant);
-                    restaurantFiltered.add(restaurant);
-                    liveRestaurants.setValue(restaurants);
-                    Log.e("liste filtered", ""+ restaurantFiltered.size());
-                    Log.e("liste", ""+ restaurants.size());
-                }
-            }
-        }).addOnFailureListener(e -> {
-            //Log.e("fail", e.getMessage())
-        });
-
-    }
-
-    @Override
     public void populateUser() {
         users.clear();
         userFiltered.clear();
@@ -169,6 +147,19 @@ public class ApiService implements ApiServiceInterface {
                 return 1;
             }
             if (left.getDistance() < right.getDistance()) {
+                return -1;
+            }
+            return 0;
+        }
+    }
+    public static class RestaurantNoteComparator implements Comparator<Restaurant> {
+        @Override
+        public int compare(Restaurant left, Restaurant right) {
+            if (left.getNote() > right.getNote()) {
+                Log.e("return comparator", "1");
+                return 1;
+            }
+            if (left.getNote() < right.getNote()) {
                 return -1;
             }
             return 0;

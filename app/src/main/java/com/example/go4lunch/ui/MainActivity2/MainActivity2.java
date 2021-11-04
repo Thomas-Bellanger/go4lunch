@@ -107,6 +107,7 @@ public class MainActivity2 extends AppCompatActivity {
         configureNavigationView();
         onDrawerOpened(mDrawerLayout);
         configurePagerAdapter();
+        mApiService.populateUser();
     }
 
     public void configureToolBar() {
@@ -131,6 +132,9 @@ public class MainActivity2 extends AppCompatActivity {
             mApiService.getSort().setValue(RestaurantListView.ALPHABETICAL);
         } else if (id == R.id.filterDistance) {
             mApiService.getSort().setValue(RestaurantListView.DISTANCE);
+        }
+        else if (id == R.id.filterNote) {
+            mApiService.getSort().setValue(RestaurantListView.NOTE);
         }
 
         return super.onOptionsItemSelected(item);

@@ -27,7 +27,7 @@
         android:id="@+id/restaurant_detail_name"
         android:layout_marginTop="@dimen/restaurant_name_detail_margin_top"
         android:layout_marginLeft="@dimen/restaurant_name_detail_margin_left"
-        android:layout_width="180dp"
+        android:layout_width="@dimen/restaurant_detail_name_width"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:singleLine="true"
@@ -70,7 +70,7 @@
     <TextView
         android:id="@+id/restaurant_detail_style"
         android:layout_marginLeft="@dimen/restaurant_name_detail_margin_left"
-        android:layout_width="50dp"
+        android:layout_width="@dimen/restaurant_detail_style_width"
         android:ellipsize="end"
         android:singleLine="true"
         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
 
     <TextView
         android:id="@+id/restaurant_detail_adress"
-        android:layout_width="150dp"
+        android:layout_width="@dimen/restaurant_detail_adress_width"
         android:ellipsize="end"
         android:singleLine="true"
         android:layout_height="wrap_content"

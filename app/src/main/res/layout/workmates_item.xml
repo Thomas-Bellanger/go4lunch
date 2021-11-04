@@ -49,6 +49,8 @@
                 android:layout_marginLeft="@dimen/workmate_item_is_eating_margin_left"
                 android:text="restaurant style(restaurant)"
                 android:textColor="#191919"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:textSize="@dimen/workmate_item_is_eating_textsize"
                 android:textStyle="bold" />
         </LinearLayout>

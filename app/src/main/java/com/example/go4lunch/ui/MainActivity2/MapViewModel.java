@@ -155,4 +155,12 @@ public class MapViewModel implements GoogleRepository.Callbacks {
     public List<Restaurant> getFilteredRestaurants() {
         return restaurantFiltered;
     }
+
+    public void testList(){
+        liveRestaurantsCall.setValue(new ArrayList<>());
+        restaurantFiltered.clear();
+        restaurantList.add(Restaurant.restaurant1);
+        restaurantFiltered.add(Restaurant.restaurant1);
+        liveRestaurantsCall.setValue(restaurantFiltered);
+    }
 }

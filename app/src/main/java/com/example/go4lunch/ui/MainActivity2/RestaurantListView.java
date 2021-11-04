@@ -27,6 +27,7 @@ public class RestaurantListView extends Fragment {
     private RecyclerView mRecyclerView;
     public static String ALPHABETICAL = "alphabetical";
     public static String DISTANCE = "distance";
+    public static String NOTE = "note";
     private MapViewModel mMapViewModel = MapViewModel.getInstance();
 
     public static RestaurantListView newInstance() {
@@ -81,6 +82,9 @@ public class RestaurantListView extends Fragment {
         }
         if (sort.equals(DISTANCE)){
             Collections.sort(restaurants, new ApiService.RestaurantDistanceComparator());
+        }
+        if (sort.equals(NOTE)){
+            Collections.sort(restaurants, new ApiService.RestaurantNoteComparator());
         }
             initList(restaurants);
     }

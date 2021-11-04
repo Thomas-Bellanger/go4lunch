@@ -146,7 +146,6 @@ public class RestaurantDetail extends AppCompatActivity {
             addFavorites();
         }
         restaurantManager.updateNote(mRestaurant, mRestaurant.getNote()).addOnSuccessListener(unused -> {
-            mApiService.populateRestaurant();
         });
         userManager.updateFavorites(favorites).addOnSuccessListener(unused -> {
             //Log.e("favorite", "size    " + favorites.size())

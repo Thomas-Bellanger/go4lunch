@@ -16,6 +16,10 @@
                 android:id="@+id/filterDistance"
                 android:title="@string/distance"
                 app:showAsAction="never|withText" />
+            <item
+                android:id="@+id/filterNote"
+                android:title="@string/note"
+                app:showAsAction="never|withText" />
         </menu>
     </item>
     <item

@@ -50,4 +50,11 @@
     <string name="notDecided">ne s\'est pas encore décidé</string>
     <string name="Open">ouvert</string>
     <string name="closed">fermé</string>
+    <string name="note">note</string>
+    <string name="alphabetical">alphabetique</string>
+    <string name="distance">distance</string>
+    <string name="filter">Filtrer</string>
+    <string name="download">Chargement...</string>
+    <string name="noUrl">Aucune adresse trouvée</string>
+    <string name="noNumber">Aucun numéro trouvé</string>
 </resources>

@@ -52,13 +52,13 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
 
         Restaurant restaurant = restaurants.get(position);
 
-        if (restaurant.getNote() > 2) {
+        if (restaurant.getNote() > 50) {
             holder.stars.setColorFilter(ContextCompat.getColor(mContext, R.color.yellow));
         }
-        if (restaurant.getNote() > 5) {
+        if (restaurant.getNote() > 100) {
             holder.stars2.setColorFilter(ContextCompat.getColor(mContext, R.color.yellow));
         }
-        if (restaurant.getNote() > 8) {
+        if (restaurant.getNote() > 150) {
             holder.stars3.setColorFilter(ContextCompat.getColor(mContext, R.color.yellow));
         }
 

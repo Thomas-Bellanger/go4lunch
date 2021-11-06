@@ -3,7 +3,7 @@
     <string name="app_name">go4lunch</string>
     <string name="main_activity_description">Find a nice restaurant and invite your co-worker for lunch!</string>
     <string name="login">Connexion</string>
-    <string name="button_login_text_logged">show profile</string>
+    <string name="button_login_text_logged">Show profile</string>
     <string name="notification">NOTIFICATION</string>
     <string name="default_notification_channel_id">0</string>
     <string name="supprimer_le_compte">Delete account</string>
@@ -54,4 +54,7 @@
     <string name="alphabetical">alphabetical</string>
     <string name="distance">distance</string>
     <string name="note">note</string>
+    <string name="download">Downlading...</string>
+    <string name="noUrl">No url found</string>
+    <string name="noNumber">No number found</string>
 </resources>

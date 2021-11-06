@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class RestaurantListView extends Fragment {
-    private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
     private ApiService mApiService;
     private RecyclerView mRecyclerView;
     public static String ALPHABETICAL = "alphabetical";

@@ -50,8 +50,7 @@ public class MainActivity2 extends AppCompatActivity {
     public static String toolbarTitle = "title";
     public static String searchTip = "tip";
     private final UserManager userManager = UserManager.getInstance();
-    private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
-    MapViewModel mMapViewModel = MapViewModel.getInstance();
+    private MapViewModel mMapViewModel = MapViewModel.getInstance();
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ActivityMain2Binding binding;
@@ -283,4 +282,5 @@ public class MainActivity2 extends AppCompatActivity {
     private void showSnackBar(String message) {
         Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
     }
+
 }

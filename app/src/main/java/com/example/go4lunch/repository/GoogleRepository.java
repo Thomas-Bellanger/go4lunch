@@ -25,9 +25,6 @@ public class GoogleRepository {
         void onResponse(@Nullable ResponseAPI response);
         void onFailure();
 
-        void onResponsePhoto(@Nullable Image image);
-        void onFailurePhoto();
-
         void onResponseDetail(@Nullable Result result);
         void onFailureDetail();
     }
@@ -67,32 +64,6 @@ public class GoogleRepository {
             @Override
             public void onFailure(Call<ResponseAPI> call, Throwable t) {
                 Log.e("checkNOK",t.getMessage());
-                // 2.5 - Call the proper callback used in controller (MainFragment)
-                if (callbacksWeakReference.get() != null) callbacksWeakReference.get().onFailure();
-            }
-        });
-    }
-
-    public void getPhoto (Callbacks callbacksPhoto, String reference){
-        final WeakReference<Callbacks> callbacksWeakReference = new WeakReference<>(callbacksPhoto);
-        // get retrofit instance
-        GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
-        // create the call on the API
-        Call<Image> liveDataCall = googlePlaceService.getPhoto(reference);
-        // 2.4 - Start the call
-        liveDataCall.enqueue(new Callback<Image>() {
-            @Override
-            public void onResponse(Call<Image> liveDataImage, Response<Image> response) {
-                // Call the proper callback used in controller
-                Log.e("checkbody","ok"+response.body());
-                Log.e("check","ok"+response.toString());
-                if (callbacksWeakReference.get() != null)
-                    callbacksWeakReference.get().onResponsePhoto(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<Image> call, Throwable t) {
-                Log.e("checkNOK Photo",t.getMessage());
                 // 2.5 - Call the proper callback used in controller (MainFragment)
                 if (callbacksWeakReference.get() != null) callbacksWeakReference.get().onFailure();
             }

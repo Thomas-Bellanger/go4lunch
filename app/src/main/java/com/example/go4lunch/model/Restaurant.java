@@ -223,14 +223,16 @@ public class Restaurant implements Parcelable {
     }
 
     public static Restaurant googleRestaurantToRestaurant(ResultsItem item) {
+        String url1 = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&maxheight=200&photo_reference=";
+        String url2 = "&key=AIzaSyC77ax8lhHQbeqgqiqJ7rqhJfCdEWE4FCk";
+        String photoRef = item.getPhotos().get(0).getPhotoReference();
             String uid = item.getPlaceId();
             String name = item.getName();
             String adress = item.getVicinity();
             String type = item.getTypes().get(0);
             Boolean opening = true;
             int distance = 0;
-            String avatar = item.getPhotos().get(0).getPhotoReference();
-            Log.e("phot ref", avatar);
+            String avatar = url1+photoRef+url2;
             String url = "url";
             String phoneNumber = "0";
             int note = item.getUserRatingsTotal();

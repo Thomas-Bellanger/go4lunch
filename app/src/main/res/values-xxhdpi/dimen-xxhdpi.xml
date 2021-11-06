@@ -57,7 +57,7 @@
     <dimen name="restaurant_item_text_height">20dp</dimen>
     <dimen name="restaurant_item_text_width">100dp</dimen>
     <dimen name="restaurant_item_style_width">50dp</dimen>
-    <dimen name="restaurant_item_adress_width">200dp</dimen>
+    <dimen name="restaurant_item_adress_width">150dp</dimen>
 
     <!-- workmate item -->
     <dimen name="avatar_margin_left">5dp</dimen>

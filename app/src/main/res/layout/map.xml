@@ -3,6 +3,16 @@
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/dl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:text="@string/download"
+        android:visibility="visible"
+        android:elevation="5dp"
+        android:textColor="@color/white"
+        android:gravity="center"/>
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapview"

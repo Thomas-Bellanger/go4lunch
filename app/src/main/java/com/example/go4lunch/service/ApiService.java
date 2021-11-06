@@ -31,28 +31,6 @@ public class ApiService implements ApiServiceInterface {
     private MapViewModel mMapViewModel = MapViewModel.getInstance();
 
     @Override
-    public List<Restaurant> filterRestaurant(String filterPattern) {
-        restaurantFiltered = new ArrayList<>();
-        if (filterPattern == null || filterPattern.length() == 0) {
-            restaurantFiltered = restaurants;
-            liveRestaurants.setValue(restaurantFiltered);
-            return restaurantFiltered;
-        } else {
-            String filterLowerCase = filterPattern.toLowerCase();
-            for (Restaurant restaurant : restaurants) {
-                if (restaurant.getName().toLowerCase().contains(filterLowerCase)) {
-                restaurantFiltered.add(restaurant);
-            }
-               else if (restaurant.getType().toLowerCase().contains(filterLowerCase)) {
-                    restaurantFiltered.add(restaurant);
-                }
-            }
-        }
-        liveRestaurants.setValue(restaurantFiltered);
-        return restaurantFiltered;
-    }
-
-    @Override
     public List<User> filterUser(String filterPattern) {
         userFiltered= new ArrayList<>();
         if (filterPattern == null || filterPattern.length() == 0) {
@@ -74,16 +52,6 @@ public class ApiService implements ApiServiceInterface {
     @Override
     public List<User> getUsers() {
         return users;
-    }
-
-    @Override
-    public List<Restaurant> getRestaurants() {
-        return restaurants;
-    }
-
-    @Override
-    public List<Restaurant> getFilteredRestaurants() {
-        return restaurantFiltered;
     }
 
     @Override
@@ -113,12 +81,6 @@ public class ApiService implements ApiServiceInterface {
         }).addOnFailureListener(e ->  {
             //Log.e("fail", e.getMessage())
         });
-    }
-
-    @Override
-    public LiveData<List<Restaurant>> getLiveRestaurant() {
-        liveRestaurants.setValue(restaurantFiltered);
-        return liveRestaurants;
     }
 
     @Override

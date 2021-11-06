@@ -27,10 +27,6 @@ public class GoogleManager {
         mGoogleRepository.fetchRestaurant(callbacks, location);
     }
 
-    public void getPhoto (GoogleRepository.Callbacks callbacksPhoto, String reference){
-        mGoogleRepository.getPhoto (callbacksPhoto, reference);
-    }
-
     public void getDetail (GoogleRepository.Callbacks callbacksDetail, String id){
         mGoogleRepository.getDetail (callbacksDetail, id);
     }

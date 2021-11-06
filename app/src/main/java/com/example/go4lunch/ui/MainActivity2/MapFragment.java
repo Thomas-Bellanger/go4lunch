@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -72,6 +73,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private MutableLiveData<Location> liveLocation= new MutableLiveData<>();
     private static final String PERMS = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final int RC_LOCATION = 100;
+    private TextView dl;
 
     public MapFragment() {
     }
@@ -84,13 +86,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map, container, false);
         Mapbox.getInstance(view.getContext(), "pk.eyJ1IjoibmV4aXNsdWNpcyIsImEiOiJja3MzMzkyNWsyOXIxMm9uOG05NjlnZTB3In0.C0x6L93b14FZC6oKQfcBrQ");
+        dl = view.findViewById(R.id.dl);
         mapView = view.findViewById(R.id.mapview);
             mapView.onCreate(savedInstanceState);
             mapView.getMapAsync(this);
             MainActivity2.toolbarTitle = "I'm hungry!";
             mapBtn = view.findViewById(R.id.btn);
             mapBtn.setVisibility(View.GONE);
-
 
         return view;
     }
@@ -103,7 +105,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             map.addOnCameraMoveListener(() -> mapBtn.setVisibility(View.VISIBLE));
             mapBtn.setOnClickListener(v -> {
                 lastLocation = new LatLng(map.getLocationComponent().getLastKnownLocation().getLatitude(), map.getLocationComponent().getLastKnownLocation().getLongitude());
-                Log.e("lastlocation", lastLocation.toString());
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(new LatLng(lastLocation))
                         .zoom(10)
@@ -112,12 +113,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 map.setCameraPosition(cameraPosition);
                 if(!userLocation.equals(lastLocation)){
                     userLocation=lastLocation;
-                    mMapViewModel.testList();
-                    Log.e("click", ""+ userLocation.equals(lastLocation));
+                    checkNearbyRestaurant();
                 }
             });
+            mApiService.getLiveDistance().observe(this.getActivity(), this::startCheckingNearby);
            mMapViewModel.liveRestaurantsCall.observe(getActivity(), this::getMarkers);
+    }
 
+    @SuppressLint("MissingPermission")
+    private void startCheckingNearby(String s) {
+        if (mMapViewModel.restaurantList.isEmpty()) {
+            userLocation = new LatLng(map.getLocationComponent().getLastKnownLocation().getLatitude(), map.getLocationComponent().getLastKnownLocation().getLongitude());
+            checkNearbyRestaurant();
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -136,11 +144,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 // Set the component's render mode
             locationComponent.setRenderMode(RenderMode.COMPASS);
-            if (locationComponent.getLastKnownLocation() != null) {
-                userLocation = new LatLng(locationComponent.getLastKnownLocation().getLatitude(), locationComponent.getLastKnownLocation().getLongitude());
-            } else {
-                userLocation = new LatLng(map.getCameraPosition().target.getLatitude(), map.getCameraPosition().target.getLongitude());
-            }
             locationComponent.addCompassListener(new CompassListener() {
                 @Override
                 public void onCompassChanged(float userHeading) {
@@ -159,6 +162,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
 
     public void checkNearbyRestaurant() {
+        updateUiWhenDlStart();
         mMapViewModel.setLocation(userLocation);
     }
 
@@ -219,7 +223,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
 
+    public void updateUiWhenDlIsFinished(){
+        dl.setVisibility(View.GONE);
+    }
+
+    public void updateUiWhenDlStart(){
+        dl.setVisibility(View.VISIBLE);
+    }
+
     public void getMarkers(List<Restaurant> restaurants) {
+        updateUiWhenDlStart();
         List<Marker> markerList = new ArrayList<>();
         IconFactory mIconFactory = IconFactory.getInstance(getContext());
         Icon pin = mIconFactory.fromResource(R.drawable.baseline_person_pin_circle_blue_500_36dp);
@@ -248,5 +261,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     });
                 }
             }
+        updateUiWhenDlIsFinished();
         }
 }

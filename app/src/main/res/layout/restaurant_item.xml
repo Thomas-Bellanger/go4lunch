@@ -20,7 +20,8 @@
                 android:layout_height="@dimen/restaurant_item_text_height"
                 android:text="restaurant_name"
                 android:textSize="@dimen/restaurant_item_text_size"
-                android:ellipsize="end"/>
+                android:ellipsize="end"
+                android:singleLine="true"/>
         </LinearLayout>
 
         <LinearLayout

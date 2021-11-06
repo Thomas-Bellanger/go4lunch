@@ -10,23 +10,15 @@ import java.util.List;
 
 public interface ApiServiceInterface {
 
-    List<Restaurant> filterRestaurant(String filterPattern);
-
     List<User> filterUser(String filterPattern);
 
     List<User> getUsers();
-
-    List<Restaurant> getRestaurants();
-
-    List<Restaurant> getFilteredRestaurants();
 
     List<User> getFilteredUsers();
 
     List<Restaurant> getFavorites();
 
     void populateUser();
-
-    LiveData<List<Restaurant>> getLiveRestaurant();
 
     LiveData<List<User>> getLiveUsers();
 

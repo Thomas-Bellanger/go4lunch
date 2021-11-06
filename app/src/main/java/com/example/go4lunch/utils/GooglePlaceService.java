@@ -24,6 +24,4 @@ public interface GooglePlaceService {
     //fFor detail search
     @GET("details/json?fields=name%2Crating%2Cformatted_phone_number%2Cwebsite&key=AIzaSyC77ax8lhHQbeqgqiqJ7rqhJfCdEWE4FCk")
     Call<Response> getDetail(@Query("place_id") String id);
-    @GET("photo?maxwidth=200&maxheight=200&key=AIzaSyC77ax8lhHQbeqgqiqJ7rqhJfCdEWE4FCk")
-    Call<Image> getPhoto(@Query("photo_reference") String ref);
 }

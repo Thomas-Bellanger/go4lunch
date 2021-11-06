@@ -15,6 +15,7 @@
     <string name="facebook_application_id">267466468173033</string>
     <string name="fb_login_protocol_scheme">fb267466468173033</string>
     <string name="info_no_username_found">no name found!</string>
+    <string name="download">Downlading...</string>
 
     <!-- Used in NavigationDrawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -25,7 +26,7 @@
     <!-- mapBox -->
     <string name="mapbox_access_token">pk.eyJ1IjoibmV4aXNsdWNpcyIsImEiOiJja3MzMzkyNWsyOXIxMm9uOG05NjlnZTB3In0.C0x6L93b14FZC6oKQfcBrQ</string>
 
-    <!-- detail actibity -->
+    <!-- detail activity -->
     <string name="style_restaurant">Style_restaurant</string>
     <string name="after_style">-</string>
     <string name="adress">Adress</string>
@@ -43,7 +44,7 @@
     <string name="supprimer_le_compte">Delete account</string>
     <string name="default_notification_channel_id">0</string>
     <string name="notification">NOTIFICATION</string>
-    <string name="button_login_text_logged" translatable="false">show profile</string>
+    <string name="button_login_text_logged">show profile</string>
     <string name="mapview">MapView</string>
     <string name="listview">ListView</string>
     <string name="workmates">WorkMates</string>
@@ -53,6 +54,10 @@
     <string name="noLunch" >No lunch chosen!</string>
     <string name="restaurantChosen" >Lunch chosen!</string>
     <string name="canceled" >Canceled</string>
+    <string name="noUrl">no url found</string>
+    <string name="noNumber">no number found</string>
+
+    <!-- workmate item -->
     <string name="is_joining">is joining!</string>
     <string name="isEating">is eating</string>
     <string name="notDecided">has not decied yet</string>

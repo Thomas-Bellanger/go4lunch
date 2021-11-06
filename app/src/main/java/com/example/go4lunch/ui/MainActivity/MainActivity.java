@@ -30,11 +30,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private final UserManager userManager = UserManager.getInstance();
-    private final ApiService mApiService = DI.getASIService();
-    private GoogleManager mGoogleManager = GoogleManager.getInstance();
     private ActivityMainBinding binding;
-    private RestaurantRepository mRestaurantRepository = RestaurantRepository.getInstance();
-    private RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

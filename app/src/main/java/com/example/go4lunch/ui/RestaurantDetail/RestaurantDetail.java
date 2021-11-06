@@ -16,12 +16,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.ActivityRestaurantDetailBinding;
-import com.example.go4lunch.manager.GoogleManager;
 import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
-import com.example.go4lunch.repository.GoogleRepository;
 import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.ui.MainActivity2.MapViewModel;
 import com.example.go4lunch.ui.WebView.WebView;
@@ -55,10 +53,10 @@ public class RestaurantDetail extends AppCompatActivity {
         setContentView(binding.getRoot());
         Intent intent = getIntent();
         mRestaurant = intent.getParcelableExtra(KEY_RESTAURANT);
+        mMapViewModel.checkForDetail(mRestaurant);
         binding.restaurantDetailName.setText(mRestaurant.getName());
         binding.restaurantDetailAdress.setText(mRestaurant.getAdress());
         binding.restaurantDetailStyle.setText(mRestaurant.getType());
-        mMapViewModel.checkForPhoto(mRestaurant);
         Glide.with(binding.restaurantDetailAvatar.getContext())
                 .load(mRestaurant.getAvatar())
                 .apply(RequestOptions.centerCropTransform())
@@ -171,17 +169,17 @@ public class RestaurantDetail extends AppCompatActivity {
 
     //check the note of the restaurant and show stars
     public void checkNote() {
-        if (mRestaurant.getNote() < 2) {
+        if (mRestaurant.getNote() < 50) {
             binding.restaurantDetailStarIcon.setColorFilter(ContextCompat.getColor(this, R.color.orange));
         } else {
             binding.restaurantDetailStarIcon.setColorFilter(ContextCompat.getColor(this, R.color.yellow));
         }
-        if (mRestaurant.getNote() < 6) {
+        if (mRestaurant.getNote() < 100) {
             binding.restaurantDetailStarIcon2.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.orange));
         } else {
             binding.restaurantDetailStarIcon2.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.yellow));
         }
-        if (mRestaurant.getNote() < 9) {
+        if (mRestaurant.getNote() < 150) {
             binding.restaurantDetailStarIcon3.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.orange));
         } else {
             binding.restaurantDetailStarIcon3.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.yellow));
@@ -192,7 +190,7 @@ public class RestaurantDetail extends AppCompatActivity {
     public void call() {
         String number = mMapViewModel.phoneNumber;
         if(number == null){
-            Toast.makeText(getApplicationContext(), "No number found!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.noNumber), Toast.LENGTH_SHORT).show();
         }
         else {
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
@@ -205,7 +203,7 @@ public class RestaurantDetail extends AppCompatActivity {
     public void navigate() {
         String url = mMapViewModel.url;
         if(url == null){
-            Toast.makeText(getApplicationContext(), "No url found!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.noUrl), Toast.LENGTH_SHORT).show();
         }
             else {
             mRestaurant.setUrl(url);
@@ -284,5 +282,6 @@ public class RestaurantDetail extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mMapViewModel.populateRestaurant();
+        mApiService.populateUser();
     }
 }

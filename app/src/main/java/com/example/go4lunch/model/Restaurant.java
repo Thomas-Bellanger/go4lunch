@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.nearbysearchmodel.ResultsItem;
 
@@ -224,7 +225,7 @@ public class Restaurant implements Parcelable {
 
     public static Restaurant googleRestaurantToRestaurant(ResultsItem item) {
         String url1 = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&maxheight=200&photo_reference=";
-        String url2 = "&key=AIzaSyC77ax8lhHQbeqgqiqJ7rqhJfCdEWE4FCk";
+        String url2 = "&key=";
         String photoRef = item.getPhotos().get(0).getPhotoReference();
             String uid = item.getPlaceId();
             String name = item.getName();
@@ -232,7 +233,7 @@ public class Restaurant implements Parcelable {
             String type = item.getTypes().get(0);
             Boolean opening = true;
             int distance = 0;
-            String avatar = url1+photoRef+url2;
+            String avatar = url1+photoRef+url2+ BuildConfig.API_KEY;
             String url = "url";
             String phoneNumber = "0";
             int note = item.getUserRatingsTotal();

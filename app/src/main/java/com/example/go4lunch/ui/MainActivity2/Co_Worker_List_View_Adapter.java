@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.R;
-import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 
@@ -42,16 +41,15 @@ public class Co_Worker_List_View_Adapter extends RecyclerView.Adapter<Co_Worker_
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = mUsers.get(position);
-        String []name =user.getName().split(" ");
+        String[] name = user.getName().split(" ");
         holder.name.setText(name[0]);
         if (user.getChosenRestaurant() == null) {
             holder.eating.setText(" ");
             holder.restaurant_Text.setText(R.string.notDecided);
             holder.name.setTextColor(Color.GRAY);
             holder.restaurant_Text.setTextColor(Color.GRAY);
-        }
-        else {
-            holder.restaurant_Text.setText(user.getChosenRestaurant().getType()+"("+ user.getChosenRestaurant().getName()+")");
+        } else {
+            holder.restaurant_Text.setText(user.getChosenRestaurant().getType() + "(" + user.getChosenRestaurant().getName() + ")");
             holder.restaurant_Text.setTextColor(Color.BLACK);
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(v.getContext(), RestaurantDetail.class);

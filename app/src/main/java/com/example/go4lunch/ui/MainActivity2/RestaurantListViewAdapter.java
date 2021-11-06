@@ -30,8 +30,8 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
 
     private final List<Restaurant> restaurants;
     private Context mContext;
-    private ApiService mApiService = DI.getASIService();
-    private MapViewModel mMapViewModel = MapViewModel.getInstance();
+    private final ApiService mApiService = DI.getASIService();
+    private final MapViewModel mMapViewModel = MapViewModel.getInstance();
 
     public RestaurantListViewAdapter(List<Restaurant> items) {
         restaurants = items;
@@ -70,11 +70,10 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
                 .load(restaurant.getAvatar())
                 .apply(RequestOptions.centerCropTransform())
                 .into(holder.restaurantAvatar);
-        if(restaurant.getOpening() == true) {
+        if (restaurant.getOpening() == true) {
             holder.hours.setText(R.string.Open);
             holder.hours.setTextColor(Color.GREEN);
-        }
-        else {
+        } else {
             holder.hours.setTextColor(Color.RED);
             holder.hours.setText(R.string.closed);
         }
@@ -83,7 +82,7 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
             intent.putExtra(RestaurantDetail.KEY_RESTAURANT, restaurant);
             v.getContext().startActivity(intent);
         });
-        holder.number.setText("("+restaurant.getJoiners().size()+")");
+        holder.number.setText("(" + restaurant.getJoiners().size() + ")");
     }
 
     @Override

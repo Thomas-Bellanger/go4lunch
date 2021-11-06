@@ -3,7 +3,6 @@ package com.example.go4lunch.ui.SettingsActivity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +12,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.databinding.ActivitySettingsBinding;
 import com.example.go4lunch.manager.UserManager;
 import com.example.go4lunch.model.User;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -47,32 +45,23 @@ public class SettingsActivity extends AppCompatActivity {
                 .show());
     }
 
-    public void settingCheckBox(){
-        if (notification){
-        binding.checkbox.setChecked(true);
-        }
-        else {
-            binding.checkbox.setChecked(false);
-        }
+    public void settingCheckBox() {
+        binding.checkbox.setChecked(notification);
     }
 
-    public void setNotification(){
-        if (notification){
-            notification=false;
-        }
-        else{
-            notification=true;
-        }
+    public void setNotification() {
+        notification = !notification;
         userManager.updateNotification(notification).addOnSuccessListener(unused -> Toast.makeText(getApplicationContext(),
                 "Change saved", Toast.LENGTH_SHORT).show());
-        Log.e("notification", "notification "+notification);
+        Log.e("notification", "notification " + notification);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        userManager.getUserData().addOnSuccessListener(user -> {notification = user.isNotification();
-        settingCheckBox();
+        userManager.getUserData().addOnSuccessListener(user -> {
+            notification = user.isNotification();
+            settingCheckBox();
         });
     }
 }

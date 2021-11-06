@@ -1,9 +1,7 @@
 package com.example.go4lunch.ui.MainActivity2;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.MutableLiveData;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
@@ -27,36 +24,23 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.ActivityMain2Binding;
-import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
-import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.service.ApiServiceInterface;
 import com.example.go4lunch.ui.MainActivity.MainActivity;
 import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 import com.example.go4lunch.ui.SettingsActivity.SettingsActivity;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.Collections;
 
 public class MainActivity2 extends AppCompatActivity {
 
     public static String toolbarTitle = "title";
     public static String searchTip = "tip";
     private final UserManager userManager = UserManager.getInstance();
-    private MapViewModel mMapViewModel = MapViewModel.getInstance();
-    private ViewPager mViewPager;
-    private TabLayout mTabLayout;
-    private ActivityMain2Binding binding;
-    private ApiServiceInterface mApiService;
-    private User currentUser;
-
+    private final MapViewModel mMapViewModel = MapViewModel.getInstance();
     public Filter filterRestaurant = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -70,6 +54,10 @@ public class MainActivity2 extends AppCompatActivity {
             mMapViewModel.liveRestaurantsCall.getValue();
         }
     };
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private ActivityMain2Binding binding;
+    private ApiServiceInterface mApiService;
     public Filter filterUser = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -83,6 +71,7 @@ public class MainActivity2 extends AppCompatActivity {
             mApiService.getLiveUsers();
         }
     };
+    private User currentUser;
     private MainActivity2PagerAdapter mMainActivity2PagerAdapter;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -131,8 +120,7 @@ public class MainActivity2 extends AppCompatActivity {
             mApiService.getSort().setValue(RestaurantListView.ALPHABETICAL);
         } else if (id == R.id.filterDistance) {
             mApiService.getSort().setValue(RestaurantListView.DISTANCE);
-        }
-        else if (id == R.id.filterNote) {
+        } else if (id == R.id.filterNote) {
             mApiService.getSort().setValue(RestaurantListView.NOTE);
         }
 
@@ -153,7 +141,7 @@ public class MainActivity2 extends AppCompatActivity {
                         Toast.makeText(MainActivity2.this, getResources().getString(R.string.noLunch), Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(e -> {//Log.e("tag", "fail" + e.getMessage())
-                    });
+                });
                 break;
 
             case R.id.activity_main_drawer_settings:
@@ -168,7 +156,7 @@ public class MainActivity2 extends AppCompatActivity {
         return true;
     }
 
-    private void logout(){
+    private void logout() {
         Intent finish = new Intent(this, MainActivity.class);
         userManager.signOut(this).addOnSuccessListener(Void -> {
             startActivity(finish);
@@ -263,7 +251,7 @@ public class MainActivity2 extends AppCompatActivity {
                         break;
                     case 2:
                         toolbarTitle = getResources().getString(R.string.availableWorkmate);
-                        searchTip = getResources().getString(R.string.searchWorkmates);;
+                        searchTip = getResources().getString(R.string.searchWorkmates);
                         break;
                 }
                 mToolbar.setTitle(toolbarTitle);

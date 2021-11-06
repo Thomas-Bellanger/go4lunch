@@ -2,22 +2,13 @@ package com.example.go4lunch.ui.MainActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
-import com.example.go4lunch.databinding.ActivityMain2Binding;
 import com.example.go4lunch.databinding.ActivityMainBinding;
-import com.example.go4lunch.manager.GoogleManager;
-import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.manager.UserManager;
-import com.example.go4lunch.model.Restaurant;
-import com.example.go4lunch.repository.RestaurantRepository;
-import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.ui.MainActivity2.MainActivity2;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
@@ -104,4 +95,4 @@ public class MainActivity extends AppCompatActivity {
         super.onPostResume();
         startSignInActivity();
     }
-    }
+}

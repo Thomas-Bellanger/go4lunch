@@ -43,8 +43,8 @@ public class RestaurantDetail extends AppCompatActivity {
     private List<Restaurant> favorites = new ArrayList<>();
     private boolean chosen = false;
     private boolean liked = false;
-    private ApiService mApiService = DI.getASIService();
-    private MapViewModel mMapViewModel = MapViewModel.getInstance();
+    private final ApiService mApiService = DI.getASIService();
+    private final MapViewModel mMapViewModel = MapViewModel.getInstance();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -189,10 +189,9 @@ public class RestaurantDetail extends AppCompatActivity {
     //call intent
     public void call() {
         String number = mMapViewModel.phoneNumber;
-        if(number == null){
+        if (number == null) {
             Toast.makeText(getApplicationContext(), getString(R.string.noNumber), Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
             callIntent.setData(Uri.parse("tel:" + number));
             startActivity(callIntent);
@@ -202,10 +201,9 @@ public class RestaurantDetail extends AppCompatActivity {
     //website intent
     public void navigate() {
         String url = mMapViewModel.url;
-        if(url == null){
+        if (url == null) {
             Toast.makeText(getApplicationContext(), getString(R.string.noUrl), Toast.LENGTH_SHORT).show();
-        }
-            else {
+        } else {
             mRestaurant.setUrl(url);
             Intent navigate = new Intent(RestaurantDetail.this, WebView.class);
             navigate.putExtra(KEY_RESTAURANT, mRestaurant);
@@ -264,13 +262,13 @@ public class RestaurantDetail extends AppCompatActivity {
         }).addOnFailureListener(e -> {//Log.e("fail", e.getMessage())
         });
         userManager.getUserData().addOnSuccessListener(user -> {
-            chosenRestaurant = user.getChosenRestaurant();
-            favorites = user.getFavorite();
-            if (chosenRestaurant == null) {
-                chosenRestaurant = Restaurant.noRestaurant;
-            }
-            checkIfRestaurantIsChosen();
-            checkIfRestaurantIsLicked();
+                    chosenRestaurant = user.getChosenRestaurant();
+                    favorites = user.getFavorite();
+                    if (chosenRestaurant == null) {
+                        chosenRestaurant = Restaurant.noRestaurant;
+                    }
+                    checkIfRestaurantIsChosen();
+                    checkIfRestaurantIsLicked();
                 }
         ).addOnFailureListener(e -> {
             //Log.e("fail", e.getMessage())

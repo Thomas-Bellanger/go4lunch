@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
-import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.service.ApiService;
 
@@ -22,12 +20,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class RestaurantListView extends Fragment {
-    private ApiService mApiService;
-    private RecyclerView mRecyclerView;
     public static String ALPHABETICAL = "alphabetical";
     public static String DISTANCE = "distance";
     public static String NOTE = "note";
-    private MapViewModel mMapViewModel = MapViewModel.getInstance();
+    private ApiService mApiService;
+    private RecyclerView mRecyclerView;
+    private final MapViewModel mMapViewModel = MapViewModel.getInstance();
 
     public static RestaurantListView newInstance() {
         return new RestaurantListView();
@@ -66,25 +64,22 @@ public class RestaurantListView extends Fragment {
         initList(mMapViewModel.getFilteredRestaurants());
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
     }
 
-
-
-    public void sortBy(String sort){
+    public void sortBy(String sort) {
         List<Restaurant> restaurants = mMapViewModel.getFilteredRestaurants();
-        if (sort.equals(ALPHABETICAL)){
+        if (sort.equals(ALPHABETICAL)) {
             Collections.sort(restaurants, new ApiService.RestaurantAZComparator());
         }
-        if (sort.equals(DISTANCE)){
+        if (sort.equals(DISTANCE)) {
             Collections.sort(restaurants, new ApiService.RestaurantDistanceComparator());
         }
-        if (sort.equals(NOTE)){
+        if (sort.equals(NOTE)) {
             Collections.sort(restaurants, new ApiService.RestaurantNoteComparator());
         }
-            initList(restaurants);
+        initList(restaurants);
     }
 }

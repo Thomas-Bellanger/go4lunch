@@ -11,7 +11,7 @@ import java.util.List;
 public class RestaurantManager {
     private static volatile RestaurantManager instance;
     private final RestaurantRepository restaurantRepository;
-
+    //manager instance
     private RestaurantManager() {
         restaurantRepository = RestaurantRepository.getInstance();
     }

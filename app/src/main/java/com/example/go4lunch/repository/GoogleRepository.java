@@ -21,6 +21,7 @@ public class GoogleRepository {
     private static volatile GoogleRepository instance;
     private ResultsItem nearbySearchResult = new ResultsItem();
 
+    //Callbacks used for Call
     public interface Callbacks{
         void onResponse(@Nullable ResponseAPI response);
         void onFailure();
@@ -29,6 +30,7 @@ public class GoogleRepository {
         void onFailureDetail();
     }
 
+    //repository instance
     public static GoogleRepository getInstance() {
         GoogleRepository result = instance;
         if (result != null) {
@@ -57,8 +59,6 @@ public class GoogleRepository {
 
                 if (callbacksWeakReference.get() != null)
                     callbacksWeakReference.get().onResponse(response.body());
-                Log.e("checkbody","ok"+response.body().getResults());
-                Log.e("check","ok"+response.toString());
             }
 
             @Override
@@ -70,6 +70,7 @@ public class GoogleRepository {
         });
     }
 
+    //get the detail to get phone number and website url
     public void getDetail (Callbacks callbacksDetail, String id){
         final WeakReference<Callbacks> callbacksWeakReference = new WeakReference<>(callbacksDetail);
         // get retrofit instance
@@ -81,15 +82,12 @@ public class GoogleRepository {
             @Override
             public void onResponse(Call<com.example.go4lunch.detailmodel.Response> liveData, Response<com.example.go4lunch.detailmodel.Response> response) {
                 // Call the proper callback used in controller
-                Log.e("checkbody","ok"+response.body().getResult());
-                Log.e("check","ok"+response.toString());
                 if (callbacksWeakReference.get() != null)
                     callbacksWeakReference.get().onResponseDetail(response.body().getResult());
             }
 
             @Override
             public void onFailure(Call<com.example.go4lunch.detailmodel.Response> call, Throwable t) {
-                Log.e("checkNOK Photo",t.getMessage());
                 // 2.5 - Call the proper callback used in controller (MainFragment)
                 if (callbacksWeakReference.get() != null) callbacksWeakReference.get().onFailure();
             }

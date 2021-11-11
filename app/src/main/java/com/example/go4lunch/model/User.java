@@ -28,6 +28,7 @@ public class User {
     public User() {
     }
 
+    //create a "User" from account to connect
     public static User firebaseUserToUser(FirebaseUser fbUser) {
         if (fbUser == null){
         return new User("0", "fbUser.getDisplayName()", "https://www.gravatar.com/avatar/HASH", Restaurant.noRestaurant, "fbUser.getEmail()");

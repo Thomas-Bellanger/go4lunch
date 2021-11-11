@@ -6,6 +6,7 @@ public class GoogleManager {
     private static volatile GoogleManager instance;
     private final GoogleRepository mGoogleRepository;
 
+    //manager instance
     private GoogleManager() {
         mGoogleRepository = GoogleRepository.getInstance();
     }

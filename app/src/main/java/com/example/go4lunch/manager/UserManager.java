@@ -15,7 +15,7 @@ public class UserManager {
 
     private static volatile UserManager instance;
     private final UserRepository userRepository;
-
+    //manager instance
     private UserManager() {
         userRepository = UserRepository.getInstance();
     }

@@ -23,11 +23,12 @@ public class Restaurant implements Parcelable {
             return new Restaurant[size];
         }
     };
+
+    //For test purpose
     public static Restaurant noRestaurant = new Restaurant("000", "none", "noAdress", "noType", false  , 0, "none", "none", "0", 0, 0, 0);
     public static Restaurant restaurant1 = new Restaurant("1863", "restaurant 1", "8 Rue des restaurants", "French", true, 0, "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "3418", 10, 48.8675, 2.6901);
     public static Restaurant restaurant2 = new Restaurant("2854", "restaurant 2", "10 Rue des restaurants", "French", true,0 , "https://i.pravatar.cc/150?u=a042581f4e29026704d", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "3418", 5, 48.8341, 2.7958);
 
-    private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
     private String uid;
     private String name;
     private String adress;
@@ -42,7 +43,6 @@ public class Restaurant implements Parcelable {
     private int note;
     private double lat;
     private double lng;
-    private String icon;
 
     public Restaurant(String uid, String name, String adress, String type, Boolean opening, int distance, String avatar, String url, String phoneNumber, int note, double lat, double lng) {
         this.uid = uid;
@@ -76,7 +76,6 @@ public class Restaurant implements Parcelable {
         like = in.readByte() != 0;
         lat = in.readDouble();
         lng = in.readDouble();
-        icon = in.readString();
     }
 
     public double getLat() {
@@ -151,10 +150,6 @@ public class Restaurant implements Parcelable {
         return joiners;
     }
 
-    public String getIcon() {
-        return icon;
-    }
-
     public void setJoiners(List<com.example.go4lunch.model.User> joiners) {
         this.joiners = joiners;
     }
@@ -191,10 +186,6 @@ public class Restaurant implements Parcelable {
         this.note = note;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -223,6 +214,7 @@ public class Restaurant implements Parcelable {
         joiners.remove(user);
     }
 
+    //create a "Restaurant" from place API response
     public static Restaurant googleRestaurantToRestaurant(ResultsItem item) {
         String url1 = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&maxheight=200&photo_reference=";
         String url2 = "&key=";

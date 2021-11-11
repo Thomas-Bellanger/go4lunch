@@ -37,8 +37,6 @@ public class Restaurant_Detail_ViewAdapter extends RecyclerView.Adapter<Restaura
     @Override
     public void onBindViewHolder(@NonNull Restaurant_Detail_ViewAdapter.ViewHolder holder, int position) {
         User joiner = joiners.get(position);
-
-
         holder.name.setText(joiner.getName());
         Glide.with(holder.avatar.getContext())
                 .load(joiner.getAvatar())

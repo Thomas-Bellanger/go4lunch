@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.go4lunch.BuildConfig;
 import com.example.go4lunch.detailmodel.Result;
 import com.example.go4lunch.nearbysearchmodel.ResponseAPI;
 import com.example.go4lunch.nearbysearchmodel.ResultsItem;
@@ -56,7 +57,8 @@ public class GoogleRepository {
             @Override
             public void onResponse(Call<ResponseAPI> liveDataCall, Response<ResponseAPI> response) {
                 // Call the proper callback used in controller (MainFragment)
-
+                Log.e("checkOK",response.body().getStatus());
+                Log.e("apiKey", BuildConfig.API_KEY);
                 if (callbacksWeakReference.get() != null)
                     callbacksWeakReference.get().onResponse(response.body());
             }

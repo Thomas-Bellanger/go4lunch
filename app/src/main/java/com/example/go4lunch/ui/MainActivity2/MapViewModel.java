@@ -71,6 +71,7 @@ public class MapViewModel implements GoogleRepository.Callbacks {
     public void onResponse(@Nullable ResponseAPI itemLive) {
         restaurantList = new ArrayList<>();
         liveRestaurantsCall.setValue(new ArrayList<>());
+        restaurantFiltered.clear();
         //create a "Restaurant" from response item and add it to firebase if not in yet, else get data from it
         for (ResultsItem item : itemLive.getResults()) {
             Restaurant restaurant = Restaurant.googleRestaurantToRestaurant(item);
@@ -86,8 +87,9 @@ public class MapViewModel implements GoogleRepository.Callbacks {
                         mRestaurantManager.createRestaurantFirebase(restaurant);
                         restaurantList.add(restaurant);
                         restaurantFiltered.add(restaurant);
+                        liveRestaurantsCall.setValue(restaurantList);
                     }
-                    liveRestaurantsCall.setValue(restaurantList);
+
                 }
             });
         }

@@ -5,7 +5,7 @@ import com.example.go4lunch.service.ApiService;
 public class DI {
     private static final ApiService service = new ApiService();
 
-    public static ApiService getASIService() {
+    public static ApiService getAPIService() {
         return service;
     }
 }

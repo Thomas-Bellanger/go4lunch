@@ -1,6 +1,7 @@
 package com.example.go4lunch.ui.SettingsActivity;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -12,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.databinding.ActivitySettingsBinding;
 import com.example.go4lunch.manager.UserManager;
 import com.example.go4lunch.model.User;
+import com.example.go4lunch.ui.MainActivity.MainActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -32,13 +34,17 @@ public class SettingsActivity extends AppCompatActivity {
                 .apply(RequestOptions.circleCropTransform())
                 .into(binding.settingsAvatar);
         binding.checkbox.setOnClickListener(v -> setNotification());
+        //return t main activity
         binding.settingsLogout.setOnClickListener(v -> finish());
         binding.settingsNameButton.setOnClickListener(v -> userManager.updateUsername(binding.settingsName.getText().toString()));
+        //delete user from firebase and logout
         binding.settingsDeletteBtn.setOnClickListener(v -> new AlertDialog.Builder(SettingsActivity.this)
                 .setMessage("Sure?")
                 .setPositiveButton("Yes", (dialogInterface, i) ->
                         userManager.deleteUser(SettingsActivity.this)
-                                .addOnSuccessListener(aVoid -> finish()
+                                .addOnSuccessListener(aVoid -> {
+                                    Intent intent = new Intent(this, MainActivity.class);
+                                    startActivity(intent);}
                                 )
                 )
                 .setNegativeButton("No", null)
@@ -49,6 +55,7 @@ public class SettingsActivity extends AppCompatActivity {
         binding.checkbox.setChecked(notification);
     }
 
+    //set if the user receive notification or not
     public void setNotification() {
         notification = !notification;
         userManager.updateNotification(notification).addOnSuccessListener(unused -> Toast.makeText(getApplicationContext(),
@@ -56,6 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
         Log.e("notification", "notification " + notification);
     }
 
+    //check if the user receive notification or not
     @Override
     protected void onStart() {
         super.onStart();

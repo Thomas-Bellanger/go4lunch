@@ -41,6 +41,18 @@ public class MainActivity2 extends AppCompatActivity {
     public static String searchTip = "tip";
     private final UserManager userManager = UserManager.getInstance();
     private final MapViewModel mMapViewModel = MapViewModel.getInstance();
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private ActivityMain2Binding binding;
+    private ApiServiceInterface mApiService;
+    private User currentUser;
+    private MainActivity2PagerAdapter mMainActivity2PagerAdapter;
+    private Toolbar mToolbar;
+    private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
+    private Restaurant chosenRestaurant;
+    private android.widget.SearchView searchView;
+    //filter for restaurant
     public Filter filterRestaurant = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -54,10 +66,7 @@ public class MainActivity2 extends AppCompatActivity {
             mMapViewModel.liveRestaurantsCall.getValue();
         }
     };
-    private ViewPager mViewPager;
-    private TabLayout mTabLayout;
-    private ActivityMain2Binding binding;
-    private ApiServiceInterface mApiService;
+    //filter for users
     public Filter filterUser = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -71,13 +80,6 @@ public class MainActivity2 extends AppCompatActivity {
             mApiService.getLiveUsers();
         }
     };
-    private User currentUser;
-    private MainActivity2PagerAdapter mMainActivity2PagerAdapter;
-    private Toolbar mToolbar;
-    private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
-    private Restaurant chosenRestaurant;
-    private android.widget.SearchView searchView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +87,7 @@ public class MainActivity2 extends AppCompatActivity {
 
         currentUser = User.firebaseUserToUser(userManager.getCurrentUser());
         binding = ActivityMain2Binding.inflate(getLayoutInflater());
-        mApiService = DI.getASIService();
+        mApiService = DI.getAPIService();
         setContentView(binding.getRoot());
         showSnackBar(getString(R.string.connection_succeed));
         mViewPager = findViewById(R.id.activity_main_viewpager);
@@ -97,21 +99,21 @@ public class MainActivity2 extends AppCompatActivity {
         configurePagerAdapter();
         mApiService.populateUser();
     }
-
+    //toolbar
     public void configureToolBar() {
         this.mToolbar = findViewById(R.id.includeToolbar);
         mToolbar.setTitle(R.string.i_m_hungry);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(mToolbar);
     }
-
+    //drawer layout
     private void configureDrawerLayout() {
         this.mDrawerLayout = binding.drawerLayout;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
     }
-
+    //sort the restaurant list by alphabetical, distance or note
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -126,7 +128,7 @@ public class MainActivity2 extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+    //menu
     public boolean onNavigationSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
@@ -155,14 +157,14 @@ public class MainActivity2 extends AppCompatActivity {
         this.mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
+    //logout
     private void logout() {
         Intent finish = new Intent(this, MainActivity.class);
         userManager.signOut(this).addOnSuccessListener(Void -> {
             startActivity(finish);
         });
     }
-
+    //navigation view for fragments
     public void configureNavigationView() {
         this.mNavigationView = binding.activityMainNavView;
         mNavigationView.setNavigationItemSelectedListener(this::onNavigationSelected);
@@ -175,7 +177,7 @@ public class MainActivity2 extends AppCompatActivity {
         mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         mViewPager.setOffscreenPageLimit(2);
     }
-
+    //filter with name (users or restaurant)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -195,6 +197,7 @@ public class MainActivity2 extends AppCompatActivity {
                 return false;
             }
         });
+        //change the hint for filter with fragment
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -220,6 +223,7 @@ public class MainActivity2 extends AppCompatActivity {
         return filterUser;
     }
 
+    //menu configuration
     public void onDrawerOpened(View drawerView) {
         NavigationView navigationVIew = findViewById(R.id.activity_main_nav_view);
         View headerView = navigationVIew.getHeaderView(0);
@@ -238,6 +242,7 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //toolbar title and searchtip with fragment
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -266,7 +271,7 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
     }
-
+    //snackbar
     private void showSnackBar(String message) {
         Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
     }

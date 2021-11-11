@@ -8,13 +8,13 @@ import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.service.ApiService;
 
 public class MainActivity2PagerAdapter extends FragmentPagerAdapter {
-    ApiService mApiService = DI.getASIService();
     Fragment mFragment;
 
     public MainActivity2PagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
+    //fragment to show
     @Override
     public Fragment getItem(int position) {
         switch (position) {
@@ -33,6 +33,7 @@ public class MainActivity2PagerAdapter extends FragmentPagerAdapter {
         return mFragment;
     }
 
+    //maximum number of page
     @Override
     public int getCount() {
         return 3;

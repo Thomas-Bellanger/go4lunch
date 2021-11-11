@@ -41,14 +41,17 @@ public class Co_Worker_List_View_Adapter extends RecyclerView.Adapter<Co_Worker_
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = mUsers.get(position);
+        //get the firstname of the user only
         String[] name = user.getName().split(" ");
         holder.name.setText(name[0]);
+        //set the text if the user has no restaurant chosen
         if (user.getChosenRestaurant() == null) {
             holder.eating.setText(" ");
             holder.restaurant_Text.setText(R.string.notDecided);
             holder.name.setTextColor(Color.GRAY);
             holder.restaurant_Text.setTextColor(Color.GRAY);
         } else {
+            //if the user have a chosen restaurant
             holder.restaurant_Text.setText(user.getChosenRestaurant().getType() + "(" + user.getChosenRestaurant().getName() + ")");
             holder.restaurant_Text.setTextColor(Color.BLACK);
             holder.itemView.setOnClickListener(v -> {

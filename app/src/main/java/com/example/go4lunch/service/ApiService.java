@@ -5,11 +5,9 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
-import com.example.go4lunch.ui.MainActivity2.MapViewModel;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -17,19 +15,15 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ApiService implements ApiServiceInterface {
-    private List<Restaurant> restaurants = new ArrayList<>();
     private List<User> users = new ArrayList<>();
     private List<Restaurant> restaurantFiltered = new ArrayList<>();
     private List<User> userFiltered = new ArrayList<>();
-    private List<Restaurant> favorites = new ArrayList<>();
     private UserManager mUserManager = UserManager.getInstance();
-    private RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
-    private MutableLiveData<List<Restaurant>> liveRestaurants = new MutableLiveData<>();
     private MutableLiveData<List<User>> liveUsers = new MutableLiveData<>();
     private MutableLiveData<String> liveDistance = new MutableLiveData<>();
     private MutableLiveData<String> sort= new MutableLiveData();
-    private MapViewModel mMapViewModel = MapViewModel.getInstance();
 
+    //filter for users
     @Override
     public List<User> filterUser(String filterPattern) {
         userFiltered= new ArrayList<>();
@@ -48,22 +42,17 @@ public class ApiService implements ApiServiceInterface {
         liveUsers.setValue(userFiltered);
         return userFiltered;
     }
-
+    //users list
     @Override
     public List<User> getUsers() {
         return users;
     }
-
+    //users list after filter
     @Override
     public List<User> getFilteredUsers() {
         return userFiltered;
     }
-
-    @Override
-    public List<Restaurant> getFavorites() {
-        return favorites;
-    }
-
+    //get users from firebase
     @Override
     public void populateUser() {
         users.clear();
@@ -82,18 +71,18 @@ public class ApiService implements ApiServiceInterface {
             //Log.e("fail", e.getMessage())
         });
     }
-
+    //live users livedata
     @Override
     public LiveData<List<User>> getLiveUsers() {
         liveUsers.setValue(userFiltered);
         return liveUsers;
     }
-
+    //live data distance
     @Override
     public MutableLiveData<String> getLiveDistance() {
         return liveDistance;
     }
-
+    //comparators for restaurant list
     public static class RestaurantAZComparator implements Comparator<Restaurant> {
         @Override
         public int compare(Restaurant left, Restaurant right) {

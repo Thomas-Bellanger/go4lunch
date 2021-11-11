@@ -15,10 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.model.Restaurant;
-import com.example.go4lunch.service.ApiService;
 import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 
 import java.util.List;
@@ -30,13 +28,10 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
 
     private final List<Restaurant> restaurants;
     private Context mContext;
-    private final ApiService mApiService = DI.getASIService();
-    private final MapViewModel mMapViewModel = MapViewModel.getInstance();
 
     public RestaurantListViewAdapter(List<Restaurant> items) {
         restaurants = items;
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,7 +46,7 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
     public void onBindViewHolder(@NonNull RestaurantListViewAdapter.ViewHolder holder, int position) {
 
         Restaurant restaurant = restaurants.get(position);
-
+        //set the number of stars "visible"
         if (restaurant.getNote() > 50) {
             holder.stars.setColorFilter(ContextCompat.getColor(mContext, R.color.yellow));
         }
@@ -70,6 +65,7 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
                 .load(restaurant.getAvatar())
                 .apply(RequestOptions.centerCropTransform())
                 .into(holder.restaurantAvatar);
+        //set if the restaurant is opened or not
         if (restaurant.getOpening() == true) {
             holder.hours.setText(R.string.Open);
             holder.hours.setTextColor(Color.GREEN);
@@ -77,12 +73,13 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
             holder.hours.setTextColor(Color.RED);
             holder.hours.setText(R.string.closed);
         }
+        holder.number.setText("(" + restaurant.getJoiners().size() + ")");
+        //intent to go for detail
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), RestaurantDetail.class);
             intent.putExtra(RestaurantDetail.KEY_RESTAURANT, restaurant);
             v.getContext().startActivity(intent);
         });
-        holder.number.setText("(" + restaurant.getJoiners().size() + ")");
     }
 
     @Override

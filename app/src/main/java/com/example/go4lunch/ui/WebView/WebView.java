@@ -16,7 +16,7 @@ public class WebView extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview);
-
+        //get the url from intent and load it
         Intent navigate = getIntent();
         mRestaurant = navigate.getParcelableExtra(RestaurantDetail.KEY_RESTAURANT);
         webView = findViewById(R.id.webview);

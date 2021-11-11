@@ -20,10 +20,9 @@ import com.example.go4lunch.service.ApiService;
 import java.util.List;
 
 public class Co_Worker_Fragment extends Fragment {
-    private final UserManager userManager = UserManager.getInstance();
     private ApiService mApiService;
     private RecyclerView mRecyclerView;
-
+    //fragment instance
     public static Co_Worker_Fragment newInstance() {
         return new Co_Worker_Fragment();
     }
@@ -40,23 +39,14 @@ public class Co_Worker_Fragment extends Fragment {
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
-        mApiService = DI.getASIService();
+        mApiService = DI.getAPIService();
+        //get the list to show
         mApiService.getLiveUsers().observe(getActivity(), this::initList);
 
         return view;
     }
-
+    //refresh the list
     private void initList(List<User> users) {
         mRecyclerView.setAdapter(new Co_Worker_List_View_Adapter(users));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 }

@@ -43,7 +43,7 @@ public class RestaurantListView extends Fragment {
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        mApiService = DI.getASIService();
+        mApiService = DI.getAPIService();
         mApiService.getLiveDistance().observe(this.getActivity(), this::update);
         mMapViewModel.liveRestaurantsCall.observe(this.getActivity(), this::initList);
         mApiService.getSort().observe(this.getActivity(), this::sortBy);
@@ -51,11 +51,7 @@ public class RestaurantListView extends Fragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
+    //update the list
     private void initList(List<Restaurant> restaurants) {
         mRecyclerView.setAdapter(new RestaurantListViewAdapter(restaurants));
     }
@@ -64,11 +60,7 @@ public class RestaurantListView extends Fragment {
         initList(mMapViewModel.getFilteredRestaurants());
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
+    //sort the restaurants
     public void sortBy(String sort) {
         List<Restaurant> restaurants = mMapViewModel.getFilteredRestaurants();
         if (sort.equals(ALPHABETICAL)) {

@@ -203,7 +203,6 @@ public class Restaurant implements Parcelable {
         dest.writeString(phoneNumber);
         dest.writeInt(note);
         dest.writeByte((byte) (like ? 1 : 0));
-        dest.writeString(icon);
     }
 
     public void addJoiners(User user) {
@@ -216,16 +215,17 @@ public class Restaurant implements Parcelable {
 
     //create a "Restaurant" from place API response
     public static Restaurant googleRestaurantToRestaurant(ResultsItem item) {
+        //use google api and photo reference from the item to get the url to load for avatar
         String url1 = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&maxheight=200&photo_reference=";
         String url2 = "&key=";
         String photoRef = item.getPhotos().get(0).getPhotoReference();
+        String avatar = url1+photoRef+url2+ BuildConfig.API_KEY;
             String uid = item.getPlaceId();
             String name = item.getName();
             String adress = item.getVicinity();
             String type = item.getTypes().get(0);
             Boolean opening = true;
             int distance = 0;
-            String avatar = url1+photoRef+url2+ BuildConfig.API_KEY;
             String url = "url";
             String phoneNumber = "0";
             int note = item.getUserRatingsTotal();

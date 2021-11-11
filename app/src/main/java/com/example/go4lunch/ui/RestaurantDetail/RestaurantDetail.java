@@ -43,7 +43,7 @@ public class RestaurantDetail extends AppCompatActivity {
     private List<Restaurant> favorites = new ArrayList<>();
     private boolean chosen = false;
     private boolean liked = false;
-    private final ApiService mApiService = DI.getASIService();
+    private final ApiService mApiService = DI.getAPIService();
     private final MapViewModel mMapViewModel = MapViewModel.getInstance();
 
     @Override
@@ -83,6 +83,7 @@ public class RestaurantDetail extends AppCompatActivity {
         setStar();
     }
 
+    //change the color of the "star button" if the restaurant is liked or not
     public void setStar() {
         if (liked) {
             binding.buttonLike.setColorFilter(ContextCompat.getColor(this, R.color.yellow));
@@ -224,13 +225,6 @@ public class RestaurantDetail extends AppCompatActivity {
         mAdapter.update(joiners);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        userManager.getUserData().addOnSuccessListener(user -> {
-        });
-    }
-
     public void fabChecked() {
         binding.fabLike.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.green));
         binding.fabLike.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_check_circle_24));
@@ -246,6 +240,7 @@ public class RestaurantDetail extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        //get restaurant joiner
         userManager.getUserCollection().get().addOnSuccessListener(queryDocumentSnapshots -> {
             for (QueryDocumentSnapshot userCollection : queryDocumentSnapshots) {
                 User user = userCollection.toObject(User.class);
@@ -261,6 +256,7 @@ public class RestaurantDetail extends AppCompatActivity {
             }
         }).addOnFailureListener(e -> {//Log.e("fail", e.getMessage())
         });
+        //get current user data and avoid error
         userManager.getUserData().addOnSuccessListener(user -> {
                     chosenRestaurant = user.getChosenRestaurant();
                     favorites = user.getFavorite();
@@ -279,6 +275,7 @@ public class RestaurantDetail extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //refresh data with firebase
         mMapViewModel.populateRestaurant();
         mApiService.populateUser();
     }

@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
     }
 
+    //sign in with google,facebook or e-mail
     private void startSignInActivity() {
         if (userManager.isCurrentUserLogged()) {
             Intent intent = new Intent(this, MainActivity2.class);
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //SnackBar
     private void showSnackBar(String message) {
         Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
     }

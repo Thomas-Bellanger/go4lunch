@@ -50,7 +50,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String PERMS = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final int RC_LOCATION = 100;
-    private final ApiService mApiService = DI.getASIService();
+    private final ApiService mApiService = DI.getAPIService();
     private final MapViewModel mMapViewModel = MapViewModel.getInstance();
     private final GoogleManager mGoogleManager = GoogleManager.getInstance();
     private final MutableLiveData<Location> liveLocation = new MutableLiveData<>();
@@ -84,29 +84,34 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+    //map
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         this.map = mapboxMap;
         acceptPermission();
         map.addOnCameraMoveListener(() -> mapBtn.setVisibility(View.VISIBLE));
-        mapBtn.setOnClickListener(v -> {
-            lastLocation = new LatLng(map.getLocationComponent().getLastKnownLocation().getLatitude(), map.getLocationComponent().getLastKnownLocation().getLongitude());
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(lastLocation))
-                    .zoom(10)
-                    .tilt(20)
-                    .build();
-            map.setCameraPosition(cameraPosition);
-            if (!userLocation.equals(lastLocation)) {
-                userLocation = lastLocation;
-                checkNearbyRestaurant();
-            }
-        });
+        mapBtn.setOnClickListener(v ->reCenter());
         mApiService.getLiveDistance().observe(this.getActivity(), this::startCheckingNearby);
         mMapViewModel.liveRestaurantsCall.observe(getActivity(), this::getMarkers);
     }
 
+    //recenter camera on user and check nearby restaurant if user has moved
+    @SuppressLint("MissingPermission")
+    public void reCenter(){
+        lastLocation = new LatLng(map.getLocationComponent().getLastKnownLocation().getLatitude(), map.getLocationComponent().getLastKnownLocation().getLongitude());
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(lastLocation))
+                .zoom(10)
+                .tilt(20)
+                .build();
+        map.setCameraPosition(cameraPosition);
+        if (!userLocation.equals(lastLocation)) {
+            userLocation = lastLocation;
+            checkNearbyRestaurant();
+        }
+    }
+    //firstcheck on google place API
     @SuppressLint("MissingPermission")
     private void startCheckingNearby(String s) {
         if (mMapViewModel.restaurantList.isEmpty()) {
@@ -114,7 +119,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             checkNearbyRestaurant();
         }
     }
-
+    //enable location
     @SuppressLint("MissingPermission")
     private void enableLocationComponent(@NonNull String loadedMapStyle) {
 // Get an instance of the component
@@ -134,25 +139,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         locationComponent.addCompassListener(new CompassListener() {
             @Override
             public void onCompassChanged(float userHeading) {
+                //get user's location
                 if (locationComponent.getLastKnownLocation() != null) {
                     if (!mApiService.getLiveDistance().equals(locationComponent.getLastKnownLocation())) {
                         mApiService.getLiveDistance().setValue(locationComponent.getLastKnownLocation().toString());
                     }
                 }
             }
-
             @Override
             public void onCompassAccuracyChange(int compassStatus) {
             }
         });
         mMapViewModel.liveRestaurantsCall.observe(getActivity(), this::getMarkers);
     }
-
+    //call for API and update ui
     public void checkNearbyRestaurant() {
         updateUiWhenDlStart();
         mMapViewModel.setLocation(userLocation);
     }
-
+    //permissions
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -209,7 +214,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onLowMemory();
         mapView.onLowMemory();
     }
-
+    //update ui if loading is started/finished
     public void updateUiWhenDlIsFinished() {
         dl.setVisibility(View.GONE);
     }
@@ -218,6 +223,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         dl.setVisibility(View.VISIBLE);
     }
 
+    //add marker on the map and create the intent when clicking on it
     public void getMarkers(List<Restaurant> restaurants) {
         updateUiWhenDlStart();
         List<Marker> markerList = new ArrayList<>();
@@ -233,8 +239,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 marker.setIcon(pin);
             }
             markerList.add(marker);
+            //get distance for restaurant
             meter = marker.getPosition().distanceTo(userLocation);
             int distance = meter.intValue();
+            //refresh restaurants "distance" in the list
             restaurant.setDistance(distance);
             mApiService.getLiveDistance().setValue(distance + "m");
             for (Marker markers : markerList) {

@@ -25,6 +25,7 @@ public class MapViewModel implements GoogleRepository.Callbacks {
     private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantFiltered = new ArrayList<>();
 
+    //instance of the service
     public static MapViewModel getInstance() {
         MapViewModel result = instance;
         if (instance != null) {
@@ -34,13 +35,13 @@ public class MapViewModel implements GoogleRepository.Callbacks {
         }
         return instance;
     }
-
+    //call api place with users location in parameter
     public void setLocation(LatLng latLng) {
         if (latLng != null) {
             mGoogleManager.fetchRestaurant(this, latLng.getLatitude() + "," + latLng.getLongitude());
         }
     }
-
+    //fiter for restaurant list
     public List<Restaurant> filterRestaurant(String filterPattern) {
         restaurantFiltered = new ArrayList<>();
         if (filterPattern == null || filterPattern.length() == 0) {
@@ -61,17 +62,17 @@ public class MapViewModel implements GoogleRepository.Callbacks {
 
         return restaurantFiltered;
     }
-
+    //call detail api with restaurant uid in parameter
     public void checkForDetail(Restaurant restaurant) {
         mGoogleManager.getDetail(this, restaurant.getUid());
     }
-
+    //get response of the api place
     @Override
     public void onResponse(@Nullable ResponseAPI itemLive) {
         restaurantList = new ArrayList<>();
         liveRestaurantsCall.setValue(new ArrayList<>());
+        //create a "Restaurant" from response item and add it to firebase if not in yet, else get data from it
         for (ResultsItem item : itemLive.getResults()) {
-
             Restaurant restaurant = Restaurant.googleRestaurantToRestaurant(item);
             mRestaurantManager.getRestaurantCollection().document(restaurant.getUid()).get().addOnCompleteListener(task -> {
                 if (task.isComplete()) {
@@ -94,6 +95,7 @@ public class MapViewModel implements GoogleRepository.Callbacks {
 
     @Override
     public void onFailure() {
+        //Log.e("fail place", "fail");
     }
 
     @Override
@@ -104,9 +106,10 @@ public class MapViewModel implements GoogleRepository.Callbacks {
 
     @Override
     public void onFailureDetail() {
-
+        //Log.e("fail detail", "fail");
     }
 
+    //refresh restaurant list with data from firebase
     public void populateRestaurant() {
         for (Restaurant restaurant : restaurantList) {
             mRestaurantManager.getRestaurantData(restaurant).addOnSuccessListener(restaurant1 -> {
@@ -116,6 +119,7 @@ public class MapViewModel implements GoogleRepository.Callbacks {
         }
     }
 
+    //restaurant list after filter
     public List<Restaurant> getFilteredRestaurants() {
         return restaurantFiltered;
     }

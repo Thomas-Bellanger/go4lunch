@@ -1,8 +1,5 @@
 package com.example.go4lunch.repository;
 
-import android.util.Log;
-
-import com.example.go4lunch.manager.RestaurantManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.google.android.gms.tasks.Task;
@@ -15,7 +12,6 @@ import java.util.List;
 
 public class RestaurantRepository {
     private static final String RESTAURANT_COLLECTION = "restaurants";
-    private static final String RESTAURANT_NAME = "restaurantName";
     private static volatile RestaurantRepository instance;
 
 

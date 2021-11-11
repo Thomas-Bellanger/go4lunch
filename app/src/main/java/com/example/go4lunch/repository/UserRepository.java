@@ -38,26 +38,26 @@ public final class UserRepository {
             return instance;
         }
     }
-
+    //get the current user connected
     @Nullable
     public FirebaseUser getCurrentUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
-
+    //get current user ID
     @Nullable
     public String getCurrentUserUid() {
         FirebaseUser user = getCurrentUser();
         return (user != null) ? user.getUid() : null;
     }
-
+    //sign out
     public Task<Void> signOut(Context context) {
         return AuthUI.getInstance().signOut(context);
     }
-
+    //delette user in firebase
     public Task<Void> deleteUser(Context context) {
         return AuthUI.getInstance().delete(context);
     }
-
+    //get users collection on firebase
     public CollectionReference getUsersCollection() {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
     }
@@ -127,11 +127,11 @@ public final class UserRepository {
             this.getUsersCollection().document(uid).delete();
         }
     }
-
+    //update "favorites" list of the user
     public Task<Void> updateFavorites(List<Restaurant> favorites) {
         return this.getUsersCollection().document(getCurrentUserUid()).update("favorite", favorites);
     }
-
+    //update if the user get notification or not
     public Task<Void> updateNotification(boolean notification) {
         return this.getUsersCollection().document(getCurrentUserUid()).update("notification", notification);
     }

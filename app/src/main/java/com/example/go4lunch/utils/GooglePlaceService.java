@@ -1,8 +1,8 @@
 package com.example.go4lunch.utils;
 
 import com.example.go4lunch.BuildConfig;
-import com.example.go4lunch.detailmodel.Response;
-import com.example.go4lunch.nearbysearchmodel.ResponseAPI;
+import com.example.go4lunch.model.detailmodel.Response;
+import com.example.go4lunch.model.nearbysearchmodel.nearbysearchmodel.ResponseAPI;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;

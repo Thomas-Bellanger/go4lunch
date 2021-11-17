@@ -11,9 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.databinding.ActivitySettingsBinding;
-import com.example.go4lunch.manager.UserManager;
+import com.example.go4lunch.domain.manager.UserManager;
 import com.example.go4lunch.model.User;
-import com.example.go4lunch.ui.MainActivity.MainActivity;
+import com.example.go4lunch.ui.SignInActivity.SignInActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -43,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
                 .setPositiveButton("Yes", (dialogInterface, i) ->
                         userManager.deleteUser(SettingsActivity.this)
                                 .addOnSuccessListener(aVoid -> {
-                                    Intent intent = new Intent(this, MainActivity.class);
+                                    Intent intent = new Intent(this, SignInActivity.class);
                                     startActivity(intent);}
                                 )
                 )

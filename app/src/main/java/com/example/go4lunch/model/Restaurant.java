@@ -2,11 +2,9 @@ package com.example.go4lunch.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.example.go4lunch.BuildConfig;
-import com.example.go4lunch.manager.RestaurantManager;
-import com.example.go4lunch.nearbysearchmodel.ResultsItem;
+import com.example.go4lunch.model.nearbysearchmodel.nearbysearchmodel.ResultsItem;
 
 import java.util.ArrayList;
 import java.util.List;

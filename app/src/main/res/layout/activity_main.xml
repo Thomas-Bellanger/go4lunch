@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".ui.MainActivity.MainActivity">
+    tools:context=".ui.SignInActivity.SignInActivity">
 
     <ImageView
         android:id="@+id/go4lunch"

@@ -18,16 +18,16 @@
         <activity
             android:name=".ui.SettingsActivity.SettingsActivity"
             android:exported="true"
-            android:parentActivityName=".ui.MainActivity2.MainActivity2" />
+            android:parentActivityName=".ui.MainActivity.MainActivity" />
         <activity
             android:name=".ui.RestaurantDetail.RestaurantDetail"
             android:exported="true"
-            android:parentActivityName=".ui.MainActivity2.MainActivity2" />
-        <activity
-            android:name=".ui.MainActivity2.MainActivity2"
-            android:exported="true" />
+            android:parentActivityName=".ui.MainActivity.MainActivity" />
         <activity
             android:name=".ui.MainActivity.MainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.SignInActivity.SignInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +40,7 @@
             android:exported="true" />
         <!-- NOTIFICATION SERVICE -->
         <service
-            android:name=".notification.NotificationService">
+            android:name=".domain.notification.NotificationService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

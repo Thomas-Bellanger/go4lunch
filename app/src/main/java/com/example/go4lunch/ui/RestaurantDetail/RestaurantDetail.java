@@ -16,12 +16,12 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.ActivityRestaurantDetailBinding;
-import com.example.go4lunch.manager.RestaurantManager;
-import com.example.go4lunch.manager.UserManager;
+import com.example.go4lunch.domain.manager.RestaurantManager;
+import com.example.go4lunch.domain.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
-import com.example.go4lunch.service.ApiService;
-import com.example.go4lunch.ui.MainActivity2.MapViewModel;
+import com.example.go4lunch.domain.service.ApiService;
+import com.example.go4lunch.ui.MainActivity.MapViewModel;
 import com.example.go4lunch.ui.WebView.WebView;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 

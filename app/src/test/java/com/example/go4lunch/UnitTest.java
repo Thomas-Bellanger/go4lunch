@@ -2,14 +2,10 @@ package com.example.go4lunch;
 
 import static org.junit.Assert.assertFalse;
 
-import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
-import com.example.go4lunch.service.ApiService;
 
 import org.junit.Test;
-
-import java.util.List;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

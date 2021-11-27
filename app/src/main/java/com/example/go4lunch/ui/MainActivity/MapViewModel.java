@@ -3,6 +3,7 @@ package com.example.go4lunch.ui.MainActivity;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.domain.manager.GoogleManager;
 import com.example.go4lunch.domain.manager.RestaurantManager;
 import com.example.go4lunch.model.Restaurant;
@@ -21,8 +22,8 @@ public class MapViewModel implements GoogleRepository.Callbacks {
     public MutableLiveData<List<Restaurant>> liveRestaurantsCall = new MutableLiveData<>();
     public String url;
     public String phoneNumber;
-    private final GoogleManager mGoogleManager = GoogleManager.getInstance();
-    private final RestaurantManager mRestaurantManager = RestaurantManager.getInstance();
+    private final GoogleManager mGoogleManager = DI.getGoogleManager();
+    private final RestaurantManager mRestaurantManager = DI.getRestaurantManager();
     private List<Restaurant> restaurantFiltered = new ArrayList<>();
 
     //instance of the service
@@ -125,11 +126,4 @@ public class MapViewModel implements GoogleRepository.Callbacks {
         return restaurantFiltered;
     }
 
-    public void testList() {
-        liveRestaurantsCall.setValue(new ArrayList<>());
-        restaurantFiltered.clear();
-        restaurantList.add(Restaurant.restaurant1);
-        restaurantFiltered.add(Restaurant.restaurant1);
-        liveRestaurantsCall.setValue(restaurantFiltered);
-    }
 }

@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String toolbarTitle = "title";
     public static String searchTip = "tip";
-    private final UserManager userManager = UserManager.getInstance();
+    private final UserManager userManager = DI.getUserManager();
     private final MapViewModel mMapViewModel = MapViewModel.getInstance();
     private ViewPager mViewPager;
     private TabLayout mTabLayout;

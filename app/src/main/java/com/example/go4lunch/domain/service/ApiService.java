@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.domain.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;

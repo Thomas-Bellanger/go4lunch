@@ -52,7 +52,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final int RC_LOCATION = 100;
     private final ApiService mApiService = DI.getAPIService();
     private final MapViewModel mMapViewModel = MapViewModel.getInstance();
-    private final MutableLiveData<Location> liveLocation = new MutableLiveData<>();
     private LatLng latLng;
     private MapView mapView;
     private MapboxMap map;
@@ -92,7 +91,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         map.addOnCameraMoveListener(() -> mapBtn.setVisibility(View.VISIBLE));
         mapBtn.setOnClickListener(v ->reCenter());
         mApiService.getLiveDistance().observe(this.getActivity(), this::startCheckingNearby);
-        mMapViewModel.liveRestaurantsCall.observe(getActivity(), this::getMarkers);
     }
 
     //recenter camera on user and check nearby restaurant if user has moved
@@ -150,7 +148,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onCompassAccuracyChange(int compassStatus) {
             }
         });
-        mMapViewModel.liveRestaurantsCall.observe(getActivity(), this::getMarkers);
+        mMapViewModel.liveRestaurantsCall.observe(this.getActivity(), this::getMarkers);
     }
     //call for API and update ui
     public void checkNearbyRestaurant() {
@@ -226,11 +224,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     //add marker on the map and create the intent when clicking on it
     public void getMarkers(List<Restaurant> restaurants) {
         updateUiWhenDlStart();
+        map.clear();
         List<Marker> markerList = new ArrayList<>();
         IconFactory mIconFactory = IconFactory.getInstance(getContext());
         Icon pin = mIconFactory.fromResource(R.drawable.baseline_person_pin_circle_blue_500_36dp);
         Double meter;
-        map.clear();
         for (Restaurant restaurant : restaurants) {
             latLng = new LatLng(restaurant.getLat(), restaurant.getLng());
             Marker marker = map.addMarker(new MarkerOptions().setPosition(latLng));

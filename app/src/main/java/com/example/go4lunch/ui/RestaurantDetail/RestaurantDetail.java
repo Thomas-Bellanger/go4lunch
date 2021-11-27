@@ -30,9 +30,9 @@ import java.util.List;
 
 public class RestaurantDetail extends AppCompatActivity {
     public static final String KEY_RESTAURANT = "restaurant";
-    private final UserManager userManager = UserManager.getInstance();
+    private final UserManager userManager = DI.getUserManager();
     private final User currentUser = User.firebaseUserToUser(userManager.getCurrentUser());
-    private final RestaurantManager restaurantManager = RestaurantManager.getInstance();
+    private final RestaurantManager restaurantManager = DI.getRestaurantManager();
     public List<User> joiners;
     private Restaurant mRestaurant;
     private ActivityRestaurantDetailBinding binding;

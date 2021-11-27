@@ -11,6 +11,7 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.domain.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
@@ -22,7 +23,7 @@ public class NotificationService extends FirebaseMessagingService {
 
     private final int NOTIFICATION_ID = 007;
     private final String NOTIFICATION_TAG = "GO4LUNCH";
-    private final UserManager userManager = UserManager.getInstance();
+    private final UserManager userManager = DI.getUserManager();
     private Restaurant chosenRestaurant;
 
 

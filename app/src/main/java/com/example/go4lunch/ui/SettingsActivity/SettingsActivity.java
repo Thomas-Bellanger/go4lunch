@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.databinding.ActivitySettingsBinding;
 import com.example.go4lunch.domain.manager.UserManager;
 import com.example.go4lunch.model.User;
@@ -17,7 +18,7 @@ import com.example.go4lunch.ui.SignInActivity.SignInActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private final UserManager userManager = UserManager.getInstance();
+    private final UserManager userManager = DI.getUserManager();
     private final User currentUser = User.firebaseUserToUser(userManager.getCurrentUser());
     private ActivitySettingsBinding binding;
     private boolean notification = currentUser.isNotification();

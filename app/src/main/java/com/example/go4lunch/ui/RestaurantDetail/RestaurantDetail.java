@@ -241,6 +241,7 @@ public class RestaurantDetail extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         //get restaurant joiner
+        mRestaurant.getJoiners().clear();
         userManager.getUserCollection().get().addOnSuccessListener(queryDocumentSnapshots -> {
             for (QueryDocumentSnapshot userCollection : queryDocumentSnapshots) {
                 User user = userCollection.toObject(User.class);

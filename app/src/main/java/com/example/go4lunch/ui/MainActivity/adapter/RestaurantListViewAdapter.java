@@ -1,4 +1,4 @@
-package com.example.go4lunch.ui.MainActivity;
+package com.example.go4lunch.ui.MainActivity.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -115,5 +115,4 @@ public class RestaurantListViewAdapter extends RecyclerView.Adapter<RestaurantLi
             ButterKnife.bind(this, itemView);
         }
     }
-
 }

@@ -1,4 +1,4 @@
-package com.example.go4lunch.ui.MainActivity;
+package com.example.go4lunch.ui.MainActivity.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +15,8 @@ import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.domain.service.ApiService;
+import com.example.go4lunch.ui.MainActivity.viewModel.MapViewModel;
+import com.example.go4lunch.ui.MainActivity.adapter.RestaurantListViewAdapter;
 
 import java.util.Collections;
 import java.util.List;

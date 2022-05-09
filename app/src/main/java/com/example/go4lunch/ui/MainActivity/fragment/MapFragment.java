@@ -1,13 +1,11 @@
-package com.example.go4lunch.ui.MainActivity;
+package com.example.go4lunch.ui.MainActivity.fragment;
 
 import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +14,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.go4lunch.DI.DI;
 import com.example.go4lunch.R;
-import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.domain.service.ApiService;
+import com.example.go4lunch.model.Restaurant;
+import com.example.go4lunch.ui.MainActivity.MainActivity;
+import com.example.go4lunch.ui.MainActivity.viewModel.MapViewModel;
 import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -71,7 +70,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map, container, false);
-        Mapbox.getInstance(view.getContext(), "pk.eyJ1IjoibmV4aXNsdWNpcyIsImEiOiJja3MzMzkyNWsyOXIxMm9uOG05NjlnZTB3In0.C0x6L93b14FZC6oKQfcBrQ");
+        Mapbox.getInstance(view.getContext(), "pk.eyJ1IjoibmV4aXNsdWNpcyIsImEiOiJja3k0ZXFkNmwwN240MnZxYzlybm5tNmJwIn0.hWrbWExHjXPP2I0O7CXIGA");
         dl = view.findViewById(R.id.dl);
         mapView = view.findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
@@ -85,7 +84,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     //map
     @SuppressLint("MissingPermission")
     @Override
-    public void onMapReady(@NonNull final MapboxMap mapboxMap) {
+        public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         this.map = mapboxMap;
         acceptPermission();
         map.addOnCameraMoveListener(() -> mapBtn.setVisibility(View.VISIBLE));
@@ -164,7 +163,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @AfterPermissionGranted(RC_LOCATION)
     private void acceptPermission() {
-        if (!EasyPermissions.hasPermissions(this.getContext(), PERMS)) {
+        if (!EasyPermissions.hasPermissions(this.requireContext(), PERMS)) {
             EasyPermissions.requestPermissions(this, "Need the permission to start!", RC_LOCATION, PERMS);
             return;
         }

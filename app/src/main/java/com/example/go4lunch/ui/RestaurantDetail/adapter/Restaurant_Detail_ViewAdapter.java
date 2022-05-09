@@ -1,4 +1,4 @@
-package com.example.go4lunch.ui.RestaurantDetail;
+package com.example.go4lunch.ui.RestaurantDetail.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

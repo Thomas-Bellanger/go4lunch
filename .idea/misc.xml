@@ -9,25 +9,25 @@
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/drawable/ic_baseline_star_rate_24.xml" value="0.13541666666666666" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/drawable/ic_launcher_background.xml" value="0.15625" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/drawable/sign_in_picture.xml" value="0.15625" />
-        <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/activity_main2.xml" value="0.4" />
-        <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/activity_restaurant_detail.xml" value="0.1" />
+        <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/activity_restaurant_detail.xml" value="0.264" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/activity_settings.xml" value="0.4" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/co_worker.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/listview.xml" value="0.25" />
-        <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/listview_workmates.xml" value="0.176" />
+        <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/listview_workmates.xml" value="0.4" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/map.xml" value="0.3138020833333333" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/nav_header.xml" value="0.4" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/restaurant_item.xml" value="0.4" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/restaurant_recyclerview.xml" value="0.264" />
-        <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/toolbar.xml" value="0.264" />
+        <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/toolbar.xml" value="0.4" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/webview.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/workmates_item.xml" value="0.4" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/workmates_join.xml" value="0.4" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/layout/workmates_list.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/menu/filtre.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/menu/menu_filtre.xml" value="0.1685185185185185" />
-        <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/menu/menu_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/tombe/AndroidStudioProjects/go4lunch/app/src/main/res/menu/menu_menu.xml" value="0.4" />
       </map>
     </option>
   </component>
@@ -40,7 +40,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.4" />
+        <option name="scale" value="0.264" />
       </ProjectState>
     </option>
   </component>

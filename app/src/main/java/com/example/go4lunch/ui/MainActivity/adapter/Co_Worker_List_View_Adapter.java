@@ -1,4 +1,4 @@
-package com.example.go4lunch.ui.MainActivity;
+package com.example.go4lunch.ui.MainActivity.adapter;
 
 import android.content.Intent;
 import android.graphics.Color;

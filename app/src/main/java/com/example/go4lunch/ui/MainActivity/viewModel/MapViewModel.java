@@ -1,4 +1,4 @@
-package com.example.go4lunch.ui.MainActivity;
+package com.example.go4lunch.ui.MainActivity.viewModel;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;

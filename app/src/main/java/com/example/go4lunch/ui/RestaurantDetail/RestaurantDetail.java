@@ -21,7 +21,8 @@ import com.example.go4lunch.domain.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.example.go4lunch.domain.service.ApiService;
-import com.example.go4lunch.ui.MainActivity.MapViewModel;
+import com.example.go4lunch.ui.MainActivity.viewModel.MapViewModel;
+import com.example.go4lunch.ui.RestaurantDetail.adapter.Restaurant_Detail_ViewAdapter;
 import com.example.go4lunch.ui.WebView.WebView;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 

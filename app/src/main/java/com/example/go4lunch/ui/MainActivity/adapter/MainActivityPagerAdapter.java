@@ -1,8 +1,12 @@
-package com.example.go4lunch.ui.MainActivity;
+package com.example.go4lunch.ui.MainActivity.adapter;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import com.example.go4lunch.ui.MainActivity.fragment.Co_Worker_Fragment;
+import com.example.go4lunch.ui.MainActivity.fragment.MapFragment;
+import com.example.go4lunch.ui.MainActivity.fragment.RestaurantListView;
 
 public class MainActivityPagerAdapter extends FragmentPagerAdapter {
     Fragment mFragment;

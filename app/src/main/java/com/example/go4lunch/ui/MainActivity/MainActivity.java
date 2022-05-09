@@ -28,6 +28,9 @@ import com.example.go4lunch.domain.manager.UserManager;
 import com.example.go4lunch.model.Restaurant;
 import com.example.go4lunch.model.User;
 import com.example.go4lunch.domain.service.ApiServiceInterface;
+import com.example.go4lunch.ui.MainActivity.adapter.MainActivityPagerAdapter;
+import com.example.go4lunch.ui.MainActivity.fragment.RestaurantListView;
+import com.example.go4lunch.ui.MainActivity.viewModel.MapViewModel;
 import com.example.go4lunch.ui.RestaurantDetail.RestaurantDetail;
 import com.example.go4lunch.ui.SettingsActivity.SettingsActivity;
 import com.example.go4lunch.ui.SignInActivity.SignInActivity;
@@ -275,5 +278,4 @@ public class MainActivity extends AppCompatActivity {
     private void showSnackBar(String message) {
         Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
     }
-
 }
